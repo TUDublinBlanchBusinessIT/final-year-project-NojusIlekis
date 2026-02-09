@@ -17,6 +17,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'role:parent'])->group(function () {
+    Route::view('/parent', 'dashboards.parent')->name('parent.dashboard');
+});
+
+Route::middleware(['auth', 'role:carer'])->group(function () {
+    Route::view('/carer', 'dashboards.carer')->name('carer.dashboard');
+});
+
+Route::middleware(['auth', 'role:manager'])->group(function () {
+    Route::view('/manager', 'dashboards.manager')->name('manager.dashboard');
+});
 
 
 require __DIR__.'/auth.php';
