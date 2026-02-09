@@ -18,8 +18,5 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/role-test', function () {
-    return 'Role middleware is working. Your role is: ' . auth()->user()->role;
-})->middleware(['auth', 'role:parent']);
 
 require __DIR__.'/auth.php';
