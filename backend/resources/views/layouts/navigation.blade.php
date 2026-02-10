@@ -11,11 +11,28 @@
                 </div>
 
                 <!-- Navigation Links -->
+                @php($role = Auth::user()->role)
+
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if ($role === 'parent')
+                        <x-nav-link :href="route('parent.dashboard')" :active="request()->routeIs('parent.dashboard')">
+                            {{ __('Parent') }}
+                        </x-nav-link>
+                    @elseif ($role === 'carer')
+                        <x-nav-link :href="route('carer.dashboard')" :active="request()->routeIs('carer.dashboard')">
+                            {{ __('Carer') }}
+                        </x-nav-link>
+                    @elseif ($role === 'manager')
+                        <x-nav-link :href="route('manager.dashboard')" :active="request()->routeIs('manager.dashboard')">
+                            {{ __('Manager') }}
+                        </x-nav-link>
+                    @endif
                 </div>
+
             </div>
 
             <!-- Settings Dropdown -->
