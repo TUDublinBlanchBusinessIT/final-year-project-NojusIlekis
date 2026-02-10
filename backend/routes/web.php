@@ -9,9 +9,14 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
-    return redirect()->route($user->dashboardRouteName());
-})->middleware(['auth', 'verified'])->name('dashboard');
 
+    return match ($user->role) {
+        'parent'  => redirect()->route('parent.dashboard'),
+        'carer'   => redirect()->route('carer.dashboard'),
+        'manager' => redirect()->route('manager.dashboard'),
+        default   => redirect('/'),
+    };
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -31,5 +36,4 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
     Route::view('/manager', 'dashboards.manager')->name('manager.dashboard');
 });
 
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -30,7 +30,12 @@ class AuthenticatedSessionController extends Controller
 
         $user = $request->user();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(match ($user->role) {
+            'parent'  => route('parent.dashboard'),
+            'carer'   => route('carer.dashboard'),
+            'manager' => route('manager.dashboard'),
+            default   => '/',
+        });
     }
 
     /**
@@ -47,3 +52,4 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 }
+
