@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -19,15 +20,6 @@ class User extends Authenticatable
         'role',
     ];
 
-    public function dashboardRouteName(): string
-    {
-        return match ($this->role) {
-            'manager' => 'manager.dashboard',
-            'carer'   => 'carer.dashboard',
-            default   => 'parent.dashboard',
-        };
-    }
-
     protected $hidden = [
         'password',
         'remember_token',
@@ -39,6 +31,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function dashboardRouteName(): string
+    {
+        return match ($this->role) {
+            'manager' => 'manager.dashboard',
+            'carer'   => 'carer.dashboard',
+            default   => 'parent.dashboard',
+        };
+    }
+
+    public function rooms(): BelongsToMany
+    {
+        return $this->belongsToMany(Room::class)->withTimestamps();
     }
 }
 

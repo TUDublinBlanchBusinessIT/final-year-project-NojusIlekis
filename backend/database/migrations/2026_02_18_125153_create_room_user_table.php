@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('room_user', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('room_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
             $table->timestamps();
+
+            $table->unique(['room_id', 'user_id']);
         });
     }
 
@@ -25,3 +31,4 @@ return new class extends Migration
         Schema::dropIfExists('room_user');
     }
 };
+
