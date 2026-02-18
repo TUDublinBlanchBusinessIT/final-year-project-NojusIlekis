@@ -33,7 +33,6 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            // ✅ OPTIONAL so Breeze tests still pass (they don’t send role)
             'role' => ['nullable', 'in:parent,carer,manager'],
         ]);
 
@@ -42,8 +41,6 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
 
-            // ✅ Default to parent if not provided
-            // (so normal registration creates parents)
             'role' => $request->role ?? 'parent',
         ]);
 
@@ -51,7 +48,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // ✅ Breeze tests expect redirect to /dashboard
         return redirect(route('dashboard', absolute: false));
     }
 }
