@@ -16,7 +16,8 @@ Route::get('/dashboard', function () {
         'manager' => redirect()->route('manager.dashboard'),
         default   => redirect('/'),
     };
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard'); // removed 'verified' for simplicity
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -24,16 +25,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:parent'])->group(function () {
-    Route::view('/parent', 'dashboards.parent')->name('parent.dashboard');
+
+Route::middleware(['auth', 'role:parent'])->prefix('parent')->group(function () {
+    Route::view('/dashboard', 'dashboards.parent')->name('parent.dashboard');
 });
 
-Route::middleware(['auth', 'role:carer'])->group(function () {
-    Route::view('/carer', 'dashboards.carer')->name('carer.dashboard');
+Route::middleware(['auth', 'role:carer'])->prefix('carer')->group(function () {
+    Route::view('/dashboard', 'dashboards.carer')->name('carer.dashboard');
 });
 
-Route::middleware(['auth', 'role:manager'])->group(function () {
-    Route::view('/manager', 'dashboards.manager')->name('manager.dashboard');
+Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function () {
+    Route::view('/dashboard', 'dashboards.manager')->name('manager.dashboard');
 });
 
 require __DIR__ . '/auth.php';
