@@ -12,5 +12,14 @@ class Child extends Model
         'room_id',
         'parent_user_id',
     ];
-}
 
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(User::class, 'parent_user_id');
+    }
+}

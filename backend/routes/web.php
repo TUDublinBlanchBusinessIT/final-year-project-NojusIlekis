@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Carer\AttendanceController;
+use App\Http\Controllers\Manager\ReportsController; 
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -38,7 +39,7 @@ Route::middleware(['auth', 'role:carer'])
     ->group(function () {
         Route::view('/dashboard', 'dashboards.carer')->name('dashboard');
 
-        // ✅ Carer-only Attendance routes
+        
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
         Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
     });
@@ -48,7 +49,10 @@ Route::middleware(['auth', 'role:manager'])
     ->name('manager.')
     ->group(function () {
         Route::view('/dashboard', 'dashboards.manager')->name('dashboard');
+
+       
+        Route::get('/reports/attendance', [ReportsController::class, 'attendance'])->name('reports.attendance');
+        Route::get('/reports/tasks', [ReportsController::class, 'tasks'])->name('reports.tasks');
     });
 
 require __DIR__.'/auth.php';
-
