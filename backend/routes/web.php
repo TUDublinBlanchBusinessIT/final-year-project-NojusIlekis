@@ -55,4 +55,8 @@ Route::middleware(['auth', 'role:manager'])
         Route::get('/reports/tasks', [ReportsController::class, 'tasks'])->name('reports.tasks');
     });
 
+Route::get('/carer/daily_updates', function () {
+    return view('carer.daily_updates.index');
+});
+
 require __DIR__.'/auth.php';
