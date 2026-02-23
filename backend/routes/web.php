@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Carer\AttendanceController;
+use App\Http\Controllers\Carer\DailyReportController;
 use App\Http\Controllers\Manager\ReportsController; 
 use Illuminate\Support\Facades\Route;
 
@@ -37,11 +38,19 @@ Route::middleware(['auth', 'role:carer'])
     ->prefix('carer')
     ->name('carer.')
     ->group(function () {
+
         Route::view('/dashboard', 'dashboards.carer')->name('dashboard');
 
-        
+        // Attendance
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
         Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+
+        // Daily Reports (written + media)
+        Route::get('/daily-reports', [DailyReportController::class, 'index'])->name('daily-reports.index');
+        Route::post('/daily-reports', [DailyReportController::class, 'store'])->name('daily-reports.store');
+
+        // (Optional later) Structured daily updates table
+        // Route::post('/daily-updates', [DailyUpdateController::class, 'store'])->name('daily-updates.store');
     });
 
 Route::middleware(['auth', 'role:manager'])
@@ -55,8 +64,7 @@ Route::middleware(['auth', 'role:manager'])
         Route::get('/reports/tasks', [ReportsController::class, 'tasks'])->name('reports.tasks');
     });
 
-Route::get('/carer/daily_updates', function () {
-    return view('carer.daily_updates.index');
-});
+
+
 
 require __DIR__.'/auth.php';
