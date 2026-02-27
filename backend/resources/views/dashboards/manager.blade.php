@@ -83,7 +83,22 @@
                             View Tasks
                         </a>
                     </div>
+                    </div>
                 </div>
+                   {{-- Daily Reports Summary --}}
+                <div class="rounded-2xl border border-slate-200 bg-white/5 shadow-sm backdrop-blur
+                        dark:border-slate-800 dark:bg-slate-950/40">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-white">Daily Reports</h3>
+                        <p class="mt-2 text-sm text-slate-300">
+                            View each child’s end-of-day report and any uploaded photos/videos.
+                        </p>
+
+                        <a href="{{ route('manager.reports.daily-reports.index') }}"
+                            class="mt-5 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+                            View Daily Reports
+                        </a>
+                    </div>
 
             </div>
 
