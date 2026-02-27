@@ -1,19 +1,36 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <div>
-                <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                    Attendance
-                </h2>
-                <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Select a room and date, then mark each child present or absent.
-                </p>
+
+            <!-- Left side (Back + Title) -->
+            <div class="flex items-start gap-6">
+
+                <!-- Back Button -->
+                <a href="{{ route('carer.dashboard') }}"
+                   class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 transition
+                          dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
+                    ← Back to Dashboard
+                </a>
+
+                <!-- Title + Description -->
+                <div>
+                    <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
+                        Attendance
+                    </h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                        Select a room and date, then mark each child present or absent.
+                    </p>
+                </div>
+
             </div>
+
+            <!-- Right side badge -->
             <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium
                          bg-blue-50 text-blue-700 border border-blue-200
                          dark:bg-blue-950/40 dark:text-blue-200 dark:border-blue-900/60">
                 Carer View
             </span>
+
         </div>
     </x-slot>
 
@@ -99,22 +116,11 @@
                             </p>
                         </div>
 
-                        <div class="flex flex-wrap items-center gap-2">
-                            <div class="inline-flex items-center gap-2 rounded-xl px-3 py-2
-                                        bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium
-                                        dark:bg-blue-950/40 dark:border-blue-900/60 dark:text-blue-200">
-                                <span>Date:</span>
-                                <span class="font-semibold">{{ $date }}</span>
-                            </div>
-
-                            <button type="button" id="mark-all-present"
-                                    class="inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold
-                                           border border-slate-300 bg-white text-slate-800
-                                           hover:bg-slate-50
-                                           focus:outline-none focus:ring-4 focus:ring-blue-200
-                                           dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800/60 dark:focus:ring-blue-900/40">
-                                Mark all present
-                            </button>
+                        <div class="inline-flex items-center gap-2 rounded-xl px-3 py-2
+                                    bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium
+                                    dark:bg-blue-950/40 dark:border-blue-900/60 dark:text-blue-200">
+                            <span>Date:</span>
+                            <span class="font-semibold">{{ $date }}</span>
                         </div>
                     </div>
 
@@ -142,9 +148,7 @@
                                             $status = optional($existing->get($child->id))->status ?? 'present';
                                         @endphp
 
-                                        <tr class="js-att-row transition-colors
-                                                   {{ $status === 'absent' ? 'bg-red-50/30 dark:bg-red-950/10' : 'bg-emerald-50/20 dark:bg-emerald-950/10' }}
-                                                   hover:bg-slate-50 dark:hover:bg-slate-900/30">
+                                        <tr class="hover:bg-blue-50/60 dark:hover:bg-blue-950/20 transition-colors">
                                             <td class="px-5 py-4">
                                                 <div class="flex items-center gap-3">
                                                     <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700
@@ -165,7 +169,7 @@
 
                                             <td class="px-5 py-4">
                                                 <select name="attendance[{{ $child->id }}]"
-                                                        class="js-status-select w-44 rounded-xl border px-3 py-2 text-sm font-medium
+                                                        class="w-44 rounded-xl border px-3 py-2 text-sm font-medium
                                                                border-slate-300 bg-white text-slate-900
                                                                focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                                                dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
@@ -176,15 +180,15 @@
 
                                                 <div class="mt-2 text-xs">
                                                     @if ($status === 'present')
-                                                        <span class="js-status-badge inline-flex items-center rounded-full px-2 py-0.5
-                                                                     bg-emerald-50 text-emerald-700 border border-emerald-200
-                                                                     dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-900/60">
+                                                        <span class="inline-flex items-center rounded-full px-2 py-0.5
+                                                                    bg-emerald-50 text-emerald-700 border border-emerald-200
+                                                                    dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-900/60">
                                                             Ready
                                                         </span>
                                                     @else
-                                                        <span class="js-status-badge inline-flex items-center rounded-full px-2 py-0.5
-                                                                     bg-red-50 text-red-700 border border-red-200
-                                                                     dark:bg-red-950/40 dark:text-red-200 dark:border-red-900/60">
+                                                        <span class="incline-flex items-center rounded-full px-2 py-0.5
+                                                        bg-red-50 text-red-700 border border-red-200
+                                                        dark:bg-red-950/40 dark:text-red-200 dark:border-red-900/60">
                                                             Marked Absent
                                                         </span>
                                                     @endif
@@ -224,65 +228,6 @@
                         </div>
                     </form>
                 </div>
-
-                <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const rowPresentClasses = ['bg-emerald-50/20', 'dark:bg-emerald-950/10'];
-                    const rowAbsentClasses  = ['bg-red-50/30', 'dark:bg-red-950/10'];
-
-                    const badgePresent = [
-                        'bg-emerald-50','text-emerald-700','border-emerald-200',
-                        'dark:bg-emerald-950/40','dark:text-emerald-200','dark:border-emerald-900/60'
-                    ];
-                    const badgeAbsent = [
-                        'bg-red-50','text-red-700','border-red-200',
-                        'dark:bg-red-950/40','dark:text-red-200','dark:border-red-900/60'
-                    ];
-
-                    function setRowStatus(row, status) {
-                        row.classList.remove(...rowPresentClasses, ...rowAbsentClasses);
-                        if (status === 'absent') row.classList.add(...rowAbsentClasses);
-                        else row.classList.add(...rowPresentClasses);
-
-                        const badge = row.querySelector('.js-status-badge');
-                        if (!badge) return;
-
-                        badge.classList.remove(...badgePresent, ...badgeAbsent);
-
-                        if (status === 'absent') {
-                            badge.classList.add(...badgeAbsent);
-                            badge.textContent = 'Marked Absent';
-                        } else {
-                            badge.classList.add(...badgePresent);
-                            badge.textContent = 'Ready';
-                        }
-                    }
-
-                    document.querySelectorAll('.js-att-row').forEach((row) => {
-                        const select = row.querySelector('.js-status-select');
-                        if (!select) return;
-
-                        // sync on load
-                        setRowStatus(row, select.value);
-
-                        select.addEventListener('change', (e) => {
-                            setRowStatus(row, e.target.value);
-                        });
-                    });
-
-                    const markAllBtn = document.getElementById('mark-all-present');
-                    if (markAllBtn) {
-                        markAllBtn.addEventListener('click', () => {
-                            document.querySelectorAll('.js-att-row').forEach((row) => {
-                                const select = row.querySelector('.js-status-select');
-                                if (!select) return;
-                                select.value = 'present';
-                                setRowStatus(row, 'present');
-                            });
-                        });
-                    }
-                });
-                </script>
             @endif
 
         </div>

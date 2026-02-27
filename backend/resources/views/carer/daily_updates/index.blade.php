@@ -1,6 +1,10 @@
 <x-app-layout>
 
 <div class="max-w-5xl mx-auto py-6">
+    <a href="{{ route('carer.dashboard') }}"
+   class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
+    ← Back to Dashboard
+</a>
 
     <h2 class="text-2xl font-bold mb-6 text-white">
         Daily Child Updates
