@@ -2,7 +2,7 @@
 
 <div class="max-w-5xl mx-auto py-6">
 
-    <h2 class="text-2xl font-bold mb-6">
+    <h2 class="text-2xl font-bold mb-6 text-white">
         Daily Child Updates
     </h2>
 
