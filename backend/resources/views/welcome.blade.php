@@ -8,16 +8,24 @@
 
 <body class="bg-gradient-to-r from-blue-700 to-blue-500 min-h-screen flex items-center">
 
-<div class="container mx-auto px-8 grid md:grid-cols-2 gap-12 items-center">
+<div class="container mx-auto px-24 grid md:grid-cols-2 gap-12 items-center">
 
     <!-- LEFT SIDE -->
     <div class="text-white space-y-6">
-        <div class="flex items-center space-x-3">
-            <div class="bg-white text-blue-700 font-bold rounded-full w-12 h-12 flex items-center justify-center text-lg">
-                SB
-            </div>
-            <h1 class="text-2xl font-semibold">SnugBug</h1>
-        </div>
+        <div class="flex items-start space-x-3">
+    
+    <img src="{{ asset('images/image.png') }}" 
+         alt="SnugBug Logo"
+         class="w-20 h-20 object-contain">
+
+    <div>
+        <h1 class="text-2xl font-semibold">SnugBug</h1>
+        <p class="text-sm text-blue-100 italic font-semibold">
+            Snug updates for Bug size humans.
+        </p>
+    </div>
+
+</div>
 
         <h2 class="text-5xl font-bold leading-tight">
             Childcare updates,<br> made simple.
