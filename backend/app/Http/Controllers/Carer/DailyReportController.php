@@ -22,7 +22,7 @@ class DailyReportController extends Controller
             ->orderBy('first_name')
             ->get();
 
-        return view('carer.daily_updates.index', compact('children'));
+        return view('carer.daily_reports.index', compact('children'));
     }
 
 
