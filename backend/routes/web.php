@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Carer\AttendanceController;
 use App\Http\Controllers\Carer\DailyReportController;
 use App\Http\Controllers\Manager\ReportsController; 
+use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -57,13 +58,19 @@ Route::middleware(['auth', 'role:manager'])
     ->prefix('manager')
     ->name('manager.')
     ->group(function () {
+
         Route::view('/dashboard', 'dashboards.manager')->name('dashboard');
 
-       
         Route::get('/reports/attendance', [ReportsController::class, 'attendance'])->name('reports.attendance');
         Route::get('/reports/tasks', [ReportsController::class, 'tasks'])->name('reports.tasks');
-    });
 
+        // Manager Daily Reports
+        Route::get('/reports/daily-reports', [ManagerDailyReportsController::class, 'index'])
+            ->name('reports.daily-reports.index');
+
+        Route::get('/reports/daily-reports/{dailyReport}', [ManagerDailyReportsController::class, 'show'])
+            ->name('reports.daily-reports.show');
+    });
 
 
 

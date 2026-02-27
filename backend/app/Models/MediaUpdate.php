@@ -16,6 +16,6 @@ class MediaUpdate extends Model
 
     public function dailyReport()
     {
-        return $this->belongsTo(DailyReport::class);
+        return $this->belongsTo(DailyReport::class, 'daily_report_id');
     }
 }

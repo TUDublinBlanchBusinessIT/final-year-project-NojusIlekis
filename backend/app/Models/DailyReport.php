@@ -25,6 +25,6 @@ class DailyReport extends Model
 
     public function mediaUpdates()
     {
-        return $this->hasMany(MediaUpdate::class);
+        return $this->hasMany(MediaUpdate::class, 'daily_report_id');
     }
 }
