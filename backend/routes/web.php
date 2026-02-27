@@ -3,7 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Carer\AttendanceController;
 use App\Http\Controllers\Carer\DailyReportController;
-use App\Http\Controllers\Manager\ReportsController; 
+use App\Http\Controllers\Carer\DailyUpdateController; // ✅ ADD THIS
+use App\Http\Controllers\Manager\ReportsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,8 +51,9 @@ Route::middleware(['auth', 'role:carer'])
         Route::get('/daily-reports', [DailyReportController::class, 'index'])->name('daily-reports.index');
         Route::post('/daily-reports', [DailyReportController::class, 'store'])->name('daily-reports.store');
 
-        // (Optional later) Structured daily updates table
-        // Route::post('/daily-updates', [DailyUpdateController::class, 'store'])->name('daily-updates.store');
+        // ✅ Daily Updates (structured - feeds manager tasks summary)
+        Route::get('/daily-updates', [DailyUpdateController::class, 'index'])->name('daily-updates.index');
+        Route::post('/daily-updates', [DailyUpdateController::class, 'store'])->name('daily-updates.store');
     });
 
 Route::middleware(['auth', 'role:manager'])
@@ -71,7 +73,5 @@ Route::middleware(['auth', 'role:manager'])
         Route::get('/reports/daily-reports/{dailyReport}', [ManagerDailyReportsController::class, 'show'])
             ->name('reports.daily-reports.show');
     });
-
-
 
 require __DIR__.'/auth.php';
