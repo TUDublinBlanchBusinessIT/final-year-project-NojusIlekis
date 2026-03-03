@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Carer\AttendanceController;
+use App\Http\Controllers\Carer\DailyReportController;
+use App\Http\Controllers\Carer\DailyUpdateController; // ✅ ADD THIS
+use App\Http\Controllers\Manager\ReportsController;
+use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,8 +21,7 @@ Route::get('/dashboard', function () {
         'manager' => redirect()->route('manager.dashboard'),
         default   => redirect('/'),
     };
-})->middleware(['auth'])->name('dashboard'); // removed 'verified' for simplicity
-
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -25,17 +29,49 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'role:parent'])
+    ->prefix('parent')
+    ->name('parent.')
+    ->group(function () {
+        Route::view('/dashboard', 'dashboards.parent')->name('dashboard');
+    });
 
-Route::middleware(['auth', 'role:parent'])->prefix('parent')->group(function () {
-    Route::view('/dashboard', 'dashboards.parent')->name('parent.dashboard');
-});
+Route::middleware(['auth', 'role:carer'])
+    ->prefix('carer')
+    ->name('carer.')
+    ->group(function () {
 
-Route::middleware(['auth', 'role:carer'])->prefix('carer')->group(function () {
-    Route::view('/dashboard', 'dashboards.carer')->name('carer.dashboard');
-});
+        Route::view('/dashboard', 'dashboards.carer')->name('dashboard');
 
-Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function () {
-    Route::view('/dashboard', 'dashboards.manager')->name('manager.dashboard');
-});
+        // Attendance
+        Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+        Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
 
-require __DIR__ . '/auth.php';
+        // Daily Reports (written + media)
+        Route::get('/daily-reports', [DailyReportController::class, 'index'])->name('daily-reports.index');
+        Route::post('/daily-reports', [DailyReportController::class, 'store'])->name('daily-reports.store');
+
+        // ✅ Daily Updates (structured - feeds manager tasks summary)
+        Route::get('/daily-updates', [DailyUpdateController::class, 'index'])->name('daily-updates.index');
+        Route::post('/daily-updates', [DailyUpdateController::class, 'store'])->name('daily-updates.store');
+    });
+
+Route::middleware(['auth', 'role:manager'])
+    ->prefix('manager')
+    ->name('manager.')
+    ->group(function () {
+
+        Route::view('/dashboard', 'dashboards.manager')->name('dashboard');
+
+        Route::get('/reports/attendance', [ReportsController::class, 'attendance'])->name('reports.attendance');
+        Route::get('/reports/tasks', [ReportsController::class, 'tasks'])->name('reports.tasks');
+
+        // Manager Daily Reports
+        Route::get('/reports/daily-reports', [ManagerDailyReportsController::class, 'index'])
+            ->name('reports.daily-reports.index');
+
+        Route::get('/reports/daily-reports/{dailyReport}', [ManagerDailyReportsController::class, 'show'])
+            ->name('reports.daily-reports.show');
+    });
+
+require __DIR__.'/auth.php';

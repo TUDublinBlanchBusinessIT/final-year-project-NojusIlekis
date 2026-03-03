@@ -1,0 +1,167 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
+                    Attendance Summary
+                </h2>
+                <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                    Filter by room and date to view totals and attendance status.
+                </p>
+            </div>
+            <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium
+                         bg-indigo-50 text-indigo-700 border border-indigo-200
+                         dark:bg-indigo-950/40 dark:text-indigo-200 dark:border-indigo-900/60">
+                Manager View
+            </span>
+        </div>
+    </x-slot>
+
+    <div class="py-8">
+        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+
+            {{-- Filters card (same style as carer) --}}
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
+                        dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Filters</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Choose a date and room.</p>
+                </div>
+
+                <div class="p-5">
+                    <form method="GET" action="{{ route('manager.reports.attendance') }}"
+                          class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Date</label>
+                            <input type="date" name="date" value="{{ $date }}"
+                                   class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900
+                                          focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
+                                          dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
+                                          dark:focus:ring-blue-900/40 dark:focus:border-blue-400">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Room</label>
+                            <select name="room_id"
+                                    class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900
+                                           focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
+                                           dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
+                                           dark:focus:ring-blue-900/40 dark:focus:border-blue-400">
+                                <option value="">All rooms</option>
+                                @foreach ($rooms as $room)
+                                    <option value="{{ $room->id }}" @selected((string)$roomId === (string)$room->id)>
+                                        {{ $room->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <button type="submit"
+                                class="group inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
+                                       bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                                       shadow-sm shadow-blue-500/20
+                                       hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
+                                       focus:outline-none focus:ring-4 focus:ring-blue-200
+                                       active:translate-y-[1px]
+                                       dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
+                            <span>Load</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {{-- Totals cards --}}
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950/40">
+                    <div class="text-xs text-slate-500 dark:text-slate-400">Children</div>
+                    <div class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $childrenCount }}</div>
+                </div>
+
+                <div class="rounded-2xl border border-emerald-200 bg-emerald-50/30 p-5 dark:border-emerald-900/60 dark:bg-emerald-950/10">
+                    <div class="text-xs text-emerald-700 dark:text-emerald-200">Present</div>
+                    <div class="text-2xl font-bold text-emerald-800 dark:text-emerald-100">{{ $present }}</div>
+                </div>
+
+                <div class="rounded-2xl border border-red-200 bg-red-50/30 p-5 dark:border-red-900/60 dark:bg-red-950/10">
+                    <div class="text-xs text-red-700 dark:text-red-200">Absent</div>
+                    <div class="text-2xl font-bold text-red-800 dark:text-red-100">{{ $absent }}</div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900/30">
+                    <div class="text-xs text-slate-600 dark:text-slate-300">Not Marked</div>
+                    <div class="text-2xl font-bold text-slate-900 dark:text-slate-100">{{ $notMarked }}</div>
+                </div>
+            </div>
+
+            {{-- Table --}}
+            <div class="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm
+                        dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Per Child</h3>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-slate-50 dark:bg-slate-900/60">
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Child</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Room</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                            @forelse ($children as $child)
+                                @php $a = $existing->get($child->id); @endphp
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30">
+                                    <td class="px-5 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700
+                                                        text-white flex items-center justify-center text-sm font-semibold
+                                                        shadow-sm shadow-blue-500/20">
+                                                {{ strtoupper(substr($child->first_name,0,1)) }}{{ strtoupper(substr($child->last_name,0,1)) }}
+                                            </div>
+                                            <div>
+                                                <div class="font-semibold text-slate-900 dark:text-slate-100">
+                                                    {{ $child->first_name }} {{ $child->last_name }}
+                                                </div>
+                                                <div class="text-xs text-slate-500 dark:text-slate-400">ID: {{ $child->id }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="px-5 py-4 text-slate-700 dark:text-slate-200">{{ $child->room?->name }}</td>
+
+                                    <td class="px-5 py-4">
+                                        @if(!$a)
+                                            <span class="inline-flex items-center rounded-full px-2 py-0.5
+                                                         bg-slate-100 text-slate-700 border border-slate-200
+                                                         dark:bg-slate-900/50 dark:text-slate-200 dark:border-slate-800">
+                                                Not marked
+                                            </span>
+                                        @elseif($a->status === 'present')
+                                            <span class="inline-flex items-center rounded-full px-2 py-0.5
+                                                         bg-emerald-50 text-emerald-700 border border-emerald-200
+                                                         dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-900/60">
+                                                Present
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center rounded-full px-2 py-0.5
+                                                         bg-red-50 text-red-700 border border-red-200
+                                                         dark:bg-red-950/40 dark:text-red-200 dark:border-red-900/60">
+                                                Absent
+                                            </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="3" class="px-5 py-6 text-slate-600 dark:text-slate-300">No children found.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</x-app-layout>

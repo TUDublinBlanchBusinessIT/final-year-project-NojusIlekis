@@ -26,14 +26,23 @@
 
             <div class="relative z-10 flex flex-col justify-between p-12 text-white">
                 <div>
-                    <div class="flex items-center gap-3">
-                        <div class="h-10 w-10 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center font-bold">
-                            SB
-                        </div>
-                        <div class="text-xl font-semibold">
-                            {{ config('app.name', 'SnugBug') }}
-                        </div>
-                    </div>
+                    <div class="flex items-start gap-3">
+
+    <img src="{{ asset('images/image.png') }}" 
+         alt="SnugBug Logo"
+         class="h-20 w-20 object-contain">
+
+    <div>
+        <div class="text-xl font-semibold">
+            {{ config('app.name', 'SnugBug') }}
+        </div>
+
+        <p class="text-sm text-white/80 italic font-semibold">
+            Snug updates for Bug size humans.
+        </p>
+    </div>
+
+</div>
 
                     <h1 class="mt-10 text-4xl font-bold leading-tight">
                         Childcare updates,<br class="hidden xl:block">
