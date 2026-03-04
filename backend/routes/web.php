@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Carer\AttendanceController;
 use App\Http\Controllers\Carer\DailyReportController;
-use App\Http\Controllers\Carer\DailyUpdateController; // ✅ ADD THIS
+use App\Http\Controllers\Carer\DailyUpdateController;
 use App\Http\Controllers\Manager\ReportsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use Illuminate\Support\Facades\Route;
@@ -61,7 +62,7 @@ Route::middleware(['auth', 'role:manager'])
     ->name('manager.')
     ->group(function () {
 
-        Route::view('/dashboard', 'dashboards.manager')->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/reports/attendance', [ReportsController::class, 'attendance'])->name('reports.attendance');
         Route::get('/reports/tasks', [ReportsController::class, 'tasks'])->name('reports.tasks');
