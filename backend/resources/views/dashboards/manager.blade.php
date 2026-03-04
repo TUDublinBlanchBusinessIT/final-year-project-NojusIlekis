@@ -80,6 +80,31 @@
                 </div>
             </div>
 
+            {{-- Attendance Trend Chart (Task 2) --}}
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
+                        dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                                Attendance Trend
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                                Present vs Absent counts per day (Last 7 Days)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 h-72">
+                        <canvas id="attendanceTrendChart"></canvas>
+                    </div>
+
+                    <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                        If the chart is empty, it usually means there are no attendance records in the selected period.
+                    </p>
+                </div>
+            </div>
+
             {{-- Quick actions --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -159,4 +184,43 @@
 
         </div>
     </div>
+
+    {{-- Chart.js + Trend chart script --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function () {
+            const labels = @json($attendanceChart['labels'] ?? []);
+            const presentData = @json($attendanceChart['present'] ?? []);
+            const absentData = @json($attendanceChart['absent'] ?? []);
+
+            const el = document.getElementById('attendanceTrendChart');
+            if (!el) return;
+
+            // Prevent double init
+            if (el.dataset.chartInit === '1') return;
+            el.dataset.chartInit = '1';
+
+            const ctx = el.getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [
+                        { label: 'Present', data: presentData, tension: 0.35 },
+                        { label: 'Absent', data: absentData, tension: 0.35 },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    }
+                }
+            });
+        })();
+    </script>
 </x-app-layout>
