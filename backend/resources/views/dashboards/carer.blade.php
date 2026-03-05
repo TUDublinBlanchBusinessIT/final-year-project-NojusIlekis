@@ -63,6 +63,22 @@
                 </a>
             </div>
 
+            <!-- Daily Updates Card -->
+            <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-slate-100">
+                <h4 class="text-xl font-semibold text-slate-800 mb-3">
+                    Daily Updates
+                </h4>
+
+                <p class="text-slate-500 mb-6">
+                    Record daily updates for children.
+                </p>
+
+                <a href="{{ route('carer.daily-updates.index') }}"
+                   class="inline-block bg-blue-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-blue-700 transition">
+                    Open Updates
+                </a>
+            </div>
+
         </div>
     </div>
 </x-app-layout>
