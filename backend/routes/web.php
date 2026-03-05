@@ -52,7 +52,7 @@ Route::middleware(['auth', 'role:carer'])
         Route::get('/daily-reports', [DailyReportController::class, 'index'])->name('daily-reports.index');
         Route::post('/daily-reports', [DailyReportController::class, 'store'])->name('daily-reports.store');
 
-        // ✅ Daily Updates (structured - feeds manager tasks summary)
+        // Daily Updates (structured)
         Route::get('/daily-updates', [DailyUpdateController::class, 'index'])->name('daily-updates.index');
         Route::post('/daily-updates', [DailyUpdateController::class, 'store'])->name('daily-updates.store');
     });
@@ -73,6 +73,10 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::get('/reports/daily-reports/{dailyReport}', [ManagerDailyReportsController::class, 'show'])
             ->name('reports.daily-reports.show');
+
+        // ✅ Manager requests acknowledgement (signature) from parent
+        Route::post('/reports/daily-reports/{dailyReport}/request-ack', [ManagerDailyReportsController::class, 'requestAck'])
+            ->name('reports.daily-reports.request-ack');
     });
 
 require __DIR__.'/auth.php';
