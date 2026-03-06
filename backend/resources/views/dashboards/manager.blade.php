@@ -18,6 +18,10 @@
         $rooms = $rooms ?? collect([]);
         $kpiRoom = $kpiRoom ?? null;
         $kpiPerRoom = $kpiPerRoom ?? collect([]);
+
+        $trendPresent = $attendanceChart['present'] ?? [];
+        $trendAbsent  = $attendanceChart['absent'] ?? [];
+        $hasTrendData = collect($trendPresent)->sum() > 0 || collect($trendAbsent)->sum() > 0;
     @endphp
 
     <x-slot name="header">
@@ -80,7 +84,7 @@
                         </div>
 
                         {{-- Filters --}}
-                        <form method="GET" action="{{ route('manager.dashboard') }}"
+                        <form id="kpiFilterForm" method="GET" action="{{ route('manager.dashboard') }}"
                               class="grid grid-cols-1 md:grid-cols-4 gap-3">
                             <div>
                                 <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Start date</label>
@@ -109,7 +113,7 @@
                             </div>
 
                             <div class="flex items-end">
-                                <button type="submit"
+                                <button id="applyFiltersBtn" type="submit"
                                         class="w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
                                                bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
                                                shadow-sm shadow-blue-500/20
@@ -252,9 +256,17 @@
                         <canvas id="attendanceTrendChart"></canvas>
                     </div>
 
-                    <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">
-                        If the chart is empty, it usually means there are no attendance records in the selected period.
-                    </p>
+                    @if(!$hasTrendData)
+                        <div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700
+                                    dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-200">
+                            No attendance records found for this range{{ !empty($filters['room_id']) ? ' in the selected room' : '' }}.
+                            Try a different date range{{ empty($filters['room_id']) ? '' : ' or select All rooms' }}.
+                        </div>
+                    @else
+                        <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                            Tip: Use the filters above to compare rooms and date ranges.
+                        </p>
+                    @endif
                 </div>
             </div>
 
@@ -338,6 +350,21 @@
         </div>
     </div>
 
+    {{-- Loading state for filters --}}
+    <script>
+        (function () {
+            const form = document.getElementById('kpiFilterForm');
+            const btn = document.getElementById('applyFiltersBtn');
+            if (!form || !btn) return;
+
+            form.addEventListener('submit', function () {
+                btn.disabled = true;
+                btn.dataset.originalText = btn.innerText;
+                btn.innerText = 'Loading...';
+            });
+        })();
+    </script>
+
     {{-- Chart.js + Trend chart script --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -351,6 +378,9 @@
 
             if (el.dataset.chartInit === '1') return;
             el.dataset.chartInit = '1';
+
+            const total = presentData.reduce((a,b) => a + b, 0) + absentData.reduce((a,b) => a + b, 0);
+            if (labels.length === 0 || total === 0) return;
 
             const ctx = el.getContext('2d');
 
