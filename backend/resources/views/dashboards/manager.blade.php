@@ -1,4 +1,25 @@
 <x-app-layout>
+    @php
+        // Safe defaults so the page won't crash if controller variables aren't set yet
+        $filters = $filters ?? [
+            'start_date' => now()->subDays(6)->toDateString(),
+            'end_date' => now()->toDateString(),
+            'room_id' => null,
+        ];
+
+        // If you still have old $kpi from Task 1/2, use it as fallback for overall
+        $kpiOverall = $kpiOverall ?? ($kpi ?? [
+            'rangeLabel' => 'Last 7 days',
+            'present' => 0,
+            'absent' => 0,
+            'rate' => 0,
+        ]);
+
+        $rooms = $rooms ?? collect([]);
+        $kpiRoom = $kpiRoom ?? null;
+        $kpiPerRoom = $kpiPerRoom ?? collect([]);
+    @endphp
+
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
@@ -34,53 +55,184 @@
                 </div>
             </div>
 
-            {{-- Attendance KPIs --}}
+            {{-- Attendance KPIs + Filters --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
-                    <div class="flex items-start justify-between gap-4">
-                        <div>
-                            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                                Attendance KPIs
-                            </h3>
-                            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                                Range: {{ $kpi['rangeLabel'] ?? 'Last 7 days' }}
-                            </p>
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                                    Attendance KPIs
+                                </h3>
+                                <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                                    Range: {{ $kpiOverall['rangeLabel'] ?? 'Last 7 days' }}
+                                </p>
+                            </div>
+
+                            <a href="{{ route('manager.dashboard') }}"
+                               class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
+                                      bg-slate-50 text-slate-700 border border-slate-200
+                                      hover:bg-slate-100
+                                      dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
+                                Clear
+                            </a>
                         </div>
 
-                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
-                                     bg-blue-50 text-blue-700 border border-blue-200
-                                     dark:bg-blue-950/40 dark:text-blue-200 dark:border-blue-900/60">
-                            Last 7 Days
-                        </span>
+                        {{-- Filters --}}
+                        <form method="GET" action="{{ route('manager.dashboard') }}"
+                              class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                            <div>
+                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Start date</label>
+                                <input type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}"
+                                       class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40" />
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">End date</label>
+                                <input type="date" name="end_date" value="{{ $filters['end_date'] ?? '' }}"
+                                       class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40" />
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Room</label>
+                                <select name="room_id"
+                                        class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40">
+                                    <option value="">All rooms</option>
+                                    @foreach($rooms as $room)
+                                        <option value="{{ $room->id }}"
+                                            @selected(($filters['room_id'] ?? null) == $room->id)>
+                                            {{ $room->name ?? ('Room #' . $room->id) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="flex items-end">
+                                <button type="submit"
+                                        class="w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
+                                               bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                                               shadow-sm shadow-blue-500/20
+                                               hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
+                                               focus:outline-none focus:ring-4 focus:ring-blue-200
+                                               active:translate-y-[1px]
+                                               dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
+                                    Apply
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
-                    <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                            <p class="text-sm text-slate-600 dark:text-slate-300">Present</p>
-                            <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                                {{ $kpi['present'] ?? 0 }}
-                            </p>
-                        </div>
+                    {{-- Overall KPIs --}}
+                    <div class="mt-5">
+                        <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
+                            Overall (All Rooms)
+                        </p>
 
-                        <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                            <p class="text-sm text-slate-600 dark:text-slate-300">Absent</p>
-                            <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                                {{ $kpi['absent'] ?? 0 }}
-                            </p>
-                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                                <p class="text-sm text-slate-600 dark:text-slate-300">Present</p>
+                                <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                    {{ $kpiOverall['present'] ?? 0 }}
+                                </p>
+                            </div>
 
-                        <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                            <p class="text-sm text-slate-600 dark:text-slate-300">Attendance Rate</p>
-                            <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                                {{ $kpi['rate'] ?? 0 }}%
-                            </p>
+                            <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                                <p class="text-sm text-slate-600 dark:text-slate-300">Absent</p>
+                                <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                    {{ $kpiOverall['absent'] ?? 0 }}
+                                </p>
+                            </div>
+
+                            <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                                <p class="text-sm text-slate-600 dark:text-slate-300">Attendance Rate</p>
+                                <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                    {{ $kpiOverall['rate'] ?? 0 }}%
+                                </p>
+                            </div>
                         </div>
                     </div>
+
+                    {{-- Selected Room KPIs --}}
+                    @if(!empty($kpiRoom))
+                        <div class="mt-6">
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
+                                Selected Room: {{ $kpiRoom['room_name'] ?? ('Room #' . ($kpiRoom['room_id'] ?? '')) }}
+                            </p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">Present</p>
+                                    <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                        {{ $kpiRoom['present'] ?? 0 }}
+                                    </p>
+                                </div>
+
+                                <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">Absent</p>
+                                    <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                        {{ $kpiRoom['absent'] ?? 0 }}
+                                    </p>
+                                </div>
+
+                                <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">Attendance Rate</p>
+                                    <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                                        {{ $kpiRoom['rate'] ?? 0 }}%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Per-room breakdown --}}
+                    <div class="mt-7">
+                        <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
+                            Room Breakdown
+                        </p>
+
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                            <table class="min-w-full text-sm">
+                                <thead class="bg-slate-50 dark:bg-slate-900/40">
+                                    <tr class="text-left">
+                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Room</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Present</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Absent</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                                    @forelse($kpiPerRoom as $row)
+                                        <tr>
+                                            <td class="px-4 py-3 text-slate-800 dark:text-slate-200">
+                                                {{ $row['room_name'] ?? ('Room #' . ($row['room_id'] ?? '')) }}
+                                            </td>
+                                            <td class="px-4 py-3 text-slate-800 dark:text-slate-200">
+                                                {{ $row['present'] ?? 0 }}
+                                            </td>
+                                            <td class="px-4 py-3 text-slate-800 dark:text-slate-200">
+                                                {{ $row['absent'] ?? 0 }}
+                                            </td>
+                                            <td class="px-4 py-3 text-slate-800 dark:text-slate-200">
+                                                {{ $row['rate'] ?? 0 }}%
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="px-4 py-4 text-slate-600 dark:text-slate-300">
+                                                No room attendance found in this date range.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            {{-- Attendance Trend Chart (Task 2) --}}
+            {{-- Attendance Trend Chart --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
@@ -90,7 +242,8 @@
                                 Attendance Trend
                             </h3>
                             <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                                Present vs Absent counts per day (Last 7 Days)
+                                {{ !empty($filters['room_id']) ? 'Filtered by selected room' : 'All rooms' }}
+                                (Present vs Absent per day)
                             </p>
                         </div>
                     </div>
@@ -196,7 +349,6 @@
             const el = document.getElementById('attendanceTrendChart');
             if (!el) return;
 
-            // Prevent double init
             if (el.dataset.chartInit === '1') return;
             el.dataset.chartInit = '1';
 
@@ -216,9 +368,7 @@
                     maintainAspectRatio: false,
                     interaction: { mode: 'index', intersect: false },
                     plugins: { legend: { display: true } },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { precision: 0 } }
-                    }
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
                 }
             });
         })();
