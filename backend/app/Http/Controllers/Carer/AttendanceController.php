@@ -70,9 +70,12 @@ class AttendanceController extends Controller
             }
 
             Attendance::updateOrCreate(
-                ['child_id' => $childId, 'date' => $data['date']],
                 [
-                    'room_id'     => $data['room_id'],
+                    'child_id' => $childId,
+                    'date'     => $data['date'],
+                    'room_id'  => $data['room_id'], // include room_id in the match (safer)
+                ],
+                [
                     'status'      => $status,
                     'recorded_by' => auth()->id(),
                 ]
