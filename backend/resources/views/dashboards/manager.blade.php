@@ -252,7 +252,9 @@
                         </div>
                     </div>
 
-                    <div class="mt-5 h-72">
+                    {{-- 2023 styling + responsive height --}}
+                    <div class="mt-5 rounded-xl border border-slate-200 bg-white p-4 h-64 sm:h-72
+                                dark:border-slate-800 dark:bg-slate-950/20">
                         <canvas id="attendanceTrendChart"></canvas>
                     </div>
 
@@ -397,8 +399,30 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     interaction: { mode: 'index', intersect: false },
-                    plugins: { legend: { display: true } },
-                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                boxWidth: 10,
+                                boxHeight: 10,
+                            }
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { maxRotation: 0, autoSkip: true }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 },
+                            grid: { drawBorder: false }
+                        }
+                    }
                 }
             });
         })();
