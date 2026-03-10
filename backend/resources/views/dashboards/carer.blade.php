@@ -29,7 +29,7 @@
         </div>
 
         <!-- Dashboard Cards -->
-        <div class="grid md:grid-cols-2 gap-8">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
             <!-- Attendance Card -->
             <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-slate-100">
@@ -76,6 +76,21 @@
                 <a href="{{ route('carer.daily-updates.index') }}"
                    class="inline-block bg-blue-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-blue-700 transition">
                     Open Updates
+                </a>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-slate-100">
+                <h4 class="text-xl font-semibold text-slate-800 mb-3">
+                    Medication Logs
+                </h4>
+
+                <p class="text-slate-500 mb-6">
+                    Record medication given to children and keep a clear history.
+                </p>
+
+                <a href="{{ route('carer.medication.index') }}"
+                    class="inline-block bg-indigo-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-indigo-700 transition">
+                    Open Medication Logs
                 </a>
             </div>
 
