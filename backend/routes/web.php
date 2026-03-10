@@ -5,6 +5,7 @@ use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Carer\AttendanceController;
 use App\Http\Controllers\Carer\DailyReportController;
 use App\Http\Controllers\Carer\DailyUpdateController;
+use App\Http\Controllers\Carer\MedicationController;
 use App\Http\Controllers\Manager\ReportsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use App\Http\Controllers\Parent\AcknowledgementController; // ✅ ADD THIS
@@ -60,6 +61,10 @@ Route::middleware(['auth', 'role:carer'])
         // Daily Updates (structured)
         Route::get('/daily-updates', [DailyUpdateController::class, 'index'])->name('daily-updates.index');
         Route::post('/daily-updates', [DailyUpdateController::class, 'store'])->name('daily-updates.store');
+
+        // Medication Logs
+        Route::get('/medication', [MedicationController::class, 'index'])->name('medication.index');
+        Route::post('/medication', [MedicationController::class, 'store'])->name('medication.store');
     });
 
 Route::middleware(['auth', 'role:manager'])
