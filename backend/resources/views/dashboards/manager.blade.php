@@ -345,7 +345,21 @@
                             View Daily Reports
                         </a>
                     </div>
+                    </div>
                 </div>
+                <div class="rounded-2xl border border-slate-200 bg-white/5 shadow-sm backdrop-blur
+                                dark:border-slate-800 dark:bg-slate-950/40">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-white">Medication Logs</h3>
+                            <p class="mt-2 text-sm text-slate-300">
+                                Track medication records logged by carers for each child.
+                            </p>
+
+                            <a href="{{ route('manager.reports.medication.index') }}"
+                                class="mt-5 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+                                View Medication Logs
+                            </a>
+                        </div>
 
             </div>
 
