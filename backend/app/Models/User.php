@@ -46,5 +46,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Room::class)->withTimestamps();
     }
+
+    public function medicationLogs()
+    {
+        return $this->hasMany(\App\Models\MedicationLog::class, 'carer_id');
+    }
 }
 

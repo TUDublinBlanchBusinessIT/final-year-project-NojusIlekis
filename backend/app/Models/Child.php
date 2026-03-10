@@ -27,4 +27,9 @@ class Child extends Model
     {
         return $this->hasMany(DailyReport::class);
     }
+
+    public function medicationLogs()
+    {
+        return $this->hasMany(\App\Models\MedicationLog::class);
+    }
 }
