@@ -67,6 +67,8 @@ Room (name, age_band)
       |     ↑ MediaUpdate (daily_report_id)
       ↑ DailyUpdate (child_id, date, meals, sleep, notes, created_by)
       ↑ MedicationLog (child_id, carer_id, medication_name, dosage, date, time_given, notes)
+      ↑ Invoice (child_id, parent_id, period_start, period_end, due_date, total, discount, status: draft|sent|paid)
+            ↑ InvoiceItem (invoice_id, description, qty, unit_price, total)
 
 Acknowledgement (record_type, record_id, parent_id, status: pending|acknowledged, signed_at, signature_name)
 ```
@@ -91,6 +93,8 @@ app/Http/Controllers/
     ReportsController       — attendance and task reports
     DailyReportsController  — view carer-written reports; request parent acknowledgement
     MedicationLogsController — view all medication logs filtered by date/room
+    InvoiceController        — create invoices for a child/parent, add line items, apply discount
+    ChildController          — full CRUD for children (index with search/room filter, create, show profile, edit, delete)
   Parent/
     AcknowledgementController — list pending acknowledgements; sign with name + checkbox
   ProfileController         — shared profile edit/delete

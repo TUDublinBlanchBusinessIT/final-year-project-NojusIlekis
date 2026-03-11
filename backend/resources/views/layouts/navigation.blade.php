@@ -30,6 +30,9 @@
                         <x-nav-link :href="route('manager.dashboard')" :active="request()->routeIs('manager.dashboard')">
                             {{ __('Manager') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('manager.children.index')" :active="request()->routeIs('manager.children.*')">
+                            {{ __('Children') }}
+                        </x-nav-link>
                     @endif
                 </div>
 

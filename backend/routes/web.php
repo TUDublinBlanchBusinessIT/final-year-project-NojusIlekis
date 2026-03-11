@@ -9,6 +9,7 @@ use App\Http\Controllers\Carer\MedicationController;
 use App\Http\Controllers\Manager\ReportsController;
 use App\Http\Controllers\Manager\MedicationLogsController;
 use App\Http\Controllers\Manager\InvoiceController;
+use App\Http\Controllers\Manager\ChildController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use App\Http\Controllers\Parent\AcknowledgementController;
 use Illuminate\Support\Facades\Route;
@@ -117,8 +118,9 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])
             ->name('invoices.show');
-        
-        
+
+        // Children CRUD
+        Route::resource('children', ChildController::class);
     });
 
 require __DIR__.'/auth.php';
