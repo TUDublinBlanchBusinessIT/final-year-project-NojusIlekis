@@ -10,13 +10,23 @@
                 </p>
             </div>
 
-            <a href="{{ route('manager.invoices.index') }}"
-               class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
-                      bg-slate-50 text-slate-700 border border-slate-200
-                      hover:bg-slate-100
-                      dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                Back to Invoices
-            </a>
+            <div class="flex items-center gap-3">
+                <a href="{{ route('manager.invoices.print', $invoice) }}"
+                   target="_blank"
+                   class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
+                          bg-slate-700 text-white border border-slate-700
+                          hover:bg-slate-800">
+                    Print Invoice
+                </a>
+
+                <a href="{{ route('manager.invoices.index') }}"
+                   class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
+                          bg-slate-50 text-slate-700 border border-slate-200
+                          hover:bg-slate-100
+                          dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
+                    Back to Invoices
+                </a>
+            </div>
         </div>
     </x-slot>
 

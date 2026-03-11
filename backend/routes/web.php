@@ -131,6 +131,9 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::patch('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])
             ->name('invoices.status.update');
+        
+        Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])
+            ->name('invoices.print');
 
         // Parent linking & room assignment (must be before the resource route)
         Route::get('children/{child}/link-parent', [ChildController::class, 'linkParentForm'])->name('children.link-parent');
