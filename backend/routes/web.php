@@ -8,6 +8,7 @@ use App\Http\Controllers\Carer\DailyUpdateController;
 use App\Http\Controllers\Carer\MedicationController;
 use App\Http\Controllers\Manager\ReportsController;
 use App\Http\Controllers\Manager\MedicationLogsController;
+use App\Http\Controllers\Manager\InvoiceController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use App\Http\Controllers\Parent\AcknowledgementController;
 use Illuminate\Support\Facades\Route;
@@ -94,6 +95,13 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::get('/reports/medication', [MedicationLogsController::class, 'index'])
             ->name('reports.medication.index');
+
+        // Manager Invoices
+        Route::get('/invoices/create', [InvoiceController::class, 'create'])
+            ->name('invoices.create');
+
+        Route::post('/invoices', [InvoiceController::class, 'store'])
+            ->name('invoices.store');
     });
 
 require __DIR__.'/auth.php';
