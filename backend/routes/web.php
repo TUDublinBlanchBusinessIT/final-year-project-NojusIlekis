@@ -6,6 +6,7 @@ use App\Http\Controllers\Carer\AttendanceController;
 use App\Http\Controllers\Carer\DailyReportController;
 use App\Http\Controllers\Carer\DailyUpdateController;
 use App\Http\Controllers\Carer\MedicationController;
+use App\Http\Controllers\Carer\IncidentReportController;
 use App\Http\Controllers\Manager\ReportsController;
 use App\Http\Controllers\Manager\MedicationLogsController;
 use App\Http\Controllers\Manager\InvoiceController;
@@ -73,6 +74,10 @@ Route::middleware(['auth', 'role:carer'])
         // Medication Logs
         Route::get('/medication', [MedicationController::class, 'index'])->name('medication.index');
         Route::post('/medication', [MedicationController::class, 'store'])->name('medication.store');
+
+        // Incident Reports
+        Route::get('/incident-reports', [IncidentReportController::class, 'index'])->name('incident-reports.index');
+        Route::post('/incident-reports', [IncidentReportController::class, 'store'])->name('incident-reports.store');
     });
 
 Route::middleware(['auth', 'role:manager'])

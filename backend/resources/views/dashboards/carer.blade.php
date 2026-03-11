@@ -79,6 +79,7 @@
                 </a>
             </div>
 
+            <!-- Medication Card -->
             <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-slate-100">
                 <h4 class="text-xl font-semibold text-slate-800 mb-3">
                     Medication Logs
@@ -93,6 +94,27 @@
                     Open Medication Logs
                 </a>
             </div>
+
+            <!-- Incident report card -->
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-6
+                    dark:border-slate-800 dark:bg-slate-950/40">
+
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                Incident Reports
+            </h3>
+
+            <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">
+                Log and review incidents that occur during the day.
+            </p>
+
+            <a href="{{ route('carer.incident-reports.index') }}"
+                class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white
+                    bg-gradient-to-r from-red-600 to-red-700
+                    hover:brightness-110 shadow-sm">
+                View Incident Reports
+            </a>
+
+        </div>
 
         </div>
     </div>
