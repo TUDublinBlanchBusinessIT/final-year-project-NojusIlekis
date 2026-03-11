@@ -23,6 +23,24 @@
     <div class="py-8">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
+            @if (session('success'))
+                <div class="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-green-700
+                            dark:border-green-900/60 dark:bg-green-950/30 dark:text-green-200">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-700
+                            dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-200">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
@@ -45,6 +63,42 @@
                             <p><span class="font-semibold">Discount:</span> €{{ number_format($invoice->discount, 2) }}</p>
                             <p><span class="font-semibold">Final Total:</span> €{{ number_format($finalTotal, 2) }}</p>
                         </div>
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        @if($invoice->status === 'draft')
+                            <form method="POST" action="{{ route('manager.invoices.status.update', $invoice) }}">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="sent">
+
+                                <button type="submit"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
+                                           bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                                           shadow-sm shadow-blue-500/20
+                                           hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
+                                           focus:outline-none focus:ring-4 focus:ring-blue-200
+                                           active:translate-y-[1px]
+                                           dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
+                                    Mark as Sent
+                                </button>
+                            </form>
+                        @endif
+
+                        @if($invoice->status === 'sent')
+                            <form method="POST" action="{{ route('manager.invoices.status.update', $invoice) }}">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="paid">
+
+                                <button type="submit"
+                                    class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
+                                           bg-emerald-600 hover:bg-emerald-700
+                                           focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                                    Mark as Paid
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -127,4 +127,20 @@ class InvoiceController extends Controller
         return redirect()->route('manager.invoices.items.create', $invoice)
             ->with('success', 'Discount updated successfully.');
     }
+
+    public function updateStatus(Request $request, Invoice $invoice)
+{
+    $validated = $request->validate([
+        'status' => ['required', 'in:sent,paid'],
+    ]);
+
+    $invoice->update([
+        'status' => $validated['status'],
+    ]);
+
+    return redirect()
+        ->route('manager.invoices.show', $invoice)
+        ->with('success', 'Invoice status updated.');
+}
+
 }
