@@ -9,7 +9,7 @@ use App\Http\Controllers\Carer\MedicationController;
 use App\Http\Controllers\Manager\ReportsController;
 use App\Http\Controllers\Manager\MedicationLogsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
-use App\Http\Controllers\Parent\AcknowledgementController; // ✅ ADD THIS
+use App\Http\Controllers\Parent\AcknowledgementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,6 +42,9 @@ Route::middleware(['auth', 'role:parent'])
         // Parent acknowledgements
         Route::get('/acknowledgements', [AcknowledgementController::class, 'index'])
             ->name('acknowledgements.index');
+
+        Route::post('/acknowledgements/{acknowledgement}/sign', [AcknowledgementController::class, 'sign'])
+            ->name('acknowledgements.sign');
     });
 
 Route::middleware(['auth', 'role:carer'])

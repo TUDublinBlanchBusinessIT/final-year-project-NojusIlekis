@@ -19,4 +19,30 @@ class AcknowledgementController extends Controller
 
         return view('parent.acknowledgements.index', compact('acknowledgements'));
     }
+
+    public function sign(Request $request, Acknowledgement $acknowledgement)
+    {
+        $parent = auth()->user();
+
+        if ($acknowledgement->parent_id !== $parent->id) {
+            abort(403);
+        }
+
+        if ($acknowledgement->status === 'acknowledged') {
+            return back()->with('error', 'This acknowledgement has already been signed.');
+        }
+
+        $validated = $request->validate([
+            'signature_name' => ['required', 'string', 'max:255'],
+            'confirm_acknowledgement' => ['accepted'],
+        ]);
+
+        $acknowledgement->update([
+            'status' => 'acknowledged',
+            'signed_at' => now(),
+            'signature_name' => $validated['signature_name'],
+        ]);
+
+        return back()->with('success', 'Acknowledgement signed successfully.');
+    }
 }
