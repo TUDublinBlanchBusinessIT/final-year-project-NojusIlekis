@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Controller;
 use App\Models\Child;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -27,7 +28,7 @@ class InvoiceController extends Controller
 
         $child = Child::with('parent')->findOrFail($validated['child_id']);
 
-        Invoice::create([
+        $invoice = Invoice::create([
             'child_id' => $child->id,
             'parent_id' => $child->parent_user_id,
             'period_start' => $validated['period_start'],
@@ -37,7 +38,40 @@ class InvoiceController extends Controller
             'status' => 'draft',
         ]);
 
-        return redirect()->route('manager.invoices.create')
-            ->with('success', 'Invoice created successfully as draft.');
+        return redirect()->route('manager.invoices.items.create', $invoice)
+            ->with('success', 'Invoice created successfully as draft. You can now add line items.');
+    }
+
+    public function createItem(Invoice $invoice)
+    {
+        $invoice->load(['child', 'parent', 'items']);
+
+        return view('manager.reports.invoices.items.create', compact('invoice'));
+    }
+
+    public function storeItem(Request $request, Invoice $invoice)
+    {
+        $validated = $request->validate([
+            'description' => ['required', 'string', 'max:255'],
+            'qty' => ['required', 'integer', 'min:1'],
+            'unit_price' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        $lineTotal = $validated['qty'] * $validated['unit_price'];
+
+        InvoiceItem::create([
+            'invoice_id' => $invoice->id,
+            'description' => $validated['description'],
+            'qty' => $validated['qty'],
+            'unit_price' => $validated['unit_price'],
+            'total' => $lineTotal,
+        ]);
+
+        $invoice->update([
+            'total' => $invoice->items()->sum('total'),
+        ]);
+
+        return redirect()->route('manager.invoices.items.create', $invoice)
+            ->with('success', 'Invoice item added successfully.');
     }
 }

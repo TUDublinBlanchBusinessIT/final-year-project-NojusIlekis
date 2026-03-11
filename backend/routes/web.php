@@ -102,6 +102,12 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::post('/invoices', [InvoiceController::class, 'store'])
             ->name('invoices.store');
+
+        Route::get('/invoices/{invoice}/items/create', [InvoiceController::class, 'createItem'])
+            ->name('invoices.items.create');
+
+        Route::post('/invoices/{invoice}/items', [InvoiceController::class, 'storeItem'])
+            ->name('invoices.items.store');
     });
 
 require __DIR__.'/auth.php';

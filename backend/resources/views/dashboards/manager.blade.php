@@ -1,13 +1,11 @@
 <x-app-layout>
     @php
-        // Safe defaults so the page won't crash if controller variables aren't set yet
         $filters = $filters ?? [
             'start_date' => now()->subDays(6)->toDateString(),
             'end_date' => now()->toDateString(),
             'room_id' => null,
         ];
 
-        // If you still have old $kpi from Task 1/2, use it as fallback for overall
         $kpiOverall = $kpiOverall ?? ($kpi ?? [
             'rangeLabel' => 'Last 7 days',
             'present' => 0,
@@ -252,7 +250,6 @@
                         </div>
                     </div>
 
-                    {{-- 2023 styling + responsive height --}}
                     <div class="mt-5 rounded-xl border border-slate-200 bg-white p-4 h-64 sm:h-72
                                 dark:border-slate-800 dark:bg-slate-950/20">
                         <canvas id="attendanceTrendChart"></canvas>
@@ -273,7 +270,7 @@
             </div>
 
             {{-- Quick actions --}}
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
                 {{-- Attendance Summary --}}
                 <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
@@ -345,28 +342,61 @@
                             View Daily Reports
                         </a>
                     </div>
+                </div>
+
+                {{-- Medication Logs --}}
+                <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
+                            dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                            Medication Logs
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                            Track medication records logged by carers for each child.
+                        </p>
+
+                        <a href="{{ route('manager.reports.medication.index') }}"
+                           class="mt-4 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
+                                  bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                                  shadow-sm shadow-blue-500/20
+                                  hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
+                                  focus:outline-none focus:ring-4 focus:ring-blue-200
+                                  active:translate-y-[1px]
+                                  dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
+                            View Medication Logs
+                        </a>
                     </div>
                 </div>
-                <div class="rounded-2xl border border-slate-200 bg-white/5 shadow-sm backdrop-blur
-                                dark:border-slate-800 dark:bg-slate-950/40">
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold text-white">Medication Logs</h3>
-                            <p class="mt-2 text-sm text-slate-300">
-                                Track medication records logged by carers for each child.
-                            </p>
 
-                            <a href="{{ route('manager.reports.medication.index') }}"
-                                class="mt-5 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
-                                View Medication Logs
-                            </a>
-                        </div>
+                {{-- Invoices --}}
+                <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
+                            dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                            Invoices
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                            Create and manage monthly invoices for children and parents.
+                        </p>
+
+                        <a href="{{ route('manager.invoices.create') }}"
+                           class="mt-4 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
+                                  bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                                  shadow-sm shadow-blue-500/20
+                                  hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
+                                  focus:outline-none focus:ring-4 focus:ring-blue-200
+                                  active:translate-y-[1px]
+                                  dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
+                            Create Invoice
+                        </a>
+                    </div>
+                </div>
 
             </div>
 
         </div>
     </div>
 
-    {{-- Loading state for filters --}}
     <script>
         (function () {
             const form = document.getElementById('kpiFilterForm');
@@ -381,7 +411,6 @@
         })();
     </script>
 
-    {{-- Chart.js + Trend chart script --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         (function () {
