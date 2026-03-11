@@ -8,6 +8,18 @@ use Illuminate\Http\Request;
 
 class AcknowledgementController extends Controller
 {
+    public function dashboard()
+    {
+        $parent = auth()->user();
+
+        $acknowledgements = Acknowledgement::where('parent_id', $parent->id)
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
+
+        return view('dashboards.parent', compact('acknowledgements'));
+    }
+
     public function index(Request $request)
     {
         $parent = auth()->user();

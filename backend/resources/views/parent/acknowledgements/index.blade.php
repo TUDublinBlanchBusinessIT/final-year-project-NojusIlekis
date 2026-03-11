@@ -84,31 +84,35 @@
                                     </td>
 
                                     <td class="px-5 py-4">
-                                        <form method="POST" action="{{ route('parent.acknowledgements.sign', $ack) }}" class="space-y-3">
-                                            @csrf
+                                        @if($ack->status === 'pending')
+                                            <form method="POST" action="{{ route('parent.acknowledgements.sign', $ack) }}" class="space-y-3">
+                                                @csrf
 
-                                            <div>
-                                                <input
-                                                    type="text"
-                                                    name="signature_name"
-                                                    placeholder="Type your full name"
-                                                    value="{{ old('signature_name') }}"
-                                                    class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                                    required
-                                                >
-                                            </div>
+                                                <div>
+                                                    <input
+                                                        type="text"
+                                                        name="signature_name"
+                                                        placeholder="Type your full name"
+                                                        value="{{ old('signature_name') }}"
+                                                        class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                                        required
+                                                    >
+                                                </div>
 
-                                            <label class="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-200">
-                                                <input type="checkbox" name="confirm_acknowledgement" value="1" class="mt-1" required>
-                                                <span>I confirm I have read this item.</span>
-                                            </label>
+                                                <label class="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-200">
+                                                    <input type="checkbox" name="confirm_acknowledgement" value="1" class="mt-1" required>
+                                                    <span>I confirm I have read this item.</span>
+                                                </label>
 
-                                            <button
-                                                type="submit"
-                                                class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
-                                                Acknowledge
-                                            </button>
-                                        </form>
+                                                <button
+                                                    type="submit"
+                                                    class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
+                                                    Acknowledge
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="text-sm text-slate-500 dark:text-slate-400">Already signed</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty

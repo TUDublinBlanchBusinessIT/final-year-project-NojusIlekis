@@ -37,7 +37,7 @@ Route::middleware(['auth', 'role:parent'])
     ->prefix('parent')
     ->name('parent.')
     ->group(function () {
-        Route::view('/dashboard', 'dashboards.parent')->name('dashboard');
+        Route::get('/dashboard', [AcknowledgementController::class, 'dashboard'])->name('dashboard');
 
         // Parent acknowledgements
         Route::get('/acknowledgements', [AcknowledgementController::class, 'index'])
