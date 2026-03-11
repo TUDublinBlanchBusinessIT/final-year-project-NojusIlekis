@@ -270,7 +270,7 @@
             </div>
 
             {{-- Quick actions --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                 {{-- Attendance Summary --}}
                 <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
@@ -390,6 +390,26 @@
                             View Invoices
                         </a>
                     </div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-6
+                            dark:border-slate-800 dark:bg-slate-950/40">
+
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                        Incident Reports
+                    </h3>
+
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">
+                        Review incidents reported by carers and follow up with parents if required.
+                    </p>
+
+                    <a href="{{ route('manager.reports.incidents') }}"
+                        class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white
+                                bg-gradient-to-r from-red-600 to-red-700
+                                hover:brightness-110 shadow-sm">
+                            View Incidents
+                    </a>
+
                 </div>
 
             </div>
