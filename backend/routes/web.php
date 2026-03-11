@@ -119,6 +119,9 @@ Route::middleware(['auth', 'role:manager'])
         Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])
             ->name('invoices.show');
 
+        Route::patch('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])
+            ->name('invoices.status.update');
+
         // Children CRUD
         Route::resource('children', ChildController::class);
     });
