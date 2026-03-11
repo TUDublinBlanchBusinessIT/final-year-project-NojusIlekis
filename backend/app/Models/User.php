@@ -51,5 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\MedicationLog::class, 'carer_id');
     }
-}
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'parent_id');
+    }
+}

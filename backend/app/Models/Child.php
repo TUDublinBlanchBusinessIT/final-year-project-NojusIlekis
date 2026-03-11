@@ -32,4 +32,9 @@ class Child extends Model
     {
         return $this->hasMany(\App\Models\MedicationLog::class);
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }
