@@ -21,4 +21,17 @@ class IncidentReportsController extends Controller
 
         return view('manager.reports.incident-reports.index', compact('reports','date'));
     }
+
+    public function updateStatus(Request $request, IncidentReport $incident)
+    {
+        $request->validate([
+            'status' => 'required|in:open,reviewed,closed',
+        ]);
+
+        $incident->update([
+            'status' => $request->status
+        ]);
+
+        return back()->with('success', 'Incident status updated.');
+    }
 }

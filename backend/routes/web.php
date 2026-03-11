@@ -165,6 +165,10 @@ Route::middleware(['auth', 'role:manager'])
 
         // Carers CRUD
         Route::resource('carers', CarerController::class);
+
+        Route::patch('/reports/incidents/{incident}/status', 
+            [IncidentReportsController::class, 'updateStatus']
+        )->name('reports.incidents.status');
     });
 
 require __DIR__.'/auth.php';
