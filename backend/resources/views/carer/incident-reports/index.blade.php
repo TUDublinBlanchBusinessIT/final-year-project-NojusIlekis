@@ -17,6 +17,12 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="mb-4 rounded-lg bg-red-100 px-4 py-3 text-red-800">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <form method="POST"
               action="{{ route('carer.incident-reports.store') }}"
               style="background:white;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.05);margin-bottom:24px;">
@@ -33,6 +39,10 @@
                                 {{ $child->first_name }} {{ $child->last_name }}
                             </option>
                         @endforeach
+
+                        @error('child_id')
+                            <p style="color:#dc2626;font-size:14px;margin-top:6px;">{{ $message }}</p>
+                        @enderror
                     </select>
                 </div>
 
@@ -46,6 +56,10 @@
                                 {{ $child->room->name ?? 'Room '.$child->room_id }}
                             </option>
                         @endforeach
+
+                        @error('room_id')
+                            <p style="color:#dc2626;font-size:14px;margin-top:6px;">{{ $message }}</p>
+                        @enderror
                     </select>
                 </div>
             </div>
@@ -71,6 +85,10 @@
                         <option value="low" @selected(old('severity') === 'low')>Low</option>
                         <option value="medium" @selected(old('severity') === 'medium')>Medium</option>
                         <option value="high" @selected(old('severity') === 'high')>High</option>
+
+                        @error('severity')
+                            <p style="color:#dc2626;font-size:14px;margin-top:6px;">{{ $message }}</p>
+                        @enderror
                     </select>
                 </div>
             </div>
@@ -80,6 +98,10 @@
                 <input type="text" name="title" value="{{ old('title') }}" required
                        placeholder="e.g. Fall during outdoor play"
                        style="width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #ccc;">
+
+                        @error('title')
+                            <p style="color:#dc2626;font-size:14px;margin-top:6px;">{{ $message }}</p>
+                        @enderror
             </div>
 
             <div style="margin-bottom:15px;">
@@ -87,6 +109,10 @@
                 <textarea name="description" rows="4" required
                           style="width:100%;padding:12px;margin-top:6px;border-radius:8px;border:1px solid #ccc;"
                           placeholder="Describe what happened...">{{ old('description') }}</textarea>
+
+                        @error('description')
+                            <p style="color:#dc2626;font-size:14px;margin-top:6px;">{{ $message }}</p>
+                        @enderror
             </div>
 
             <div style="margin-bottom:15px;">
@@ -94,6 +120,10 @@
                 <textarea name="action_taken" rows="3"
                           style="width:100%;padding:12px;margin-top:6px;border-radius:8px;border:1px solid #ccc;"
                           placeholder="Describe what action was taken...">{{ old('action_taken') }}</textarea>
+
+                        @error('action_taken')
+                            <p style="color:#dc2626;font-size:14px;margin-top:6px;">{{ $message }}</p>
+                        @enderror
             </div>
 
             <div style="margin-bottom:20px;display:flex;align-items:center;gap:10px;">
