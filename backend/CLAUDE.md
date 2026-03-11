@@ -96,6 +96,7 @@ app/Http/Controllers/
     InvoiceController        — create invoices for a child/parent, add line items, apply discount
     ChildController          — full CRUD for children (index with search/room filter, create, show profile, edit, delete)
     ParentController         — full CRUD for parents (Users with role='parent'); uses $parentUser variable (not $parent — PHP reserved word); destroy() guards against deleting parents with linked children
+    CarerController          — full CRUD for carers (Users with role='carer'); index supports search + active room filter; store/update handle room_user pivot assignment (attach with start_date, close old assignment by setting end_date); show displays current room, room history, and activity counts
   Parent/
     AcknowledgementController — list pending acknowledgements; sign with name + checkbox
   ProfileController         — shared profile edit/delete
