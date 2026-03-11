@@ -15,6 +15,10 @@ class Child extends Model
         'room_id',
     ];
 
+    protected $casts = [
+        'dob' => 'date',
+    ];
+
     public function room()
     {
         return $this->belongsTo(Room::class);
@@ -27,6 +31,16 @@ class Child extends Model
             ->withTimestamps();
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function dailyUpdates()
+    {
+        return $this->hasMany(DailyUpdate::class);
+    }
+
     public function dailyReports()
     {
         return $this->hasMany(DailyReport::class);
@@ -34,6 +48,6 @@ class Child extends Model
 
     public function medicationLogs()
     {
-        return $this->hasMany(\App\Models\MedicationLog::class);
+        return $this->hasMany(MedicationLog::class);
     }
 }

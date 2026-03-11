@@ -73,8 +73,9 @@ Acknowledgement (record_type, record_id, parent_id, status: pending|acknowledged
 
 - Children no longer have a `parent_user_id` column — parent links use the `child_parent` pivot (supports multiple parents per child).
 - `room_id` on `children` is nullable (child can be unassigned from a room).
-- `room_user` unique constraint is on `(room_id, user_id, start_date)` — allows tracking carer room history.
+- `room_user` unique constraint is on `(room_id, user_id, start_date)` — allows tracking carer room history. Use `User::activeRooms()` / `Room::activeCarers()` (where `end_date IS NULL`) to get current assignments.
 - Attendance records store `room_id` directly (denormalised) to support efficient room-level filtering.
+- Two data migration files use raw SQL — these must stay SQLite-compatible (subquery style, not MySQL `UPDATE…JOIN` or `DELETE alias FROM`).
 
 ### Controller Structure
 

@@ -10,13 +10,14 @@ return new class extends Migration
     public function up(): void
     {
         // STEP 1: Remove duplicates if any exist (keep the earliest record)
+        // Uses a subquery compatible with both MySQL and SQLite
         DB::statement("
-            DELETE dr1 FROM daily_reports dr1
-            INNER JOIN daily_reports dr2
-            WHERE 
-                dr1.id > dr2.id
-                AND dr1.child_id = dr2.child_id
-                AND dr1.date = dr2.date
+            DELETE FROM daily_reports
+            WHERE id NOT IN (
+                SELECT MIN(id)
+                FROM daily_reports
+                GROUP BY child_id, date
+            )
         ");
 
         // STEP 2: Add unique constraint
