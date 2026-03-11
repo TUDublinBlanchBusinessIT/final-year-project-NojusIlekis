@@ -14,6 +14,7 @@ use App\Http\Controllers\Manager\ParentController;
 use App\Http\Controllers\Manager\CarerController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use App\Http\Controllers\Parent\AcknowledgementController;
+use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -49,6 +50,13 @@ Route::middleware(['auth', 'role:parent'])
 
         Route::post('/acknowledgements/{acknowledgement}/sign', [AcknowledgementController::class, 'sign'])
             ->name('acknowledgements.sign');
+
+        // Parent invoices
+        Route::get('/invoices', [ParentInvoiceController::class, 'index'])
+            ->name('invoices.index');
+
+        Route::get('/invoices/{invoice}', [ParentInvoiceController::class, 'show'])
+            ->name('invoices.show');
     });
 
 Route::middleware(['auth', 'role:carer'])
@@ -111,10 +119,10 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::post('/invoices/{invoice}/items', [InvoiceController::class, 'storeItem'])
             ->name('invoices.items.store');
-            
+
         Route::patch('/invoices/{invoice}/discount', [InvoiceController::class, 'updateDiscount'])
             ->name('invoices.discount.update');
-        
+
         Route::get('/invoices', [InvoiceController::class, 'index'])
             ->name('invoices.index');
 
