@@ -132,6 +132,12 @@ Route::middleware(['auth', 'role:manager'])
         Route::patch('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])
             ->name('invoices.status.update');
 
+        // Parent linking & room assignment (must be before the resource route)
+        Route::get('children/{child}/link-parent', [ChildController::class, 'linkParentForm'])->name('children.link-parent');
+        Route::post('children/{child}/link-parent', [ChildController::class, 'linkParent'])->name('children.link-parent.store');
+        Route::delete('children/{child}/unlink-parent/{user}', [ChildController::class, 'unlinkParent'])->name('children.unlink-parent');
+        Route::patch('children/{child}/assign-room', [ChildController::class, 'assignRoom'])->name('children.assign-room');
+
         // Children CRUD
         Route::resource('children', ChildController::class);
 

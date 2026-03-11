@@ -85,4 +85,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invoice::class, 'parent_id');
     }
+
+    public function incidentReports()
+    {
+        return $this->hasMany(\App\Models\IncidentReport::class, 'carer_id');
+    }
 }
