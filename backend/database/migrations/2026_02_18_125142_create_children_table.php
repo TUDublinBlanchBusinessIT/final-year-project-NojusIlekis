@@ -13,18 +13,18 @@ return new class extends Migration
 
             $table->string('first_name');
             $table->string('last_name');
+            $table->date('dob')->nullable();
+            $table->text('allergies')->nullable();
+            $table->text('medical_notes')->nullable();
 
-            $table->foreignId('room_id')->constrained('rooms')->cascadeOnDelete();
-
-            $table->foreignId('parent_user_id')
+            $table->foreignId('room_id')
                 ->nullable()
-                ->constrained('users')
+                ->constrained('rooms')
                 ->nullOnDelete();
 
             $table->timestamps();
 
             $table->index(['room_id']);
-            $table->index(['parent_user_id']);
         });
     }
 

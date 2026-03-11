@@ -9,8 +9,10 @@ class Child extends Model
     protected $fillable = [
         'first_name',
         'last_name',
+        'dob',
+        'allergies',
+        'medical_notes',
         'room_id',
-        'parent_user_id',
     ];
 
     public function room()
@@ -18,9 +20,11 @@ class Child extends Model
         return $this->belongsTo(Room::class);
     }
 
-    public function parent()
+    public function parents()
     {
-        return $this->belongsTo(User::class, 'parent_user_id');
+        return $this->belongsToMany(User::class, 'child_parent', 'child_id', 'parent_id')
+            ->withPivot('relationship_type', 'legal_guardian')
+            ->withTimestamps();
     }
 
     public function dailyReports()

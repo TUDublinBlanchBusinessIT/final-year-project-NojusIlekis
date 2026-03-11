@@ -57,9 +57,11 @@ An `IdleTimeout` middleware enforces session expiry based on `session.lifetime` 
 
 ```
 User (role: parent|carer|manager)
-  ↕ (pivot: room_user)
-Room
-  ↑ Child (room_id, parent_user_id → User)
+  ↕ (pivot: room_user — room_id, user_id, start_date, end_date, is_primary)
+Room (name, age_band)
+  ↑ Child (room_id nullable, dob, allergies, medical_notes)
+      ↕ (pivot: child_parent — child_id, parent_id, relationship_type, legal_guardian)
+      User (role: parent)
       ↑ Attendance (child_id, date, status: present|absent, room_id, recorded_by)
       ↑ DailyReport (child_id, carer_id, date, daily_report text)
       |     ↑ MediaUpdate (daily_report_id)
@@ -69,7 +71,10 @@ Room
 Acknowledgement (record_type, record_id, parent_id, status: pending|acknowledged, signed_at, signature_name)
 ```
 
-Carers are assigned to rooms via the `room_user` pivot table. Attendance records store `room_id` directly (denormalised) to support efficient room-level filtering.
+- Children no longer have a `parent_user_id` column — parent links use the `child_parent` pivot (supports multiple parents per child).
+- `room_id` on `children` is nullable (child can be unassigned from a room).
+- `room_user` unique constraint is on `(room_id, user_id, start_date)` — allows tracking carer room history.
+- Attendance records store `room_id` directly (denormalised) to support efficient room-level filtering.
 
 ### Controller Structure
 

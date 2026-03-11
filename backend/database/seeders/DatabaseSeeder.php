@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // ----------------------------
-        // Users (Sprint 1 logins)
+        // Users
         // ----------------------------
         $parent = User::updateOrCreate(
             ['email' => 'parent@test.com'],
@@ -49,7 +49,6 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Extra parents (useful for testing)
         $parent2 = User::updateOrCreate(
             ['email' => 'parent2@test.com'],
             [
@@ -69,47 +68,57 @@ class DatabaseSeeder extends Seeder
         // ----------------------------
         // Assign carer to rooms (pivot room_user)
         // ----------------------------
-        // Uses DB directly so it works even if you haven't added relationships yet.
         DB::table('room_user')->updateOrInsert(
             ['room_id' => $roomA->id, 'user_id' => $carer->id],
-            ['room_id' => $roomA->id, 'user_id' => $carer->id]
+            ['room_id' => $roomA->id, 'user_id' => $carer->id, 'start_date' => now()->toDateString()]
         );
 
         DB::table('room_user')->updateOrInsert(
             ['room_id' => $roomB->id, 'user_id' => $carer->id],
-            ['room_id' => $roomB->id, 'user_id' => $carer->id]
+            ['room_id' => $roomB->id, 'user_id' => $carer->id, 'start_date' => now()->toDateString()]
         );
 
         // ----------------------------
         // Children (split across rooms)
         // ----------------------------
-        $children = [
-            ['first_name' => 'Mia',  'last_name' => 'Kelly',   'room_id' => $roomA->id, 'parent_user_id' => $parent->id],
-            ['first_name' => 'Noah', 'last_name' => 'Byrne',   'room_id' => $roomA->id, 'parent_user_id' => $parent->id],
-            ['first_name' => 'Lily', 'last_name' => 'Murphy',  'room_id' => $roomA->id, 'parent_user_id' => $parent2->id],
-            ['first_name' => 'Jack', 'last_name' => 'Walsh',   'room_id' => $roomA->id, 'parent_user_id' => $parent2->id],
+        $childrenData = [
+            ['first_name' => 'Mia',  'last_name' => 'Kelly',   'room_id' => $roomA->id, 'parent' => $parent],
+            ['first_name' => 'Noah', 'last_name' => 'Byrne',   'room_id' => $roomA->id, 'parent' => $parent],
+            ['first_name' => 'Lily', 'last_name' => 'Murphy',  'room_id' => $roomA->id, 'parent' => $parent2],
+            ['first_name' => 'Jack', 'last_name' => 'Walsh',   'room_id' => $roomA->id, 'parent' => $parent2],
 
-            ['first_name' => 'Ella', 'last_name' => 'Doyle',   'room_id' => $roomB->id, 'parent_user_id' => $parent->id],
-            ['first_name' => 'Leo',  'last_name' => 'Ryan',    'room_id' => $roomB->id, 'parent_user_id' => $parent->id],
-            ['first_name' => 'Ava',  'last_name' => 'O’Brien', 'room_id' => $roomB->id, 'parent_user_id' => $parent2->id],
-            ['first_name' => 'Finn', 'last_name' => 'Nolan',   'room_id' => $roomB->id, 'parent_user_id' => $parent2->id],
+            ['first_name' => 'Ella', 'last_name' => 'Doyle',   'room_id' => $roomB->id, 'parent' => $parent],
+            ['first_name' => 'Leo',  'last_name' => 'Ryan',    'room_id' => $roomB->id, 'parent' => $parent],
+            ['first_name' => 'Ava',  'last_name' => "O'Brien", 'room_id' => $roomB->id, 'parent' => $parent2],
+            ['first_name' => 'Finn', 'last_name' => 'Nolan',   'room_id' => $roomB->id, 'parent' => $parent2],
         ];
 
         $childModels = [];
-        foreach ($children as $c) {
-            $childModels[] = Child::updateOrCreate(
+        foreach ($childrenData as $c) {
+            $child = Child::updateOrCreate(
                 [
                     'first_name' => $c['first_name'],
                     'last_name'  => $c['last_name'],
                     'room_id'    => $c['room_id'],
                 ],
-                $c
+                [
+                    'first_name' => $c['first_name'],
+                    'last_name'  => $c['last_name'],
+                    'room_id'    => $c['room_id'],
+                ]
             );
+
+            // Link parent via child_parent pivot
+            DB::table('child_parent')->updateOrInsert(
+                ['child_id' => $child->id, 'parent_id' => $c['parent']->id],
+                ['child_id' => $child->id, 'parent_id' => $c['parent']->id, 'legal_guardian' => true]
+            );
+
+            $childModels[] = $child;
         }
 
         // ----------------------------
-        // OPTIONAL: sample attendance + daily updates for today
-        // (remove this block if you want empty lists by default)
+        // Sample attendance + daily updates for today
         // ----------------------------
         $today = Carbon::today()->toDateString();
 
@@ -117,9 +126,9 @@ class DatabaseSeeder extends Seeder
             Attendance::updateOrCreate(
                 ['child_id' => $child->id, 'date' => $today],
                 [
-                    'child_id' => $child->id,
-                    'date' => $today,
-                    'status' => 'present',
+                    'child_id'    => $child->id,
+                    'date'        => $today,
+                    'status'      => 'present',
                     'recorded_by' => $carer->id,
                 ]
             );
@@ -127,16 +136,14 @@ class DatabaseSeeder extends Seeder
             DailyUpdate::updateOrCreate(
                 ['child_id' => $child->id, 'date' => $today],
                 [
-                    'child_id' => $child->id,
-                    'date' => $today,
-                    'meals' => 'Breakfast eaten well, good appetite.',
-                    'sleep' => 'Napped for 45 minutes.',
-                    'notes' => 'Had a great day and played nicely with others.',
+                    'child_id'   => $child->id,
+                    'date'       => $today,
+                    'meals'      => 'Breakfast eaten well, good appetite.',
+                    'sleep'      => 'Napped for 45 minutes.',
+                    'notes'      => 'Had a great day and played nicely with others.',
                     'created_by' => $carer->id,
                 ]
             );
         }
     }
 }
-
-
