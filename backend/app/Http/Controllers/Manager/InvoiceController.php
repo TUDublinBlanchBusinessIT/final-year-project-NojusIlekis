@@ -12,7 +12,7 @@ class InvoiceController extends Controller
 {
     public function create()
     {
-        $children = Child::with('parent')->orderBy('first_name')->get();
+        $children = Child::with('parents')->orderBy('first_name')->get();
 
         return view('manager.reports.invoices.create', compact('children'));
     }
@@ -26,15 +26,24 @@ class InvoiceController extends Controller
             'due_date' => ['required', 'date'],
         ]);
 
-        $child = Child::with('parent')->findOrFail($validated['child_id']);
+        $child = Child::with('parents')->findOrFail($validated['child_id']);
+
+        $parent = $child->parents->first();
+
+        if (!$parent) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'This child does not have a linked parent.');
+        }
 
         $invoice = Invoice::create([
             'child_id' => $child->id,
-            'parent_id' => $child->parent_user_id,
+            'parent_id' => $parent->id,
             'period_start' => $validated['period_start'],
             'period_end' => $validated['period_end'],
             'due_date' => $validated['due_date'],
             'total' => 0,
+            'discount' => 0,
             'status' => 'draft',
         ]);
 
@@ -46,7 +55,10 @@ class InvoiceController extends Controller
     {
         $invoice->load(['child', 'parent', 'items']);
 
-        return view('manager.reports.invoices.items.create', compact('invoice'));
+        $subtotal = $invoice->items->sum('total');
+        $finalTotal = max(0, $subtotal - $invoice->discount);
+
+        return view('manager.reports.invoices.items.create', compact('invoice', 'subtotal', 'finalTotal'));
     }
 
     public function storeItem(Request $request, Invoice $invoice)
@@ -67,11 +79,33 @@ class InvoiceController extends Controller
             'total' => $lineTotal,
         ]);
 
+        $subtotal = $invoice->items()->sum('total');
+        $finalTotal = max(0, $subtotal - $invoice->discount);
+
         $invoice->update([
-            'total' => $invoice->items()->sum('total'),
+            'total' => $finalTotal,
         ]);
 
         return redirect()->route('manager.invoices.items.create', $invoice)
             ->with('success', 'Invoice item added successfully.');
+    }
+
+    public function updateDiscount(Request $request, Invoice $invoice)
+    {
+        $validated = $request->validate([
+            'discount' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        $subtotal = $invoice->items()->sum('total');
+        $discount = min($validated['discount'], $subtotal);
+        $finalTotal = max(0, $subtotal - $discount);
+
+        $invoice->update([
+            'discount' => $discount,
+            'total' => $finalTotal,
+        ]);
+
+        return redirect()->route('manager.invoices.items.create', $invoice)
+            ->with('success', 'Discount updated successfully.');
     }
 }

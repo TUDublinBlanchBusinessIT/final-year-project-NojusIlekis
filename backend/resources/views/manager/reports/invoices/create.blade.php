@@ -12,6 +12,13 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
 
+                    @if(session('error'))
+                        <div class="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-700
+                                    dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-200">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('manager.invoices.store') }}" class="space-y-6">
                         @csrf
 
@@ -27,10 +34,10 @@
                                 <option value="">Choose a child</option>
 
                                 @foreach($children as $child)
-                                    <option value="{{ $child->id }}">
+                                    <option value="{{ $child->id }}" {{ old('child_id') == $child->id ? 'selected' : '' }}>
                                         {{ $child->first_name }} {{ $child->last_name }}
-                                        @if($child->parent)
-                                            - Parent: {{ $child->parent->name }}
+                                        @if($child->parents->count())
+                                            - Parent: {{ $child->parents->first()->name }}
                                         @endif
                                     </option>
                                 @endforeach
@@ -46,6 +53,7 @@
 
                                 <input type="date"
                                        name="period_start"
+                                       value="{{ old('period_start') }}"
                                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
                                               focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                               dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
@@ -58,6 +66,7 @@
 
                                 <input type="date"
                                        name="period_end"
+                                       value="{{ old('period_end') }}"
                                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
                                               focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                               dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
@@ -70,6 +79,7 @@
 
                                 <input type="date"
                                        name="due_date"
+                                       value="{{ old('due_date') }}"
                                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
                                               focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                               dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">

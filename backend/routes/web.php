@@ -108,6 +108,12 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::post('/invoices/{invoice}/items', [InvoiceController::class, 'storeItem'])
             ->name('invoices.items.store');
+            
+        Route::patch('/invoices/{invoice}/discount', [InvoiceController::class, 'updateDiscount'])
+            ->name('invoices.discount.update');
+        
+        
+        
     });
 
 require __DIR__.'/auth.php';

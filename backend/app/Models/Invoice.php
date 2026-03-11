@@ -15,6 +15,7 @@ class Invoice extends Model
         'period_end',
         'due_date',
         'total',
+        'discount',
         'status',
     ];
 
