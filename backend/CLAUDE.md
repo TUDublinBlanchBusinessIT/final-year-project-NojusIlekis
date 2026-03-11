@@ -57,18 +57,25 @@ An `IdleTimeout` middleware enforces session expiry based on `session.lifetime` 
 
 ```
 User (role: parent|carer|manager)
-  ↕ (pivot: room_user)
-Room
-  ↑ Child (room_id, parent_user_id → User)
+  ↕ (pivot: room_user — room_id, user_id, start_date, end_date, is_primary)
+Room (name, age_band)
+  ↑ Child (room_id nullable, dob, allergies, medical_notes)
+      ↕ (pivot: child_parent — child_id, parent_id, relationship_type, legal_guardian)
+      User (role: parent)
       ↑ Attendance (child_id, date, status: present|absent, room_id, recorded_by)
       ↑ DailyReport (child_id, carer_id, date, daily_report text)
       |     ↑ MediaUpdate (daily_report_id)
       ↑ DailyUpdate (child_id, date, meals, sleep, notes, created_by)
+      ↑ MedicationLog (child_id, carer_id, medication_name, dosage, date, time_given, notes)
 
-Acknowledgement (record_type, record_id, parent_id, status: pending|signed, signed_at, signature_name)
+Acknowledgement (record_type, record_id, parent_id, status: pending|acknowledged, signed_at, signature_name)
 ```
 
-Carers are assigned to rooms via the `room_user` pivot table. Attendance records store `room_id` directly (denormalised) to support efficient room-level filtering.
+- Children no longer have a `parent_user_id` column — parent links use the `child_parent` pivot (supports multiple parents per child).
+- `room_id` on `children` is nullable (child can be unassigned from a room).
+- `room_user` unique constraint is on `(room_id, user_id, start_date)` — allows tracking carer room history. Use `User::activeRooms()` / `Room::activeCarers()` (where `end_date IS NULL`) to get current assignments.
+- Attendance records store `room_id` directly (denormalised) to support efficient room-level filtering.
+- Two data migration files use raw SQL — these must stay SQLite-compatible (subquery style, not MySQL `UPDATE…JOIN` or `DELETE alias FROM`).
 
 ### Controller Structure
 
@@ -78,10 +85,14 @@ app/Http/Controllers/
     AttendanceController    — mark children present/absent by room and date
     DailyReportController   — write/view written reports + media uploads per child
     DailyUpdateController   — structured updates (meals, sleep, notes) per child
+    MedicationController    — log medication administered to children (scoped to carer's rooms)
   Manager/
     DashboardController     — attendance KPI dashboard with date/room filters and trend chart
     ReportsController       — attendance and task reports
     DailyReportsController  — view carer-written reports; request parent acknowledgement
+    MedicationLogsController — view all medication logs filtered by date/room
+  Parent/
+    AcknowledgementController — list pending acknowledgements; sign with name + checkbox
   ProfileController         — shared profile edit/delete
 ```
 

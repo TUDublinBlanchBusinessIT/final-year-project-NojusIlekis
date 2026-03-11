@@ -44,12 +44,41 @@ class User extends Authenticatable
 
     public function rooms(): BelongsToMany
     {
-        return $this->belongsToMany(Room::class)->withTimestamps();
+        return $this->belongsToMany(Room::class)
+            ->withPivot('start_date', 'end_date', 'is_primary')
+            ->withTimestamps();
+    }
+
+    public function activeRooms(): BelongsToMany
+    {
+        return $this->rooms()->wherePivotNull('end_date');
+    }
+
+    public function children(): BelongsToMany
+    {
+        return $this->belongsToMany(Child::class, 'child_parent', 'parent_id', 'child_id')
+            ->withPivot('relationship_type', 'legal_guardian')
+            ->withTimestamps();
+    }
+
+    public function dailyReports()
+    {
+        return $this->hasMany(DailyReport::class, 'carer_id');
+    }
+
+    public function attendancesRecorded()
+    {
+        return $this->hasMany(Attendance::class, 'recorded_by');
+    }
+
+    public function dailyUpdates()
+    {
+        return $this->hasMany(DailyUpdate::class, 'created_by');
     }
 
     public function medicationLogs()
     {
-        return $this->hasMany(\App\Models\MedicationLog::class, 'carer_id');
+        return $this->hasMany(MedicationLog::class, 'carer_id');
     }
 
     public function invoices()

@@ -16,10 +16,13 @@ return new class extends Migration
 
             $table->foreignId('room_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->date('start_date')->default(now()->toDateString());
+            $table->date('end_date')->nullable();
+            $table->boolean('is_primary')->default(false);
 
             $table->timestamps();
 
-            $table->unique(['room_id', 'user_id']);
+            $table->unique(['room_id', 'user_id', 'start_date']);
         });
     }
 

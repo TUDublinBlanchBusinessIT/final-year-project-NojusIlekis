@@ -148,7 +148,7 @@ class DashboardController extends Controller
 
         $map = [];
         foreach ($trendRows as $r) {
-            $map[$r->date] = [
+            $map[$r->date->toDateString()] = [
                 'present' => (int) $r->present_count,
                 'absent' => (int) $r->absent_count,
             ];

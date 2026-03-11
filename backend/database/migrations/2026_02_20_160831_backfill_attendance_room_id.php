@@ -10,11 +10,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Use a subquery UPDATE compatible with both MySQL and SQLite
         DB::statement("
-            UPDATE attendances a
-            JOIN children c ON c.id = a.child_id
-            SET a.room_id = c.room_id
-            WHERE a.room_id IS NULL
+            UPDATE attendances
+            SET room_id = (SELECT room_id FROM children WHERE children.id = attendances.child_id)
+            WHERE room_id IS NULL
         ");
     }
 
