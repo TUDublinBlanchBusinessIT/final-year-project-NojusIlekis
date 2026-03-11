@@ -31,6 +31,10 @@ class IncidentReportController extends Controller
 
     public function store(Request $request)
     {
+        $carer = auth()->user();
+
+        $roomIds = $carer->rooms()->pluck('rooms.id');
+
         $request->validate([
             'child_id' => 'required|exists:children,id',
             'room_id' => 'required|exists:rooms,id',
@@ -42,6 +46,28 @@ class IncidentReportController extends Controller
             'severity' => 'required|in:low,medium,high',
             'parent_contact_required' => 'nullable|boolean',
         ]);
+
+        if (! $roomIds->contains((int) $request->room_id)) {
+            return back()
+                ->with('error', 'You are not allowed to create incident reports for this room.')
+                ->withInput();
+        }
+
+        $child = Child::where('id', $request->child_id)
+            ->whereIn('room_id', $roomIds)
+            ->first();
+
+        if (! $child) {
+            return back()
+                ->with('error', 'You are not allowed to create incident reports for this child.')
+                ->withInput();
+        }
+
+        if ((int) $child->room_id !== (int) $request->room_id) {
+            return back()
+                ->with('error', 'Selected child does not belong to the selected room.')
+                ->withInput();
+        }
 
         IncidentReport::create([
             'child_id' => $request->child_id,

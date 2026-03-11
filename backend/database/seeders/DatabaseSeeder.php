@@ -7,6 +7,7 @@ use App\Models\Room;
 use App\Models\Child;
 use App\Models\Attendance;
 use App\Models\DailyUpdate;
+use App\Models\IncidentReport;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -144,6 +145,69 @@ class DatabaseSeeder extends Seeder
                     'created_by' => $carer->id,
                 ]
             );
+        }
+
+        // ----------------------------
+        // Sample incident reports
+        // ----------------------------
+        if (!empty($childModels)) {
+            IncidentReport::updateOrCreate(
+                [
+                    'child_id' => $childModels[0]->id,
+                    'incident_date' => now()->toDateString(),
+                    'incident_time' => '11:15:00',
+                    'title' => 'Fall during outdoor play',
+                ],
+                [
+                    'carer_id' => $carer->id,
+                    'room_id' => $childModels[0]->room_id,
+                    'description' => 'Child slipped while running in the outdoor area and grazed left knee.',
+                    'action_taken' => 'Cleaned wound, applied plaster, monitored child for 20 minutes.',
+                    'severity' => 'low',
+                    'parent_contact_required' => true,
+                    'status' => 'open',
+                ]
+            );
+
+            if (isset($childModels[1])) {
+                IncidentReport::updateOrCreate(
+                    [
+                        'child_id' => $childModels[1]->id,
+                        'incident_date' => now()->toDateString(),
+                        'incident_time' => '12:40:00',
+                        'title' => 'Bumped head on table edge',
+                    ],
+                    [
+                        'carer_id' => $carer->id,
+                        'room_id' => $childModels[1]->room_id,
+                        'description' => 'Child stood up quickly and bumped forehead on the corner of a table.',
+                        'action_taken' => 'Applied cold compress and observed child closely for 30 minutes.',
+                        'severity' => 'medium',
+                        'parent_contact_required' => true,
+                        'status' => 'open',
+                    ]
+                );
+            }
+
+            if (isset($childModels[2])) {
+                IncidentReport::updateOrCreate(
+                    [
+                        'child_id' => $childModels[2]->id,
+                        'incident_date' => now()->toDateString(),
+                        'incident_time' => '14:10:00',
+                        'title' => 'Possible allergic reaction',
+                    ],
+                    [
+                        'carer_id' => $carer->id,
+                        'room_id' => $childModels[2]->room_id,
+                        'description' => 'Child developed mild redness around mouth after afternoon snack.',
+                        'action_taken' => 'Snack removed, child monitored, manager informed immediately.',
+                        'severity' => 'high',
+                        'parent_contact_required' => true,
+                        'status' => 'open',
+                    ]
+                );
+            }
         }
     }
 }
