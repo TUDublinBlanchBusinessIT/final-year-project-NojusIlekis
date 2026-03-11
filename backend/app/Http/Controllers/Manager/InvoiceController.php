@@ -10,6 +10,25 @@ use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
+    public function index()
+    {
+        $invoices = Invoice::with(['child', 'parent'])
+            ->latest()
+            ->get();
+
+        return view('manager.reports.invoices.index', compact('invoices'));
+    }
+
+    public function show(Invoice $invoice)
+    {
+        $invoice->load(['child', 'parent', 'items']);
+
+        $subtotal = $invoice->items->sum('total');
+        $finalTotal = $invoice->total;
+
+        return view('manager.reports.invoices.show', compact('invoice', 'subtotal', 'finalTotal'));
+    }
+
     public function create()
     {
         $children = Child::with('parents')->orderBy('first_name')->get();

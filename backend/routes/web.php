@@ -112,6 +112,11 @@ Route::middleware(['auth', 'role:manager'])
         Route::patch('/invoices/{invoice}/discount', [InvoiceController::class, 'updateDiscount'])
             ->name('invoices.discount.update');
         
+        Route::get('/invoices', [InvoiceController::class, 'index'])
+            ->name('invoices.index');
+
+        Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])
+            ->name('invoices.show');
         
         
     });
