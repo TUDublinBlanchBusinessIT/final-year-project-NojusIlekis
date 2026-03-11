@@ -94,7 +94,7 @@ app/Http/Controllers/
     DailyReportsController  — view carer-written reports; request parent acknowledgement
     MedicationLogsController — view all medication logs filtered by date/room
     InvoiceController        — create invoices for a child/parent, add line items, apply discount
-    ChildController          — full CRUD for children (index with search/room filter, create, show profile, edit, delete)
+    ChildController          — full CRUD for children (index with search/room filter, create, show profile, edit, delete); also handles parent linking (linkParentForm, linkParent, unlinkParent — max 2 parents per child, composite PK enforced) and inline room assignment (assignRoom via PATCH)
     ParentController         — full CRUD for parents (Users with role='parent'); uses $parentUser variable (not $parent — PHP reserved word); destroy() guards against deleting parents with linked children
     CarerController          — full CRUD for carers (Users with role='carer'); index supports search + active room filter; store/update handle room_user pivot assignment (attach with start_date, close old assignment by setting end_date); show displays current room, room history, and activity counts
   Parent/
@@ -105,6 +105,10 @@ app/Http/Controllers/
 ### Frontend
 
 Blade templates in `resources/views/`, organised by role (`carer/`, `manager/`, `dashboards/`). Layouts are in `resources/views/layouts/` (`app.blade.php` for authenticated, `guest.blade.php` for auth screens). Alpine.js handles interactive UI behaviour inline. Charts on the manager dashboard use Chart.js data injected from Blade.
+
+Manager views are in `resources/views/manager/` with subdirectories: `children/`, `parents/`, `carers/` (each with index, create, edit, show). All CRUD views share a consistent Tailwind styling pattern: `rounded-2xl` cards with `border-slate-200` borders, blue gradient buttons (`from-blue-600 via-blue-700 to-indigo-700`), amber badge for "Unassigned", red badge styling for destructive actions.
+
+Manager navigation (in `navigation.blade.php`) shows role-specific links: **Dashboard → Children → Parents → Carers** for managers. Each link uses `request()->routeIs('manager.X.*')` for active state.
 
 ### Testing
 
