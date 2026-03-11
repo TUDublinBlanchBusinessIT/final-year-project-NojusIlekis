@@ -64,8 +64,9 @@ Room
       ↑ DailyReport (child_id, carer_id, date, daily_report text)
       |     ↑ MediaUpdate (daily_report_id)
       ↑ DailyUpdate (child_id, date, meals, sleep, notes, created_by)
+      ↑ MedicationLog (child_id, carer_id, medication_name, dosage, date, time_given, notes)
 
-Acknowledgement (record_type, record_id, parent_id, status: pending|signed, signed_at, signature_name)
+Acknowledgement (record_type, record_id, parent_id, status: pending|acknowledged, signed_at, signature_name)
 ```
 
 Carers are assigned to rooms via the `room_user` pivot table. Attendance records store `room_id` directly (denormalised) to support efficient room-level filtering.
@@ -78,10 +79,14 @@ app/Http/Controllers/
     AttendanceController    — mark children present/absent by room and date
     DailyReportController   — write/view written reports + media uploads per child
     DailyUpdateController   — structured updates (meals, sleep, notes) per child
+    MedicationController    — log medication administered to children (scoped to carer's rooms)
   Manager/
     DashboardController     — attendance KPI dashboard with date/room filters and trend chart
     ReportsController       — attendance and task reports
     DailyReportsController  — view carer-written reports; request parent acknowledgement
+    MedicationLogsController — view all medication logs filtered by date/room
+  Parent/
+    AcknowledgementController — list pending acknowledgements; sign with name + checkbox
   ProfileController         — shared profile edit/delete
 ```
 
