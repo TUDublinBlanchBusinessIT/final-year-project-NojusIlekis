@@ -55,4 +55,9 @@ class Child extends Model
     {
         return $this->hasMany(Invoice::class);
     }
+
+    public function incidentReports()
+    {
+        return $this->hasMany(\App\Models\IncidentReport::class);
+    }
 }

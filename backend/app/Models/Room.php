@@ -30,4 +30,9 @@ class Room extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function incidentReports()
+    {
+        return $this->hasMany(\App\Models\IncidentReport::class);
+    }
 }
