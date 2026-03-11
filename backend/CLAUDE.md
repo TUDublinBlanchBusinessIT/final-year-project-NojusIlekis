@@ -95,6 +95,7 @@ app/Http/Controllers/
     MedicationLogsController — view all medication logs filtered by date/room
     InvoiceController        — create invoices for a child/parent, add line items, apply discount
     ChildController          — full CRUD for children (index with search/room filter, create, show profile, edit, delete)
+    ParentController         — full CRUD for parents (Users with role='parent'); uses $parentUser variable (not $parent — PHP reserved word); destroy() guards against deleting parents with linked children
   Parent/
     AcknowledgementController — list pending acknowledgements; sign with name + checkbox
   ProfileController         — shared profile edit/delete
