@@ -129,18 +129,31 @@ class InvoiceController extends Controller
     }
 
     public function updateStatus(Request $request, Invoice $invoice)
-{
-    $validated = $request->validate([
-        'status' => ['required', 'in:sent,paid'],
-    ]);
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'in:sent,paid'],
+        ]);
 
-    $invoice->update([
-        'status' => $validated['status'],
-    ]);
+        $invoice->update([
+            'status' => $validated['status'],
+        ]);
 
-    return redirect()
-        ->route('manager.invoices.show', $invoice)
-        ->with('success', 'Invoice status updated.');
-}
+        return redirect()
+            ->route('manager.invoices.show', $invoice)
+            ->with('success', 'Invoice status updated.');
+    }
 
+    public function print(Invoice $invoice)
+    {
+        $invoice->load(['child', 'parent', 'items']);
+
+        $subtotal = $invoice->items->sum('total');
+        $finalTotal = $invoice->total;
+
+        return view('manager.reports.invoices.print', compact(
+            'invoice',
+            'subtotal',
+            'finalTotal'
+        ));
+    }
 }
