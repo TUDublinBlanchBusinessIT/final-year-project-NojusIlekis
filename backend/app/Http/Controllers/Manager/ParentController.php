@@ -13,6 +13,8 @@ class ParentController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         $parents = User::where('role', 'parent')
             ->withCount('children')
             ->when($request->search, function ($query, $search) {
@@ -30,11 +32,15 @@ class ParentController extends Controller
 
     public function create()
     {
+        $this->authorize('create', User::class);
+
         return view('manager.parents.create');
     }
 
     public function store(StoreParentRequest $request)
     {
+        $this->authorize('create', User::class);
+
         $validated = $request->validated();
 
         $parentUser = User::create([
@@ -55,6 +61,8 @@ class ParentController extends Controller
             ->with(['children.room'])
             ->findOrFail($id);
 
+        $this->authorize('view', $parentUser);
+
         return view('manager.parents.show', compact('parentUser'));
     }
 
@@ -62,12 +70,16 @@ class ParentController extends Controller
     {
         $parentUser = User::where('role', 'parent')->findOrFail($id);
 
+        $this->authorize('update', $parentUser);
+
         return view('manager.parents.edit', compact('parentUser'));
     }
 
     public function update(UpdateParentRequest $request, string $id)
     {
         $parentUser = User::where('role', 'parent')->findOrFail($id);
+
+        $this->authorize('update', $parentUser);
 
         $validated = $request->validated();
 
@@ -90,6 +102,8 @@ class ParentController extends Controller
         $parentUser = User::where('role', 'parent')
             ->withCount('children')
             ->findOrFail($id);
+
+        $this->authorize('delete', $parentUser);
 
         if ($parentUser->children_count > 0) {
             return redirect()

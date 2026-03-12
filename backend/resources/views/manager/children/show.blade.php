@@ -11,6 +11,7 @@
             </div>
 
             <div class="flex items-center gap-2">
+                @can('update', $child)
                 <a href="{{ route('manager.children.edit', $child) }}"
                    class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
                           bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
@@ -20,7 +21,9 @@
                           active:translate-y-[1px]">
                     Edit
                 </a>
+                @endcan
 
+                @can('delete', $child)
                 <form method="POST" action="{{ route('manager.children.destroy', $child) }}"
                       onsubmit="return confirm('Delete {{ addslashes($child->first_name . ' ' . $child->last_name) }}? This cannot be undone.')">
                     @csrf
@@ -34,6 +37,7 @@
                         Delete
                     </button>
                 </form>
+                @endcan
 
                 <a href="{{ route('manager.children.index') }}"
                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
@@ -80,6 +84,7 @@
                         </p>
                         <div>
                             <span class="font-semibold text-slate-600 dark:text-slate-400">Room:</span>
+                            @can('assignRoom', $child)
                             <form method="POST"
                                   action="{{ route('manager.children.assign-room', $child) }}"
                                   class="mt-2 flex items-center gap-2">
@@ -104,6 +109,11 @@
                                     Update
                                 </button>
                             </form>
+                            @else
+                            <span class="ml-2 text-slate-800 dark:text-slate-200">
+                                {{ $child->room?->name ?? '— Unassigned —' }}
+                            </span>
+                            @endcan
                         </div>
                     </div>
                     <div class="space-y-3 text-slate-800 dark:text-slate-200">
@@ -124,18 +134,20 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                     <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Linked Parents</h3>
-                    @if ($child->parents->count() < 2)
-                        <a href="{{ route('manager.children.link-parent', $child) }}"
-                           class="inline-flex items-center justify-center rounded-xl px-3 py-1.5 text-xs font-semibold text-white
-                                  bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
-                                  shadow-sm shadow-blue-500/20
-                                  hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
-                                  active:translate-y-[1px]">
-                            Link Parent
-                        </a>
-                    @else
-                        <span class="text-xs text-slate-500 dark:text-slate-400">Maximum of 2 parents reached</span>
-                    @endif
+                    @can('linkParent', $child)
+                        @if ($child->parents->count() < 2)
+                            <a href="{{ route('manager.children.link-parent', $child) }}"
+                               class="inline-flex items-center justify-center rounded-xl px-3 py-1.5 text-xs font-semibold text-white
+                                      bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                                      shadow-sm shadow-blue-500/20
+                                      hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
+                                      active:translate-y-[1px]">
+                                Link Parent
+                            </a>
+                        @else
+                            <span class="text-xs text-slate-500 dark:text-slate-400">Maximum of 2 parents reached</span>
+                        @endif
+                    @endcan
                 </div>
                 <div class="p-6">
                     @forelse ($child->parents as $parent)
@@ -162,6 +174,7 @@
                                         Legal Guardian
                                     </span>
                                 @endif
+                                @can('linkParent', $child)
                                 <form method="POST"
                                       action="{{ route('manager.children.unlink-parent', [$child, $parent]) }}"
                                       onsubmit="return confirm('Unlink {{ addslashes($parent->name) }} from this child?')">
@@ -175,6 +188,7 @@
                                         Unlink
                                     </button>
                                 </form>
+                                @endcan
                             </div>
                         </div>
                     @empty

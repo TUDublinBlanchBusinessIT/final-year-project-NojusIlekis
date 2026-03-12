@@ -15,6 +15,8 @@ class ChildController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Child::class);
+
         $rooms = Room::orderBy('name')->get();
 
         $children = Child::with(['room', 'parents'])
@@ -37,12 +39,16 @@ class ChildController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Child::class);
+
         $rooms = Room::orderBy('name')->get();
         return view('manager.children.create', compact('rooms'));
     }
 
     public function store(StoreChildRequest $request)
     {
+        $this->authorize('create', Child::class);
+
         $validated = $request->validated();
 
         $child = Child::create($validated);
@@ -54,6 +60,8 @@ class ChildController extends Controller
 
     public function show(Child $child)
     {
+        $this->authorize('view', $child);
+
         $child->load('room', 'parents');
 
         $rooms = Room::orderBy('name')->get();
@@ -87,12 +95,16 @@ class ChildController extends Controller
 
     public function edit(Child $child)
     {
+        $this->authorize('update', $child);
+
         $rooms = Room::orderBy('name')->get();
         return view('manager.children.edit', compact('child', 'rooms'));
     }
 
     public function update(UpdateChildRequest $request, Child $child)
     {
+        $this->authorize('update', $child);
+
         $validated = $request->validated();
 
         $child->update($validated);
@@ -104,6 +116,8 @@ class ChildController extends Controller
 
     public function destroy(Child $child)
     {
+        $this->authorize('delete', $child);
+
         $child->delete();
 
         return redirect()
@@ -117,6 +131,8 @@ class ChildController extends Controller
 
     public function linkParentForm(Child $child)
     {
+        $this->authorize('linkParent', $child);
+
         $child->load('parents');
 
         if ($child->parents->count() >= 2) {
@@ -137,6 +153,8 @@ class ChildController extends Controller
 
     public function linkParent(LinkParentRequest $request, Child $child)
     {
+        $this->authorize('linkParent', $child);
+
         $child->load('parents');
 
         if ($child->parents->count() >= 2) {
@@ -167,6 +185,8 @@ class ChildController extends Controller
 
     public function unlinkParent(Child $child, User $user)
     {
+        $this->authorize('linkParent', $child);
+
         $child->parents()->detach($user->id);
 
         return redirect()
@@ -180,6 +200,8 @@ class ChildController extends Controller
 
     public function assignRoom(Request $request, Child $child)
     {
+        $this->authorize('assignRoom', $child);
+
         $validated = $request->validate([
             'room_id' => ['nullable', 'exists:rooms,id'],
         ]);

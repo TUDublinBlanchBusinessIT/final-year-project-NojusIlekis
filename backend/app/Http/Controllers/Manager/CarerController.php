@@ -14,6 +14,8 @@ class CarerController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         $rooms = Room::orderBy('name')->get();
 
         $carers = User::where('role', 'carer')
@@ -36,12 +38,16 @@ class CarerController extends Controller
 
     public function create()
     {
+        $this->authorize('create', User::class);
+
         $rooms = Room::orderBy('name')->get();
         return view('manager.carers.create', compact('rooms'));
     }
 
     public function store(StoreCarerRequest $request)
     {
+        $this->authorize('create', User::class);
+
         $validated = $request->validated();
 
         $carerUser = User::create([
@@ -70,6 +76,8 @@ class CarerController extends Controller
             ->with(['rooms' => fn($q) => $q->orderBy('room_user.start_date', 'desc')])
             ->findOrFail($id);
 
+        $this->authorize('view', $carerUser);
+
         $dailyReportsCount    = $carerUser->dailyReports()->count();
         $attendanceCount      = $carerUser->attendancesRecorded()->count();
         $medicationLogsCount  = $carerUser->medicationLogs()->count();
@@ -88,6 +96,8 @@ class CarerController extends Controller
             ->with('activeRooms')
             ->findOrFail($id);
 
+        $this->authorize('update', $carerUser);
+
         $rooms = Room::orderBy('name')->get();
 
         return view('manager.carers.edit', compact('carerUser', 'rooms'));
@@ -98,6 +108,8 @@ class CarerController extends Controller
         $carerUser = User::where('role', 'carer')
             ->with('activeRooms')
             ->findOrFail($id);
+
+        $this->authorize('update', $carerUser);
 
         $validated = $request->validated();
 
@@ -138,6 +150,9 @@ class CarerController extends Controller
     public function destroy(string $id)
     {
         $carerUser = User::where('role', 'carer')->findOrFail($id);
+
+        $this->authorize('delete', $carerUser);
+
         $carerUser->delete();
 
         return redirect()

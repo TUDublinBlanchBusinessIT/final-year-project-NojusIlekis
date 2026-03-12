@@ -11,6 +11,7 @@
             </div>
 
             <div class="flex items-center gap-2">
+                @can('update', $parentUser)
                 <a href="{{ route('manager.parents.edit', $parentUser) }}"
                    class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
                           bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
@@ -20,7 +21,9 @@
                           active:translate-y-[1px]">
                     Edit
                 </a>
+                @endcan
 
+                @can('delete', $parentUser)
                 <form method="POST" action="{{ route('manager.parents.destroy', $parentUser) }}"
                       onsubmit="return confirm('Delete {{ addslashes($parentUser->name) }}? This cannot be undone.')">
                     @csrf
@@ -34,6 +37,7 @@
                         Delete
                     </button>
                 </form>
+                @endcan
 
                 <a href="{{ route('manager.parents.index') }}"
                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium

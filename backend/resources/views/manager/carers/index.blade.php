@@ -10,6 +10,7 @@
                 </p>
             </div>
 
+            @can('create', App\Models\User::class)
             <a href="{{ route('manager.carers.create') }}"
                class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
                       bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
@@ -20,6 +21,7 @@
                       dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
                 Add Carer
             </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -151,6 +153,7 @@
                                                 View
                                             </a>
 
+                                            @can('update', $carerUser)
                                             <a href="{{ route('manager.carers.edit', $carerUser) }}"
                                                class="inline-flex items-center justify-center rounded-xl px-3 py-1.5 text-xs font-semibold
                                                       bg-slate-100 text-slate-700 border border-slate-200
@@ -159,7 +162,9 @@
                                                       focus:outline-none focus:ring-4 focus:ring-slate-200">
                                                 Edit
                                             </a>
+                                            @endcan
 
+                                            @can('delete', $carerUser)
                                             <form method="POST" action="{{ route('manager.carers.destroy', $carerUser) }}"
                                                   onsubmit="return confirm('Delete {{ addslashes($carerUser->name) }}? This cannot be undone.')">
                                                 @csrf
@@ -173,6 +178,7 @@
                                                     Delete
                                                 </button>
                                             </form>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>
