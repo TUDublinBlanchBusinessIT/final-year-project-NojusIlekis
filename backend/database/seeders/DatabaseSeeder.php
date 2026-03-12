@@ -221,9 +221,8 @@ class DatabaseSeeder extends Seeder
             Attendance::updateOrCreate(
                 ['child_id' => $child->id, 'date' => $today],
                 [
-                    'child_id'    => $child->id,
-                    'date'        => $today,
                     'status'      => 'present',
+                    'room_id'     => $child->room_id,
                     'recorded_by' => $carer->id,
                 ]
             );

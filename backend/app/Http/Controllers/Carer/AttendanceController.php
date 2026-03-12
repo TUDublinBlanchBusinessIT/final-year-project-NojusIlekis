@@ -73,9 +73,9 @@ class AttendanceController extends Controller
                 [
                     'child_id' => $childId,
                     'date'     => $data['date'],
-                    'room_id'  => $data['room_id'], // include room_id in the match (safer)
                 ],
                 [
+                    'room_id'     => $data['room_id'],
                     'status'      => $status,
                     'recorded_by' => auth()->id(),
                 ]

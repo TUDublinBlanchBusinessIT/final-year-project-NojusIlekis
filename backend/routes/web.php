@@ -59,6 +59,9 @@ Route::middleware(['auth', 'role:parent'])
 
         Route::get('/invoices/{invoice}', [ParentInvoiceController::class, 'show'])
             ->name('invoices.show');
+
+        Route::get('/invoices/{invoice}/print', [ParentInvoiceController::class, 'print'])
+            ->name('invoices.print');
     });
 
 Route::middleware(['auth', 'role:carer'])

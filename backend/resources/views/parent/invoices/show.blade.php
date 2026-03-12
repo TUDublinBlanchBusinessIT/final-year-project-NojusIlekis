@@ -10,10 +10,22 @@
                 </p>
             </div>
 
-            <a href="{{ route('parent.invoices.index') }}"
-               class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100">
-                Back to Invoices
-            </a>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('parent.invoices.print', $invoice) }}"
+                   target="_blank"
+                   class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-white
+                          bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                          shadow-sm shadow-blue-500/20
+                          hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
+                          active:translate-y-[1px]">
+                    Print Invoice
+                </a>
+
+                <a href="{{ route('parent.invoices.index') }}"
+                   class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100">
+                    Back to Invoices
+                </a>
+            </div>
         </div>
     </x-slot>
 

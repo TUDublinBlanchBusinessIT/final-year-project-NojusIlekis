@@ -29,4 +29,16 @@ class InvoiceController extends Controller
 
         return view('parent.invoices.show', compact('invoice', 'subtotal', 'finalTotal'));
     }
+
+    public function print(Invoice $invoice)
+    {
+        abort_unless($invoice->parent_id === auth()->id(), 403);
+
+        $invoice->load(['child', 'parent', 'items']);
+
+        $subtotal = $invoice->items->sum('total');
+        $finalTotal = $invoice->total;
+
+        return view('manager.reports.invoices.print', compact('invoice', 'subtotal', 'finalTotal'));
+    }
 }
