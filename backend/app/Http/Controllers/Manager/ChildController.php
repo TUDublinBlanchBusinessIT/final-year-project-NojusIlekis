@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Manager\LinkParentRequest;
+use App\Http\Requests\Manager\StoreChildRequest;
+use App\Http\Requests\Manager\UpdateChildRequest;
 use App\Models\Child;
 use App\Models\Room;
 use App\Models\User;
@@ -38,16 +41,9 @@ class ChildController extends Controller
         return view('manager.children.create', compact('rooms'));
     }
 
-    public function store(Request $request)
+    public function store(StoreChildRequest $request)
     {
-        $validated = $request->validate([
-            'first_name'    => ['required', 'string', 'max:120'],
-            'last_name'     => ['required', 'string', 'max:120'],
-            'dob'           => ['nullable', 'date', 'before_or_equal:today'],
-            'allergies'     => ['nullable', 'string'],
-            'medical_notes' => ['nullable', 'string'],
-            'room_id'       => ['nullable', 'exists:rooms,id'],
-        ]);
+        $validated = $request->validated();
 
         $child = Child::create($validated);
 
@@ -95,16 +91,9 @@ class ChildController extends Controller
         return view('manager.children.edit', compact('child', 'rooms'));
     }
 
-    public function update(Request $request, Child $child)
+    public function update(UpdateChildRequest $request, Child $child)
     {
-        $validated = $request->validate([
-            'first_name'    => ['required', 'string', 'max:120'],
-            'last_name'     => ['required', 'string', 'max:120'],
-            'dob'           => ['nullable', 'date', 'before_or_equal:today'],
-            'allergies'     => ['nullable', 'string'],
-            'medical_notes' => ['nullable', 'string'],
-            'room_id'       => ['nullable', 'exists:rooms,id'],
-        ]);
+        $validated = $request->validated();
 
         $child->update($validated);
 
@@ -146,7 +135,7 @@ class ChildController extends Controller
         return view('manager.children.link-parent', compact('child', 'availableParents'));
     }
 
-    public function linkParent(Request $request, Child $child)
+    public function linkParent(LinkParentRequest $request, Child $child)
     {
         $child->load('parents');
 
@@ -156,11 +145,7 @@ class ChildController extends Controller
                 ->with('error', 'This child already has the maximum of 2 parents linked.');
         }
 
-        $validated = $request->validate([
-            'parent_id'         => ['required', 'exists:users,id'],
-            'relationship_type' => ['required', 'in:mother,father,guardian,grandparent,other'],
-            'legal_guardian'    => ['boolean'],
-        ]);
+        $validated = $request->validated();
 
         $parentUser = User::where('role', 'parent')->findOrFail($validated['parent_id']);
 

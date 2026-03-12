@@ -69,6 +69,7 @@ Room (name, age_band)
       ↑ MedicationLog (child_id, carer_id, medication_name, dosage, date, time_given, notes)
       ↑ Invoice (child_id, parent_id, period_start, period_end, due_date, total, discount, status: draft|sent|paid)
             ↑ InvoiceItem (invoice_id, description, qty, unit_price, total)
+      ↑ IncidentReport (child_id, carer_id, room_id, incident_date, incident_time, title, description, action_taken, severity: low|medium|high, parent_contact_required, status: open|reviewed|closed)
 
 Acknowledgement (record_type, record_id, parent_id, status: pending|acknowledged, signed_at, signature_name)
 ```
@@ -88,17 +89,20 @@ app/Http/Controllers/
     DailyReportController   — write/view written reports + media uploads per child
     DailyUpdateController   — structured updates (meals, sleep, notes) per child
     MedicationController    — log medication administered to children (scoped to carer's rooms)
+    IncidentReportController — create/view incident reports; scoped to carer's rooms; validates child belongs to selected room
   Manager/
     DashboardController     — attendance KPI dashboard with date/room filters and trend chart
     ReportsController       — attendance and task reports
     DailyReportsController  — view carer-written reports; request parent acknowledgement
     MedicationLogsController — view all medication logs filtered by date/room
-    InvoiceController        — create invoices for a child/parent, add line items, apply discount
+    InvoiceController        — create invoices for a child/parent, add line items, apply discount, update status, print view
+    IncidentReportsController — view all incident reports filtered by date; update status (open/reviewed/closed)
     ChildController          — full CRUD for children (index with search/room filter, create, show profile, edit, delete); also handles parent linking (linkParentForm, linkParent, unlinkParent — max 2 parents per child, composite PK enforced) and inline room assignment (assignRoom via PATCH)
     ParentController         — full CRUD for parents (Users with role='parent'); uses $parentUser variable (not $parent — PHP reserved word); destroy() guards against deleting parents with linked children
     CarerController          — full CRUD for carers (Users with role='carer'); index supports search + active room filter; store/update handle room_user pivot assignment (attach with start_date, close old assignment by setting end_date); show displays current room, room history, and activity counts
   Parent/
     AcknowledgementController — list pending acknowledgements; sign with name + checkbox
+    InvoiceController         — view own invoices (index + show); `abort_unless` guards invoice ownership
   ProfileController         — shared profile edit/delete
 ```
 
@@ -112,7 +116,7 @@ Manager navigation (in `navigation.blade.php`) shows role-specific links: **Dash
 
 ### Testing
 
-Tests use Pest PHP with an in-memory SQLite database (configured in `phpunit.xml`). The `tests/Feature/` directory contains role-access tests and auth tests. Use `User::factory()->create(['role' => 'carer'])` pattern to create role-specific users in tests.
+Tests use Pest PHP with an in-memory SQLite database (configured in `phpunit.xml`). The `tests/Feature/` directory contains role-access tests, auth tests, and feature tests. Use `User::factory()->create(['role' => 'carer'])` pattern to create role-specific users in tests. `ChildFactory` and `RoomFactory` are now available for use in tests.
 
 ## Seed Test Accounts
 

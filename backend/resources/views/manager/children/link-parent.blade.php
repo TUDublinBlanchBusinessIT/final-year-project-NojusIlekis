@@ -52,21 +52,35 @@
                               class="space-y-5">
                             @csrf
 
-                            <div>
-                                <label for="parent_id" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
+                            <div x-data="{
+                                search: '',
+                                parents: @js($availableParents->map(fn($p) => ['id' => $p->id, 'label' => $p->name . ' (' . $p->email . ')'])),
+                                get filtered() {
+                                    if (!this.search) return this.parents;
+                                    const q = this.search.toLowerCase();
+                                    return this.parents.filter(p => p.label.toLowerCase().includes(q));
+                                }
+                            }">
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
                                     Parent <span class="text-red-500">*</span>
                                 </label>
+
+                                <input type="text"
+                                       x-model="search"
+                                       placeholder="Search by name or email…"
+                                       class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 mb-2
+                                              focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
+                                              dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
+
                                 <select name="parent_id" id="parent_id"
                                         class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
                                                focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                                dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
                                                @error('parent_id') border-red-400 @enderror">
                                     <option value="">Select a parent…</option>
-                                    @foreach ($availableParents as $parentUser)
-                                        <option value="{{ $parentUser->id }}" @selected(old('parent_id') == $parentUser->id)>
-                                            {{ $parentUser->name }} ({{ $parentUser->email }})
-                                        </option>
-                                    @endforeach
+                                    <template x-for="p in filtered" :key="p.id">
+                                        <option :value="p.id" :selected="p.id == {{ old('parent_id', 'null') }}" x-text="p.label"></option>
+                                    </template>
                                 </select>
                                 @error('parent_id')
                                     <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>

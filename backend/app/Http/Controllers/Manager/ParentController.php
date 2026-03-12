@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Manager\StoreParentRequest;
+use App\Http\Requests\Manager\UpdateParentRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 
 class ParentController extends Controller
 {
@@ -32,13 +33,9 @@ class ParentController extends Controller
         return view('manager.parents.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreParentRequest $request)
     {
-        $validated = $request->validate([
-            'name'                  => ['required', 'string', 'max:255'],
-            'email'                 => ['required', 'email', 'unique:users,email'],
-            'password'              => ['required', 'min:8', 'confirmed'],
-        ]);
+        $validated = $request->validated();
 
         $parentUser = User::create([
             'name'     => $validated['name'],
@@ -68,15 +65,11 @@ class ParentController extends Controller
         return view('manager.parents.edit', compact('parentUser'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateParentRequest $request, string $id)
     {
         $parentUser = User::where('role', 'parent')->findOrFail($id);
 
-        $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'email', "unique:users,email,{$id}"],
-            'password' => ['nullable', 'min:8', 'confirmed'],
-        ]);
+        $validated = $request->validated();
 
         $parentUser->name  = $validated['name'];
         $parentUser->email = $validated['email'];

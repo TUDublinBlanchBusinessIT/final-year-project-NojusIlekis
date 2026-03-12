@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Manager\StoreCarerRequest;
+use App\Http\Requests\Manager\UpdateCarerRequest;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,14 +40,9 @@ class CarerController extends Controller
         return view('manager.carers.create', compact('rooms'));
     }
 
-    public function store(Request $request)
+    public function store(StoreCarerRequest $request)
     {
-        $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:8', 'confirmed'],
-            'room_id'  => ['nullable', 'exists:rooms,id'],
-        ]);
+        $validated = $request->validated();
 
         $carerUser = User::create([
             'name'     => $validated['name'],
@@ -96,18 +93,13 @@ class CarerController extends Controller
         return view('manager.carers.edit', compact('carerUser', 'rooms'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateCarerRequest $request, string $id)
     {
         $carerUser = User::where('role', 'carer')
             ->with('activeRooms')
             ->findOrFail($id);
 
-        $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'email', "unique:users,email,{$id}"],
-            'password' => ['nullable', 'min:8', 'confirmed'],
-            'room_id'  => ['nullable', 'exists:rooms,id'],
-        ]);
+        $validated = $request->validated();
 
         $carerUser->name  = $validated['name'];
         $carerUser->email = $validated['email'];
