@@ -154,21 +154,79 @@ The app exposes a token-based JSON API at `/api/*` for mobile clients using Lara
 | GET | `/api/user` | Returns authenticated user info |
 | POST | `/api/logout` | Revokes current token |
 
-### Role-scoped prefixes (Part 2 endpoints added here)
+### Role-scoped endpoints
 
-- `/api/parent/*` — requires `role=parent`
-- `/api/carer/*` — requires `role=carer`
-- `/api/manager/*` — requires `role=manager`
+**Parent** (`/api/parent/*` — requires `role=parent`):
+
+| Method | URL | Description |
+|---|---|---|
+| GET | `/api/parent/children` | List parent's linked children with room |
+| GET | `/api/parent/children/{child}` | Single child + recent attendances, daily reports, medication logs |
+| GET | `/api/parent/children/{child}/attendance` | Attendance history (`from_date`/`to_date`, default last 30 days) |
+| GET | `/api/parent/children/{child}/daily-updates` | Daily updates (same date params) |
+| GET | `/api/parent/invoices` | Parent's invoices with child + items |
+| GET | `/api/parent/invoices/{invoice}` | Single invoice with child + items |
+
+Child endpoints verify the child is linked to the authenticated parent via `child_parent` pivot — 403 if not. Invoice show verifies `parent_id === auth()->id()`.
+
+**Carer** (`/api/carer/*` — requires `role=carer`):
+
+| Method | URL | Description |
+|---|---|---|
+| GET | `/api/carer/rooms` | Carer's active room assignments with children |
+| GET | `/api/carer/rooms/{room}/children` | Children in room with today's attendance status |
+| POST | `/api/carer/attendance` | Mark attendance (updateOrCreate on child+date) |
+| POST | `/api/carer/daily-updates` | Log daily update (updateOrCreate on child+date) |
+| POST | `/api/carer/medication-logs` | Log medication administered |
+
+Room endpoints verify carer is actively assigned (`activeRooms()`, end_date IS NULL) — 403 if not.
+
+**Manager** (`/api/manager/*` — requires `role=manager`):
+
+| Method | URL | Query params | Description |
+|---|---|---|---|
+| GET | `/api/manager/children` | `search`, `room_id` | Paginated children (15/page) with room + parents |
+| GET | `/api/manager/parents` | `search` | Paginated parents with children count |
+| GET | `/api/manager/carers` | `search`, `room_id` | Paginated carers with active rooms |
+| GET | `/api/manager/rooms` | — | All rooms with children_count + active_carers_count |
+| GET | `/api/manager/dashboard` | — | Counts + today's attendance + 5 recent invoices |
 
 ### Middleware
 
 - `auth:sanctum` — Sanctum token guard (API routes)
-- `api.role:X` — `ApiRoleMiddleware`, returns JSON 403 if role mismatch
+- `api.role:X` — `ApiRoleMiddleware` (`app/Http/Middleware/ApiRoleMiddleware.php`), returns JSON 403 if role mismatch, 401 if no user
 
 ### Key files
 
 - `routes/api.php` — all API route definitions
 - `app/Http/Controllers/Api/ApiAuthController.php` — register, login, logout, user
+- `app/Http/Controllers/Api/ParentDataController.php` — parent-scoped endpoints
+- `app/Http/Controllers/Api/CarerDataController.php` — carer-scoped endpoints
+- `app/Http/Controllers/Api/ManagerDataController.php` — manager-scoped endpoints
 - `app/Http/Middleware/ApiRoleMiddleware.php` — role guard for API routes
 - `config/sanctum.php` — Sanctum configuration
 - `database/migrations/*_create_personal_access_tokens_table.php` — tokens table
+
+### API Tests
+
+- `tests/Feature/ApiAuthTest.php` — 9 tests: register, login, logout, token revocation, unauthenticated access
+- `tests/Feature/ApiRoleGuardTest.php` — 10 tests: each role can access its own routes and is blocked (403) from other roles; unauthenticated gets 401
+
+**Note on logout test:** After calling `/api/logout`, call `$this->app['auth']->forgetGuards()` before the follow-up request — otherwise Sanctum's guard caches the resolved user in memory and the revoked token still appears valid within the same test process.
+
+### Messaging (Task #1602 — sprint-4)
+
+`messages` table added via migration `2026_03_16_185253_create_messages_table.php`:
+
+| Column | Type | Notes |
+|---|---|---|
+| `sender_id` | FK → users | cascade delete |
+| `receiver_id` | FK → users | cascade delete |
+| `child_id` | FK → children, nullable | null on delete — optional message context |
+| `body` | text | required |
+| `read_at` | timestamp, nullable | null = unread |
+
+Indexes: `(sender_id, receiver_id)` for conversation lookups; `(receiver_id, read_at)` for unread queries.
+
+- `app/Models/Message.php` — `sender()`, `receiver()`, `child()` relationships; `read_at` cast to datetime
+- `User::sentMessages()` / `User::receivedMessages()` added to User model
