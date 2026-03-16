@@ -72,6 +72,11 @@ Room (name, age_band)
       ↑ IncidentReport (child_id, carer_id, room_id, incident_date, incident_time, title, description, action_taken, severity: low|medium|high, parent_contact_required, status: open|reviewed|closed)
 
 Acknowledgement (record_type, record_id, parent_id, status: pending|acknowledged, signed_at, signature_name)
+
+Message (sender_id → users, receiver_id → users, child_id nullable → children, body text, read_at nullable timestamp)
+  - Indexes: (sender_id, receiver_id) for conversation lookups; (receiver_id, read_at) for unread queries
+  - User::sentMessages() / User::receivedMessages() — hasMany via sender_id / receiver_id
+  - read_at = null means unread; filled when receiver opens the message
 ```
 
 - Children no longer have a `parent_user_id` column — parent links use the `child_parent` pivot (supports multiple parents per child).
