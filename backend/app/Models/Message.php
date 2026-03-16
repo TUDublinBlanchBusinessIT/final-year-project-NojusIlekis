@@ -16,7 +16,10 @@ class Message extends Model
     ];
 
     protected $casts = [
-        'read_at' => 'datetime',
+        'sender_id'   => 'integer',
+        'receiver_id' => 'integer',
+        'child_id'    => 'integer',
+        'read_at'     => 'datetime',
     ];
 
     public function sender(): BelongsTo
