@@ -70,7 +70,10 @@ class AttendanceController extends Controller
             }
 
             Attendance::updateOrCreate(
-                ['child_id' => $childId, 'date' => $data['date']],
+                [
+                    'child_id' => $childId,
+                    'date'     => $data['date'],
+                ],
                 [
                     'room_id'     => $data['room_id'],
                     'status'      => $status,

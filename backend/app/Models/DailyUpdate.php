@@ -14,4 +14,18 @@ class DailyUpdate extends Model
         'notes',
         'created_by',
     ];
+
+    protected $casts = [
+        'date' => 'date',
+    ];
+
+    public function child()
+    {
+        return $this->belongsTo(Child::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

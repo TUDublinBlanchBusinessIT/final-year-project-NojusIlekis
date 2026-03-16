@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\Child;
 use App\Models\DailyReport;
+use App\Models\Acknowledgement; // ✅ ADD
 
 class DailyReportsController extends Controller
 {
@@ -47,5 +48,32 @@ class DailyReportsController extends Controller
         $dailyReport->load(['child.room', 'carer', 'mediaUpdates']);
 
         return view('manager.reports.daily-reports.show', compact('dailyReport'));
+    }
+
+    // ✅ NEW: Manager requests acknowledgement from the parent
+    public function requestAck(Request $request, DailyReport $dailyReport)
+    {
+        $dailyReport->load('child');
+
+        $child = $dailyReport->child;
+
+        if (!$child || !$child->parent_user_id) {
+            return back()->with('error', 'No parent is linked to this child.');
+        }
+
+        Acknowledgement::updateOrCreate(
+            [
+                'record_type' => 'daily_report',
+                'record_id'   => $dailyReport->id,
+                'parent_id'   => $child->parent_user_id,
+            ],
+            [
+                'status'         => 'pending',
+                'signed_at'      => null,
+                'signature_name' => null,
+            ]
+        );
+
+        return back()->with('success', 'Acknowledgement request sent.');
     }
 }

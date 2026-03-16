@@ -1,11 +1,22 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Carer\AttendanceController;
 use App\Http\Controllers\Carer\DailyReportController;
-use App\Http\Controllers\Carer\DailyUpdateController; // ✅ ADD THIS
+use App\Http\Controllers\Carer\DailyUpdateController;
+use App\Http\Controllers\Carer\MedicationController;
+use App\Http\Controllers\Carer\IncidentReportController;
 use App\Http\Controllers\Manager\ReportsController;
+use App\Http\Controllers\Manager\MedicationLogsController;
+use App\Http\Controllers\Manager\InvoiceController;
+use App\Http\Controllers\Manager\ChildController;
+use App\Http\Controllers\Manager\ParentController;
+use App\Http\Controllers\Manager\CarerController;
+use App\Http\Controllers\Manager\IncidentReportsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
+use App\Http\Controllers\Parent\AcknowledgementController;
+use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,7 +44,24 @@ Route::middleware(['auth', 'role:parent'])
     ->prefix('parent')
     ->name('parent.')
     ->group(function () {
-        Route::view('/dashboard', 'dashboards.parent')->name('dashboard');
+        Route::get('/dashboard', [AcknowledgementController::class, 'dashboard'])->name('dashboard');
+
+        // Parent acknowledgements
+        Route::get('/acknowledgements', [AcknowledgementController::class, 'index'])
+            ->name('acknowledgements.index');
+
+        Route::post('/acknowledgements/{acknowledgement}/sign', [AcknowledgementController::class, 'sign'])
+            ->name('acknowledgements.sign');
+
+        // Parent invoices
+        Route::get('/invoices', [ParentInvoiceController::class, 'index'])
+            ->name('invoices.index');
+
+        Route::get('/invoices/{invoice}', [ParentInvoiceController::class, 'show'])
+            ->name('invoices.show');
+
+        Route::get('/invoices/{invoice}/print', [ParentInvoiceController::class, 'print'])
+            ->name('invoices.print');
     });
 
 Route::middleware(['auth', 'role:carer'])
@@ -51,9 +79,17 @@ Route::middleware(['auth', 'role:carer'])
         Route::get('/daily-reports', [DailyReportController::class, 'index'])->name('daily-reports.index');
         Route::post('/daily-reports', [DailyReportController::class, 'store'])->name('daily-reports.store');
 
-        // ✅ Daily Updates (structured - feeds manager tasks summary)
+        // Daily Updates (structured)
         Route::get('/daily-updates', [DailyUpdateController::class, 'index'])->name('daily-updates.index');
         Route::post('/daily-updates', [DailyUpdateController::class, 'store'])->name('daily-updates.store');
+
+        // Medication Logs
+        Route::get('/medication', [MedicationController::class, 'index'])->name('medication.index');
+        Route::post('/medication', [MedicationController::class, 'store'])->name('medication.store');
+
+        // Incident Reports
+        Route::get('/incident-reports', [IncidentReportController::class, 'index'])->name('incident-reports.index');
+        Route::post('/incident-reports', [IncidentReportController::class, 'store'])->name('incident-reports.store');
     });
 
 Route::middleware(['auth', 'role:manager'])
@@ -61,7 +97,7 @@ Route::middleware(['auth', 'role:manager'])
     ->name('manager.')
     ->group(function () {
 
-        Route::view('/dashboard', 'dashboards.manager')->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/reports/attendance', [ReportsController::class, 'attendance'])->name('reports.attendance');
         Route::get('/reports/tasks', [ReportsController::class, 'tasks'])->name('reports.tasks');
@@ -72,6 +108,70 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::get('/reports/daily-reports/{dailyReport}', [ManagerDailyReportsController::class, 'show'])
             ->name('reports.daily-reports.show');
+
+        // Manager requests acknowledgement (signature) from parent
+        Route::post('/reports/daily-reports/{dailyReport}/request-ack', [ManagerDailyReportsController::class, 'requestAck'])
+            ->name('reports.daily-reports.request-ack');
+
+        Route::get('/reports/medication', [MedicationLogsController::class, 'index'])
+            ->name('reports.medication.index');
+
+        Route::get('/reports/incidents', [IncidentReportsController::class, 'index'])
+            ->name('reports.incidents');
+
+        // Manager Invoices
+        Route::get('/invoices/create', [InvoiceController::class, 'create'])
+            ->name('invoices.create');
+
+        Route::post('/invoices', [InvoiceController::class, 'store'])
+            ->name('invoices.store');
+
+        Route::get('/invoices/{invoice}/items/create', [InvoiceController::class, 'createItem'])
+            ->name('invoices.items.create');
+
+        Route::post('/invoices/{invoice}/items', [InvoiceController::class, 'storeItem'])
+            ->name('invoices.items.store');
+
+        Route::patch('/invoices/{invoice}/discount', [InvoiceController::class, 'updateDiscount'])
+            ->name('invoices.discount.update');
+
+        Route::get('/invoices', [InvoiceController::class, 'index'])
+            ->name('invoices.index');
+
+        Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])
+            ->name('invoices.show');
+
+        Route::patch('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])
+            ->name('invoices.status.update');
+
+        Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])
+            ->name('invoices.print');
+
+        // Parent linking & room assignment
+        Route::get('children/{child}/link-parent', [ChildController::class, 'linkParentForm'])
+            ->name('children.link-parent');
+
+        Route::post('children/{child}/link-parent', [ChildController::class, 'linkParent'])
+            ->name('children.link-parent.store');
+
+        Route::delete('children/{child}/unlink-parent/{user}', [ChildController::class, 'unlinkParent'])
+            ->name('children.unlink-parent');
+
+        Route::patch('children/{child}/assign-room', [ChildController::class, 'assignRoom'])
+            ->name('children.assign-room');
+
+        // Children CRUD
+        Route::resource('children', ChildController::class);
+
+        // Parents CRUD
+        Route::resource('parents', ParentController::class);
+
+        // Carers CRUD
+        Route::resource('carers', CarerController::class);
+
+        Route::patch('/reports/incidents/{incident}/status', 
+            [IncidentReportsController::class, 'updateStatus']
+        )->name('reports.incidents.status');
     });
 
 require __DIR__.'/auth.php';

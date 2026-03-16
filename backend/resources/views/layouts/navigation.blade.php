@@ -20,7 +20,10 @@
 
                     @if ($role === 'parent')
                         <x-nav-link :href="route('parent.dashboard')" :active="request()->routeIs('parent.dashboard')">
-                            {{ __('Parent') }}
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
+                            {{ __('Invoices') }}
                         </x-nav-link>
                     @elseif ($role === 'carer')
                         <x-nav-link :href="route('carer.dashboard')" :active="request()->routeIs('carer.dashboard')">
@@ -29,6 +32,15 @@
                     @elseif ($role === 'manager')
                         <x-nav-link :href="route('manager.dashboard')" :active="request()->routeIs('manager.dashboard')">
                             {{ __('Manager') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('manager.children.index')" :active="request()->routeIs('manager.children.*')">
+                            {{ __('Children') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('manager.parents.index')" :active="request()->routeIs('manager.parents.*')">
+                            {{ __('Parents') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('manager.carers.index')" :active="request()->routeIs('manager.carers.*')">
+                            {{ __('Carers') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -87,6 +99,12 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if ($role === 'parent')
+                <x-responsive-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
+                    {{ __('Invoices') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

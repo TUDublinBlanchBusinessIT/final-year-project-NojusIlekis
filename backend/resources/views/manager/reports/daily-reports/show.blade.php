@@ -23,6 +23,39 @@
     <div class="py-8">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
+            @if(session('success'))
+                <div class="rounded-2xl border border-emerald-200 bg-emerald-50/30 p-4 text-emerald-800
+                            dark:border-emerald-900/60 dark:bg-emerald-950/10 dark:text-emerald-100">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="rounded-2xl border border-red-200 bg-red-50/30 p-4 text-red-800
+                            dark:border-red-900/60 dark:bg-red-950/10 dark:text-red-100">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            {{-- Acknowledgement --}}
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40">
+                <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Acknowledgement</h3>
+
+                    <form method="POST" action="{{ route('manager.reports.daily-reports.request-ack', $dailyReport->id) }}">
+                        @csrf
+                        <button type="submit"
+                                class="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+                            Request Acknowledgement
+                        </button>
+                    </form>
+                </div>
+
+                <div class="p-5 text-sm text-slate-600 dark:text-slate-300">
+                    Request an acknowledgement for this report.
+                </div>
+            </div>
+
             {{-- Report text --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">

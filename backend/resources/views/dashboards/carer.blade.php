@@ -29,7 +29,7 @@
         </div>
 
         <!-- Dashboard Cards -->
-        <div class="grid md:grid-cols-2 gap-8">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
             <!-- Attendance Card -->
             <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-slate-100">
@@ -62,6 +62,59 @@
                     Open Reports
                 </a>
             </div>
+
+            <!-- Daily Updates Card -->
+            <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-slate-100">
+                <h4 class="text-xl font-semibold text-slate-800 mb-3">
+                    Daily Updates
+                </h4>
+
+                <p class="text-slate-500 mb-6">
+                    Record daily updates for children.
+                </p>
+
+                <a href="{{ route('carer.daily-updates.index') }}"
+                   class="inline-block bg-blue-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-blue-700 transition">
+                    Open Updates
+                </a>
+            </div>
+
+            <!-- Medication Card -->
+            <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-8 border border-slate-100">
+                <h4 class="text-xl font-semibold text-slate-800 mb-3">
+                    Medication Logs
+                </h4>
+
+                <p class="text-slate-500 mb-6">
+                    Record medication given to children and keep a clear history.
+                </p>
+
+                <a href="{{ route('carer.medication.index') }}"
+                    class="inline-block bg-indigo-600 text-white px-5 py-2 rounded-xl font-medium hover:bg-indigo-700 transition">
+                    Open Medication Logs
+                </a>
+            </div>
+
+            <!-- Incident report card -->
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-6
+                    dark:border-slate-800 dark:bg-slate-950/40">
+
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                Incident Reports
+            </h3>
+
+            <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">
+                Log and review incidents that occur during the day.
+            </p>
+
+            <a href="{{ route('carer.incident-reports.index') }}"
+                class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white
+                    bg-gradient-to-r from-red-600 to-red-700
+                    hover:brightness-110 shadow-sm">
+                View Incident Reports
+            </a>
+
+        </div>
 
         </div>
     </div>

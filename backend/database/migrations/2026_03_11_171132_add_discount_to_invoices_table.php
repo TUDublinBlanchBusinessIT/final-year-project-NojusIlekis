@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('rooms', function (Blueprint $table) {
-            $table->string('name')->after('id'); // add room name
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->decimal('discount', 8, 2)->default(0)->after('total');
         });
     }
 
     public function down(): void
     {
-        Schema::table('rooms', function (Blueprint $table) {
-            $table->dropColumn('name');
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->dropColumn('discount');
         });
     }
 };
