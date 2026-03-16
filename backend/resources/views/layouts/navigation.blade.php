@@ -27,6 +27,11 @@
                         </x-nav-link>
                         <x-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
                             {{ __('Messages') }}
+                            @if($unreadMessageCount > 0)
+                                <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
+                                    {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                                </span>
+                            @endif
                         </x-nav-link>
                     @elseif ($role === 'carer')
                         <x-nav-link :href="route('carer.dashboard')" :active="request()->routeIs('carer.dashboard')">
@@ -34,6 +39,11 @@
                         </x-nav-link>
                         <x-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
                             {{ __('Messages') }}
+                            @if($unreadMessageCount > 0)
+                                <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
+                                    {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                                </span>
+                            @endif
                         </x-nav-link>
                     @elseif ($role === 'manager')
                         <x-nav-link :href="route('manager.dashboard')" :active="request()->routeIs('manager.dashboard')">
@@ -112,10 +122,20 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
                     {{ __('Messages') }}
+                    @if($unreadMessageCount > 0)
+                        <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
+                            {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                        </span>
+                    @endif
                 </x-responsive-nav-link>
             @elseif ($role === 'carer')
                 <x-responsive-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
                     {{ __('Messages') }}
+                    @if($unreadMessageCount > 0)
+                        <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
+                            {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                        </span>
+                    @endif
                 </x-responsive-nav-link>
             @endif
         </div>
