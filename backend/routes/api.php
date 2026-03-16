@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApiAuthController;
 use App\Http\Controllers\Api\CarerDataController;
 use App\Http\Controllers\Api\ManagerDataController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\ParentDataController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,12 @@ Route::post('/login', [ApiAuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::get('/user', [ApiAuthController::class, 'user']);
+
+    // Messaging (shared by parent and carer)
+    Route::get('/messages/unread-count', [MessageController::class, 'unreadCount']);
+    Route::get('/messages/conversations', [MessageController::class, 'conversations']);
+    Route::get('/messages/conversations/{user}', [MessageController::class, 'show']);
+    Route::post('/messages', [MessageController::class, 'store']);
 
     // Parent-only routes
     Route::middleware('api.role:parent')->prefix('parent')->name('api.parent.')->group(function () {
