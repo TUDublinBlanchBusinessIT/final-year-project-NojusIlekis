@@ -130,3 +130,40 @@ All seed users have password `Password123!`:
 | parent2@test.com | parent |
 
 Seed rooms: **Bumblebees** and **Ladybirds**. The carer is assigned to both rooms.
+
+## API (Sanctum Token Auth)
+
+The app exposes a token-based JSON API at `/api/*` for mobile clients using Laravel Sanctum v4.
+
+### Auth endpoints (public)
+
+| Method | URL | Description |
+|---|---|---|
+| POST | `/api/register` | Register new user, returns token |
+| POST | `/api/login` | Login with email + password, returns token |
+
+### Authenticated endpoints (Bearer token required)
+
+| Method | URL | Description |
+|---|---|---|
+| GET | `/api/user` | Returns authenticated user info |
+| POST | `/api/logout` | Revokes current token |
+
+### Role-scoped prefixes (Part 2 endpoints added here)
+
+- `/api/parent/*` — requires `role=parent`
+- `/api/carer/*` — requires `role=carer`
+- `/api/manager/*` — requires `role=manager`
+
+### Middleware
+
+- `auth:sanctum` — Sanctum token guard (API routes)
+- `api.role:X` — `ApiRoleMiddleware`, returns JSON 403 if role mismatch
+
+### Key files
+
+- `routes/api.php` — all API route definitions
+- `app/Http/Controllers/Api/ApiAuthController.php` — register, login, logout, user
+- `app/Http/Middleware/ApiRoleMiddleware.php` — role guard for API routes
+- `config/sanctum.php` — Sanctum configuration
+- `database/migrations/*_create_personal_access_tokens_table.php` — tokens table
