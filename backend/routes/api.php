@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiAuthController;
+use App\Http\Controllers\Api\CarerDataController;
 use App\Http\Controllers\Api\ParentDataController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +24,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/invoices/{invoice}', [ParentDataController::class, 'showInvoice'])->name('invoices.show');
     });
 
-    // Carer-only routes (placeholder for Part 2)
+    // Carer-only routes
     Route::middleware('api.role:carer')->prefix('carer')->name('api.carer.')->group(function () {
-        // endpoints added in Part 2
+        Route::get('/rooms', [CarerDataController::class, 'rooms'])->name('rooms.index');
+        Route::get('/rooms/{room}/children', [CarerDataController::class, 'roomChildren'])->name('rooms.children');
+        Route::post('/attendance', [CarerDataController::class, 'storeAttendance'])->name('attendance.store');
+        Route::post('/daily-updates', [CarerDataController::class, 'storeDailyUpdate'])->name('daily-updates.store');
+        Route::post('/medication-logs', [CarerDataController::class, 'storeMedicationLog'])->name('medication-logs.store');
     });
 
     // Manager-only routes (placeholder for Part 2)
