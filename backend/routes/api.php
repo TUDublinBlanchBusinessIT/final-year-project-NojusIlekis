@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ApiAuthController;
 use App\Http\Controllers\Api\CarerDataController;
+use App\Http\Controllers\Api\ManagerDataController;
 use App\Http\Controllers\Api\ParentDataController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,8 +34,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/medication-logs', [CarerDataController::class, 'storeMedicationLog'])->name('medication-logs.store');
     });
 
-    // Manager-only routes (placeholder for Part 2)
+    // Manager-only routes
     Route::middleware('api.role:manager')->prefix('manager')->name('api.manager.')->group(function () {
-        // endpoints added in Part 2
+        Route::get('/children', [ManagerDataController::class, 'children'])->name('children.index');
+        Route::get('/parents', [ManagerDataController::class, 'parents'])->name('parents.index');
+        Route::get('/carers', [ManagerDataController::class, 'carers'])->name('carers.index');
+        Route::get('/rooms', [ManagerDataController::class, 'rooms'])->name('rooms.index');
+        Route::get('/dashboard', [ManagerDataController::class, 'dashboard'])->name('dashboard');
     });
 });
