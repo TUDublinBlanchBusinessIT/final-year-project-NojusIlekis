@@ -18,6 +18,7 @@ use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsCo
 use App\Http\Controllers\Parent\AcknowledgementController;
 use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use App\Http\Controllers\Parent\MessagingController;
+use App\Http\Controllers\Carer\MessagingController as CarerMessagingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -97,6 +98,12 @@ Route::middleware(['auth', 'role:carer'])
         // Incident Reports
         Route::get('/incident-reports', [IncidentReportController::class, 'index'])->name('incident-reports.index');
         Route::post('/incident-reports', [IncidentReportController::class, 'store'])->name('incident-reports.store');
+
+        // Messaging
+        Route::get('/messages', [CarerMessagingController::class, 'index'])->name('messages.index');
+        Route::get('/messages/new', [CarerMessagingController::class, 'create'])->name('messages.create');
+        Route::post('/messages', [CarerMessagingController::class, 'store'])->name('messages.store');
+        Route::get('/messages/{user}', [CarerMessagingController::class, 'show'])->name('messages.show');
     });
 
 Route::middleware(['auth', 'role:manager'])

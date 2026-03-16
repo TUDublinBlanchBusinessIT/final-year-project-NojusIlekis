@@ -32,6 +32,9 @@
                         <x-nav-link :href="route('carer.dashboard')" :active="request()->routeIs('carer.dashboard')">
                             {{ __('Carer') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
+                            {{ __('Messages') }}
+                        </x-nav-link>
                     @elseif ($role === 'manager')
                         <x-nav-link :href="route('manager.dashboard')" :active="request()->routeIs('manager.dashboard')">
                             {{ __('Manager') }}
@@ -108,6 +111,10 @@
                     {{ __('Invoices') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
+                    {{ __('Messages') }}
+                </x-responsive-nav-link>
+            @elseif ($role === 'carer')
+                <x-responsive-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
                     {{ __('Messages') }}
                 </x-responsive-nav-link>
             @endif
