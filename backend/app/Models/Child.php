@@ -63,4 +63,31 @@ class Child extends Model
     {
         return $this->hasMany(\App\Models\IncidentReport::class);
     }
+
+    public function hasAllergies(): bool
+    {
+        if (is_array($this->allergies)) {
+            return !empty($this->allergies);
+        }
+        return !empty(trim((string) $this->allergies));
+    }
+
+    public function allergyList(): string
+    {
+        if (is_array($this->allergies)) {
+            return implode(', ', $this->allergies);
+        }
+        return trim((string) $this->allergies) ?: 'None';
+    }
+
+    public function allergyArray(): array
+    {
+        if (is_array($this->allergies)) {
+            return $this->allergies;
+        }
+        if (empty(trim((string) $this->allergies))) {
+            return [];
+        }
+        return array_map('trim', explode(',', $this->allergies));
+    }
 }
