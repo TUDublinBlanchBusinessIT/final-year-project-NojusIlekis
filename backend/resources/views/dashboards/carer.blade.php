@@ -28,6 +28,23 @@
             </p>
         </div>
 
+        <!-- Allergy Quick Reference -->
+        @if(isset($rooms) && $rooms->isNotEmpty())
+            @php $hasAnyAllergies = $rooms->contains(fn($r) => $r->children->contains(fn($c) => $c->hasAllergies())); @endphp
+
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
+                <h3 class="text-lg font-semibold text-slate-800 mb-4">🚨 Allergy Quick Reference</h3>
+
+                @if($hasAnyAllergies)
+                    @foreach($rooms as $room)
+                        <x-room-allergy-summary :room="$room" />
+                    @endforeach
+                @else
+                    <p class="text-slate-400 text-sm">No children with allergies in your rooms.</p>
+                @endif
+            </div>
+        @endif
+
         <!-- Dashboard Cards -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 

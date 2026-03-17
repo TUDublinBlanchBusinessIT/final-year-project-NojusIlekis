@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Carer\AttendanceController;
+use App\Http\Controllers\Carer\DashboardController as CarerDashboardController;
 use App\Http\Controllers\Carer\DailyReportController;
 use App\Http\Controllers\Carer\DailyUpdateController;
 use App\Http\Controllers\Carer\MedicationController;
@@ -77,7 +78,7 @@ Route::middleware(['auth', 'role:carer'])
     ->name('carer.')
     ->group(function () {
 
-        Route::view('/dashboard', 'dashboards.carer')->name('dashboard');
+        Route::get('/dashboard', [CarerDashboardController::class, 'index'])->name('dashboard');
 
         // Attendance
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
