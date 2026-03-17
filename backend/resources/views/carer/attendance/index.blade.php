@@ -163,6 +163,12 @@
                                                         <div class="text-xs text-slate-500 dark:text-slate-400">
                                                             ID: {{ $child->id }}
                                                         </div>
+                                                        @if($child->hasAllergies())
+                                                            <span class="mt-1 inline-flex items-center bg-red-100 text-red-700 text-xs font-semibold px-2 py-0.5 rounded-full"
+                                                                  title="Allergies: {{ $child->allergyList() }}">
+                                                                ⚠️ {{ $child->allergyList() }}
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>
