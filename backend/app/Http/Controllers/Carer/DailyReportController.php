@@ -25,7 +25,16 @@ class DailyReportController extends Controller
             ->orderBy('first_name')
             ->get();
 
-        return view('carer.daily_reports.index', compact('rooms', 'children'));
+        $allergyData = $children->mapWithKeys(fn($child) => [
+            $child->id => [
+                'name'          => $child->first_name . ' ' . $child->last_name,
+                'has_allergies' => $child->hasAllergies(),
+                'allergies'     => $child->allergyList(),
+                'medical_notes' => $child->medical_notes ?? '',
+            ]
+        ]);
+
+        return view('carer.daily_reports.index', compact('rooms', 'children', 'allergyData'));
     }
 
 

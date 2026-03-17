@@ -26,7 +26,16 @@ class MedicationController extends Controller
             ->take(10)
             ->get();
 
-        return view('carer.medication.index', compact('children', 'recentLogs'));
+        $allergyData = $children->mapWithKeys(fn($child) => [
+            $child->id => [
+                'name'          => $child->first_name . ' ' . $child->last_name,
+                'has_allergies' => $child->hasAllergies(),
+                'allergies'     => $child->allergyList(),
+                'medical_notes' => $child->medical_notes ?? '',
+            ]
+        ]);
+
+        return view('carer.medication.index', compact('children', 'recentLogs', 'allergyData'));
     }
 
     public function store(Request $request)

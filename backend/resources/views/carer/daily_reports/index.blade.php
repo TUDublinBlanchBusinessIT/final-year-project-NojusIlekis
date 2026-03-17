@@ -32,6 +32,22 @@
     @endif
 
 
+    <div x-data="{ childId: null, data: {{ Js::from($allergyData) }} }">
+
+    <template x-if="childId && data[childId]?.has_allergies">
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-lg shadow-sm" role="alert">
+            <p class="font-bold text-red-800">⚠️ Allergy Alert — <span x-text="data[childId].name"></span></p>
+            <p class="text-sm mt-1">Allergies: <strong x-text="data[childId].allergies"></strong></p>
+        </div>
+    </template>
+
+    <template x-if="childId && data[childId]?.medical_notes">
+        <div class="bg-amber-50 border-l-4 border-amber-500 text-amber-800 p-4 mb-4 rounded-lg shadow-sm" role="alert">
+            <p class="font-bold">📋 Medical Notes — <span x-text="data[childId].name"></span></p>
+            <p class="text-sm mt-1" x-text="data[childId].medical_notes"></p>
+        </div>
+    </template>
+
     <form method="POST"
           action="{{ route('carer.daily-reports.store') }}"
           enctype="multipart/form-data"
@@ -76,6 +92,7 @@
         {{-- Child Selection --}}
         <label style="font-weight:600;">Select Child</label>
         <select name="child_id" required
+                x-model="childId"
                 style="width:100%;padding:10px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;">
             <option value="">Choose child...</option>
             @foreach($children as $child)
@@ -130,6 +147,7 @@
         </button>
 
     </form>
+    </div>{{-- end x-data --}}
 
 </div>
 
