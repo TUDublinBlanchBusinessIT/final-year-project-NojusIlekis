@@ -62,8 +62,11 @@
                         required
                         style="width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #ccc;">
                     <option value="">Select class...</option>
-                    <option value="Ladybirds"  @selected(old('room') === 'Ladybirds')>Ladybirds</option>
-                    <option value="Bumblebees" @selected(old('room') === 'Bumblebees')>Bumblebees</option>
+                    @foreach($rooms as $room)
+                        <option value="{{ $room->name }}" @selected(old('room') === $room->name)>
+                            {{ $room->name }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
 
