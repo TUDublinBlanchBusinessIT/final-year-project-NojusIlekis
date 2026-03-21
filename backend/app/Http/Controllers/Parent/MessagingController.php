@@ -15,7 +15,7 @@ class MessagingController extends Controller
 
         $messages = Message::where('sender_id', $userId)
             ->orWhere('receiver_id', $userId)
-            ->with(['sender', 'receiver'])
+            ->with(['sender', 'receiver', 'child'])
             ->latest()
             ->get();
 
@@ -26,6 +26,7 @@ class MessagingController extends Controller
             $otherUser   = $lastMessage->sender_id === $userId
                 ? $lastMessage->receiver
                 : $lastMessage->sender;
+
             $unreadCount = $msgs->where('receiver_id', $userId)->whereNull('read_at')->count();
 
             return (object) [
@@ -52,7 +53,6 @@ class MessagingController extends Controller
             ->oldest()
             ->get();
 
-        // Mark all unread messages FROM the other user as read
         Message::where('sender_id', $user->id)
             ->where('receiver_id', $authId)
             ->whereNull('read_at')
@@ -91,7 +91,6 @@ class MessagingController extends Controller
     {
         $parent = auth()->user();
 
-        // Room IDs from parent's children
         $roomIds = $parent->children()
             ->with('room')
             ->get()
@@ -99,7 +98,6 @@ class MessagingController extends Controller
             ->filter()
             ->unique();
 
-        // Carers actively assigned to those rooms
         $carers = User::where('role', 'carer')
             ->whereHas('activeRooms', fn ($q) => $q->whereIn('rooms.id', $roomIds))
             ->with('activeRooms')

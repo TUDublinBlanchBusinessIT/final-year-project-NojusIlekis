@@ -19,16 +19,21 @@
     <div class="py-8">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 flex flex-col gap-6">
 
-            {{-- Message thread --}}
-            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 flex flex-col gap-4 min-h-64">
-                @forelse ($messages as $message)
-                    @php $isMine = $message->sender_id === auth()->id(); @endphp
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 flex flex-col gap-4 max-h-[60vh] overflow-y-auto">
+                @if($messages->count() === 1)
+                    <p class="text-center text-xs text-slate-400">
+                        Start of conversation
+                    </p>
+                @endif
+
+                @forelse ($messages as $messageItem)
+                    @php $isMine = $messageItem->sender_id === auth()->id(); @endphp
+
                     <div class="flex {{ $isMine ? 'justify-end' : 'justify-start' }}">
                         <div class="max-w-sm">
-                            {{-- Child badge --}}
-                            @if ($message->child)
+                            @if ($messageItem->child)
                                 <p class="text-xs text-slate-400 mb-1 {{ $isMine ? 'text-right' : 'text-left' }}">
-                                    Re: {{ $message->child->first_name }} {{ $message->child->last_name }}
+                                    Re: {{ $messageItem->child->first_name }} {{ $messageItem->child->last_name }}
                                 </p>
                             @endif
 
@@ -36,12 +41,16 @@
                                 {{ $isMine
                                     ? 'bg-blue-600 text-white rounded-2xl rounded-br-sm ml-auto'
                                     : 'bg-slate-200 text-slate-900 rounded-2xl rounded-bl-sm mr-auto' }}">
-                                {{ $message->body }}
+                                {{ $messageItem->body }}
                             </div>
 
                             <p class="text-xs text-slate-400 mt-1 {{ $isMine ? 'text-right' : 'text-left' }}">
-                                {{ $message->created_at->format('g:i A') }}
-                                &middot; {{ $message->created_at->format('d M') }}
+                                {{ $messageItem->created_at->format('g:i A') }}
+                                &middot; {{ $messageItem->created_at->format('d M') }}
+
+                                @if ($isMine)
+                                    &middot; {{ $messageItem->read_at ? 'Read' : 'Sent' }}
+                                @endif
                             </p>
                         </div>
                     </div>
@@ -52,7 +61,6 @@
                 @endforelse
             </div>
 
-            {{-- Compose form --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
                 @if (session('success'))
                     <p class="mb-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2">
@@ -64,7 +72,6 @@
                     @csrf
                     <input type="hidden" name="receiver_id" value="{{ $user->id }}">
 
-                    {{-- About child --}}
                     @if ($myChildren->isNotEmpty())
                         <div>
                             <label for="child_id" class="block text-xs font-medium text-slate-600 mb-1">
@@ -82,17 +89,17 @@
                         </div>
                     @endif
 
-                    {{-- Message body --}}
                     <div>
                         <label for="body" class="block text-xs font-medium text-slate-600 mb-1">
                             Message
                         </label>
                         <textarea name="body" id="body" rows="3" required maxlength="2000"
-                                  placeholder="Type your message…"
+                                  placeholder="Type your message..."
                                   class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none">{{ old('body') }}</textarea>
-                        @error('body')
-                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
+
+                        @if ($errors->has('body'))
+                            <p class="text-xs text-red-600 mt-1">{{ $errors->first('body') }}</p>
+                        @endif
                     </div>
 
                     <div class="flex justify-end">
