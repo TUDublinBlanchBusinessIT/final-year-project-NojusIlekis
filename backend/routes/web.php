@@ -21,6 +21,7 @@ use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use App\Http\Controllers\Parent\MessagingController;
 use App\Http\Controllers\Carer\MessagingController as CarerMessagingController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Manager\MessagingController as ManagerMessagingController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,6 +72,10 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/messages/new', [MessagingController::class, 'create'])->name('messages.create');
         Route::post('/messages', [MessagingController::class, 'store'])->name('messages.store');
         Route::get('/messages/{user}', [MessagingController::class, 'show'])->name('messages.show');
+
+        // Dashboard quick enquiry to manager
+        Route::post('/dashboard/enquiry', [MessagingController::class, 'storeDashboardEnquiry'])
+            ->name('dashboard.enquiry.store');
     });
 
 Route::middleware(['auth', 'role:carer'])
@@ -128,6 +133,13 @@ Route::middleware(['auth', 'role:manager'])
         Route::post('/reports/daily-reports/{dailyReport}/request-ack', [ManagerDailyReportsController::class, 'requestAck'])
             ->name('reports.daily-reports.request-ack');
 
+        // Manager Messaging / Parent Enquiries
+        Route::get('/messages', [ManagerMessagingController::class, 'index'])->name('messages.index');
+
+        Route::get('/messages/{user}', [ManagerMessagingController::class, 'show'])->name('messages.show');
+
+        Route::post('/messages', [ManagerMessagingController::class, 'store'])->name('messages.store');
+
         Route::get('/reports/medication', [MedicationLogsController::class, 'index'])
             ->name('reports.medication.index');
 
@@ -184,7 +196,7 @@ Route::middleware(['auth', 'role:manager'])
         // Carers CRUD
         Route::resource('carers', CarerController::class);
 
-        Route::patch('/reports/incidents/{incident}/status', 
+        Route::patch('/reports/incidents/{incident}/status',
             [IncidentReportsController::class, 'updateStatus']
         )->name('reports.incidents.status');
     });

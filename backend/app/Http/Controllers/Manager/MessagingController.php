@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Parent;
+namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Message;
@@ -34,13 +34,17 @@ class MessagingController extends Controller
                 'last_message' => $lastMessage,
                 'unread_count' => $unreadCount,
             ];
-        })->sortByDesc(fn ($c) => $c->last_message->created_at)->values();
+        })->filter(fn ($conversation) => $conversation->user && $conversation->user->role === 'parent')
+          ->sortByDesc(fn ($c) => $c->last_message->created_at)
+          ->values();
 
-        return view('parent.messages.index', compact('conversations'));
+        return view('manager.messages.index', compact('conversations'));
     }
 
     public function show(User $user)
     {
+        abort_unless($user->role === 'parent', 403);
+
         $authId = auth()->id();
 
         $messages = Message::where(function ($q) use ($authId, $user) {
@@ -58,9 +62,7 @@ class MessagingController extends Controller
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
 
-        $myChildren = auth()->user()->children()->get();
-
-        return view('parent.messages.show', compact('messages', 'user', 'myChildren'));
+        return view('manager.messages.show', compact('messages', 'user'));
     }
 
     public function store(Request $request)
@@ -71,10 +73,8 @@ class MessagingController extends Controller
             'child_id'    => ['nullable', 'exists:children,id'],
         ]);
 
-        if ($validated['child_id'] ?? null) {
-            $linked = auth()->user()->children()->where('children.id', $validated['child_id'])->exists();
-            abort_unless($linked, 403);
-        }
+        $receiver = User::findOrFail($validated['receiver_id']);
+        abort_unless($receiver->role === 'parent', 403);
 
         Message::create([
             'sender_id'   => auth()->id(),
@@ -83,52 +83,7 @@ class MessagingController extends Controller
             'body'        => $validated['body'],
         ]);
 
-        return redirect()->route('parent.messages.show', $validated['receiver_id'])
-            ->with('success', 'Message sent.');
-    }
-
-    public function storeDashboardEnquiry(Request $request)
-    {
-        $validated = $request->validate([
-            'body'     => ['required', 'string', 'max:2000'],
-            'child_id' => ['nullable', 'exists:children,id'],
-        ]);
-
-        if ($validated['child_id'] ?? null) {
-            $linked = auth()->user()->children()->where('children.id', $validated['child_id'])->exists();
-            abort_unless($linked, 403);
-        }
-
-        $manager = User::where('role', 'manager')->orderBy('id')->firstOrFail();
-
-        Message::create([
-            'sender_id'   => auth()->id(),
-            'receiver_id' => $manager->id,
-            'child_id'    => $validated['child_id'] ?? null,
-            'body'        => $validated['body'],
-        ]);
-
-        return redirect()->route('parent.dashboard')
-            ->with('success', 'Your enquiry has been sent to the centre manager.');
-    }
-
-    public function create()
-    {
-        $parent = auth()->user();
-
-        $roomIds = $parent->children()
-            ->with('room')
-            ->get()
-            ->pluck('room_id')
-            ->filter()
-            ->unique();
-
-        $carers = User::where('role', 'carer')
-            ->whereHas('activeRooms', fn ($q) => $q->whereIn('rooms.id', $roomIds))
-            ->with('activeRooms')
-            ->orderBy('name')
-            ->get();
-
-        return view('parent.messages.create', compact('carers'));
+        return redirect()->route('manager.messages.show', $validated['receiver_id'])
+            ->with('success', 'Reply sent.');
     }
 }
