@@ -38,6 +38,18 @@
 
                         <tbody class="divide-y divide-slate-200">
                             @forelse($invoices as $invoice)
+                                @php
+                                    $status = strtolower($invoice->status);
+
+                                    $badgeClasses = match ($status) {
+                                        'draft' => 'bg-slate-100 text-slate-700 border border-slate-200',
+                                        'sent' => 'bg-blue-100 text-blue-700 border border-blue-200',
+                                        'paid' => 'bg-emerald-100 text-emerald-700 border border-emerald-200',
+                                        'overdue' => 'bg-red-100 text-red-700 border border-red-200',
+                                        default => 'bg-slate-100 text-slate-700 border border-slate-200',
+                                    };
+                                @endphp
+
                                 <tr class="hover:bg-slate-50">
                                     <td class="px-5 py-4 text-slate-900 font-medium">#{{ $invoice->id }}</td>
                                     <td class="px-5 py-4 text-slate-700">
@@ -50,7 +62,7 @@
                                         {{ $invoice->due_date }}
                                     </td>
                                     <td class="px-5 py-4">
-                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $badgeClasses }}">
                                             {{ ucfirst($invoice->status) }}
                                         </span>
                                     </td>
