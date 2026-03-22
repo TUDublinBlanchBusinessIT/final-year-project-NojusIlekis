@@ -92,6 +92,30 @@
                     @endif
                 </div>
 
+                {{-- Fee Summary Strip --}}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-5 py-4 border-b border-slate-200 dark:border-slate-800">
+                    <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                        <p class="text-sm text-slate-600 dark:text-slate-300">Total Outstanding</p>
+                        <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                            €{{ number_format($totalOutstanding ?? 0, 2) }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                        <p class="text-sm text-slate-600 dark:text-slate-300">Next Due Date</p>
+                        <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                            {{ $nextDueInvoice ? \Carbon\Carbon::parse($nextDueInvoice->due_date)->format('d M Y') : 'None' }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+                        <p class="text-sm text-slate-600 dark:text-slate-300">Unpaid Invoices</p>
+                        <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                            {{ $outstandingInvoices->count() }}
+                        </p>
+                    </div>
+                </div>
+
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>

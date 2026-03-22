@@ -32,6 +32,9 @@ class AcknowledgementController extends Controller
             ->take(5)
             ->get();
 
+        $totalOutstanding = $outstandingInvoices->sum('total');
+        $nextDueInvoice = $outstandingInvoices->sortBy('due_date')->first();
+
         $centreManager = User::where('role', 'manager')
             ->orderBy('id')
             ->first();
@@ -42,6 +45,8 @@ class AcknowledgementController extends Controller
             'acknowledgements',
             'outstandingInvoices',
             'recentPaidInvoices',
+            'totalOutstanding',
+            'nextDueInvoice',
             'centreManager',
             'myChildren'
         ));
