@@ -17,6 +17,7 @@ use App\Http\Controllers\Manager\CarerController;
 use App\Http\Controllers\Manager\IncidentReportsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use App\Http\Controllers\Parent\AcknowledgementController;
+use App\Http\Controllers\Parent\ParentChildrenController;
 use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use App\Http\Controllers\Parent\MessagingController;
 use App\Http\Controllers\Carer\MessagingController as CarerMessagingController;
@@ -67,15 +68,13 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/invoices/{invoice}/print', [ParentInvoiceController::class, 'print'])
             ->name('invoices.print');
 
-        // Messaging
-        Route::get('/messages', [MessagingController::class, 'index'])->name('messages.index');
-        Route::get('/messages/new', [MessagingController::class, 'create'])->name('messages.create');
-        Route::post('/messages', [MessagingController::class, 'store'])->name('messages.store');
-        Route::get('/messages/{user}', [MessagingController::class, 'show'])->name('messages.show');
+        // Parent children
+        Route::get('/children', [ParentChildrenController::class, 'index'])
+            ->name('children.index');
 
-        // Dashboard quick enquiry to manager
-        Route::post('/dashboard/enquiry', [MessagingController::class, 'storeDashboardEnquiry'])
-            ->name('dashboard.enquiry.store');
+        Route::get('/children/{child}', [ParentChildrenController::class, 'show'])
+            ->name('children.show');
+
     });
 
 Route::middleware(['auth', 'role:carer'])
