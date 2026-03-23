@@ -50,6 +50,13 @@ Route::middleware(['auth', 'role:parent'])
     ->name('parent.')
     ->group(function () {
         Route::get('/dashboard', [AcknowledgementController::class, 'dashboard'])->name('dashboard');
+        Route::post('/dashboard/enquiry', [MessagingController::class, 'storeDashboardEnquiry'])->name('dashboard.enquiry.store');
+
+        // Parent messaging
+        Route::get('/messages', [MessagingController::class, 'index'])->name('messages.index');
+        Route::get('/messages/new', [MessagingController::class, 'create'])->name('messages.create');
+        Route::post('/messages', [MessagingController::class, 'store'])->name('messages.store');
+        Route::get('/messages/{user}', [MessagingController::class, 'show'])->name('messages.show');
 
         // Parent acknowledgements
         Route::get('/acknowledgements', [AcknowledgementController::class, 'index'])
