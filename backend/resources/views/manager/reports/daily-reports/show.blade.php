@@ -51,8 +51,37 @@
                     </form>
                 </div>
 
-                <div class="p-5 text-sm text-slate-600 dark:text-slate-300">
-                    Request an acknowledgement for this report.
+                <div class="p-5">
+                    @if($dailyReport->acknowledgement && $dailyReport->acknowledgement->status === 'acknowledged')
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-medium text-green-800">Acknowledged</p>
+                                <p class="text-sm text-gray-500">
+                                    Signed by {{ $dailyReport->acknowledgement->signature_name }}
+                                    on {{ $dailyReport->acknowledgement->signed_at->format('d M Y \a\t H:i') }}
+                                </p>
+                            </div>
+                        </div>
+                    @elseif($dailyReport->acknowledgement)
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-medium text-amber-800">Awaiting Parent Signature</p>
+                                <p class="text-sm text-gray-500">Sent to parent — not yet acknowledged</p>
+                            </div>
+                        </div>
+                    @else
+                        <p class="text-gray-400 text-sm">No acknowledgement requested for this report.</p>
+                    @endif
                 </div>
             </div>
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Acknowledgement;
 
 class DailyReport extends Model
 {
@@ -26,5 +27,11 @@ class DailyReport extends Model
     public function mediaUpdates()
     {
         return $this->hasMany(MediaUpdate::class, 'daily_report_id');
+    }
+
+    public function acknowledgement()
+    {
+        return $this->hasOne(Acknowledgement::class, 'record_id')
+                    ->where('record_type', 'daily_report');
     }
 }

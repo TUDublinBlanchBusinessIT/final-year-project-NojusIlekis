@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Acknowledgement;
 
 class IncidentReport extends Model
 {
@@ -37,5 +38,11 @@ class IncidentReport extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function acknowledgement()
+    {
+        return $this->hasOne(Acknowledgement::class, 'record_id')
+                    ->where('record_type', 'incident_report');
     }
 }
