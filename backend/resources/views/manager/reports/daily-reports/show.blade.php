@@ -82,6 +82,17 @@
                     @else
                         <p class="text-gray-400 text-sm">No acknowledgement requested for this report.</p>
                     @endif
+
+                    @if($dailyReport->acknowledgement && ($dailyReport->acknowledgement->creator || $dailyReport->acknowledgement->updater))
+                        <div class="mt-3 text-xs text-gray-400">
+                            @if($dailyReport->acknowledgement->creator)
+                                Requested by {{ $dailyReport->acknowledgement->creator->name }}
+                            @endif
+                            @if($dailyReport->acknowledgement->updater)
+                                · Last updated by {{ $dailyReport->acknowledgement->updater->name }}
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </div>
 
