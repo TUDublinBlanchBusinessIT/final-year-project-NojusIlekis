@@ -20,6 +20,7 @@ use App\Http\Controllers\Parent\AcknowledgementController;
 use App\Http\Controllers\Parent\ParentChildrenController;
 use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use App\Http\Controllers\Parent\MessagingController;
+use App\Http\Controllers\Parent\MilestoneController as ParentMilestoneController;
 use App\Http\Controllers\Carer\MessagingController as CarerMessagingController;
 use App\Http\Controllers\Carer\MilestoneController as CarerMilestoneController;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,9 @@ Route::middleware(['auth', 'role:parent'])
 
         Route::get('/children/{child}', [ParentChildrenController::class, 'show'])
             ->name('children.show');
+
+        // Parent milestones
+        Route::get('/milestones/{child}', [ParentMilestoneController::class, 'show'])->name('milestones.show');
 
     });
 

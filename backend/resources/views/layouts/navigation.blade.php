@@ -11,7 +11,11 @@
                 </div>
 
                 <!-- Navigation Links -->
-                @php($role = Auth::user()->role)
+                @php
+                    $role = auth()->check() ? auth()->user()->role : null;
+                    $firstChild = ($role === 'parent' && auth()->check()) ? auth()->user()->children()->first() : null;
+                    $unreadMessageCount = auth()->check() ? \App\Models\Message::where('receiver_id', auth()->id())->whereNull('read_at')->count() : 0;
+                @endphp
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -25,6 +29,11 @@
                         <x-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
                             {{ __('Invoices') }}
                         </x-nav-link>
+                        @if($firstChild)
+                            <x-nav-link :href="route('parent.milestones.show', $firstChild)" :active="request()->routeIs('parent.milestones.*')">
+                                {{ __('Milestones') }}
+                            </x-nav-link>
+                        @endif
                         <x-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
                             {{ __('Messages') }}
                             @if($unreadMessageCount > 0)
@@ -120,6 +129,11 @@
             </x-responsive-nav-link>
 
             @if ($role === 'parent')
+                @if($firstChild)
+                    <x-responsive-nav-link :href="route('parent.milestones.show', $firstChild)" :active="request()->routeIs('parent.milestones.*')">
+                        {{ __('Milestones') }}
+                    </x-responsive-nav-link>
+                @endif
                 <x-responsive-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
                     {{ __('Invoices') }}
                 </x-responsive-nav-link>
