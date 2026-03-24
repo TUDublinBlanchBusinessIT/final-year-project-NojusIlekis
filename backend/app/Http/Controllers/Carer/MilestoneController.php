@@ -11,6 +11,22 @@ use Illuminate\Http\Request;
 class MilestoneController extends Controller
 {
     /**
+     * List children in the carer's active rooms so they can pick one.
+     */
+    public function index()
+    {
+        $children = auth()->user()
+            ->activeRooms()
+            ->with('children')
+            ->get()
+            ->flatMap(fn ($room) => $room->children)
+            ->unique('id')
+            ->sortBy('first_name');
+
+        return view('carer.milestones.index', compact('children'));
+    }
+
+    /**
      * Show milestones for a child, grouped by Aistear theme.
      */
     public function show(Child $child)

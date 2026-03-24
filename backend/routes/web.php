@@ -113,6 +113,7 @@ Route::middleware(['auth', 'role:carer'])
         Route::post('/incident-reports', [IncidentReportController::class, 'store'])->name('incident-reports.store');
 
         // Milestones
+        Route::get('/milestones', [CarerMilestoneController::class, 'index'])->name('milestones.index');
         Route::get('/milestones/{child}', [CarerMilestoneController::class, 'show'])->name('milestones.show');
         Route::post('/milestones/{child}/{milestone}/toggle', [CarerMilestoneController::class, 'toggle'])->name('milestones.toggle');
 

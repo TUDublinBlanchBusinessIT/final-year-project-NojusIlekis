@@ -37,7 +37,7 @@
                         <x-nav-link :href="route('carer.dashboard')" :active="request()->routeIs('carer.dashboard')">
                             {{ __('Carer') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('carer.attendance.index')" :active="request()->routeIs('carer.milestones.*')">
+                        <x-nav-link :href="route('carer.milestones.index')" :active="request()->routeIs('carer.milestones.*')">
                             {{ __('Milestones') }}
                         </x-nav-link>
                         <x-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
@@ -132,7 +132,7 @@
                     @endif
                 </x-responsive-nav-link>
             @elseif ($role === 'carer')
-                <x-responsive-nav-link :href="route('carer.attendance.index')" :active="request()->routeIs('carer.milestones.*')">
+                <x-responsive-nav-link :href="route('carer.milestones.index')" :active="request()->routeIs('carer.milestones.*')">
                     {{ __('Milestones') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
