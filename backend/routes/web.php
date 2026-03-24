@@ -23,6 +23,7 @@ use App\Http\Controllers\Parent\MessagingController;
 use App\Http\Controllers\Carer\MessagingController as CarerMessagingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manager\MessagingController as ManagerMessagingController;
+use App\Http\Controllers\Parent\TimelineController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -75,12 +76,18 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/invoices/{invoice}/print', [ParentInvoiceController::class, 'print'])
             ->name('invoices.print');
 
+
         // Parent children
         Route::get('/children', [ParentChildrenController::class, 'index'])
             ->name('children.index');
 
         Route::get('/children/{child}', [ParentChildrenController::class, 'show'])
             ->name('children.show');
+
+        Route::get('/children/{child}/timeline', [TimelineController::class, 'show'])
+            ->name('children.timeline');
+
+        
 
     });
 
