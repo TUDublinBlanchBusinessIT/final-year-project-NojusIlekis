@@ -169,6 +169,10 @@
                                                                 ⚠️ {{ $child->allergyList() }}
                                                             </span>
                                                         @endif
+                                                        <a href="{{ route('carer.milestones.show', $child) }}"
+                                                           class="mt-1 inline-flex items-center text-blue-600 hover:text-blue-800 text-xs font-medium">
+                                                            Milestones
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </td>

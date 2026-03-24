@@ -21,6 +21,7 @@ use App\Http\Controllers\Parent\ParentChildrenController;
 use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use App\Http\Controllers\Parent\MessagingController;
 use App\Http\Controllers\Carer\MessagingController as CarerMessagingController;
+use App\Http\Controllers\Carer\MilestoneController as CarerMilestoneController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manager\MessagingController as ManagerMessagingController;
 
@@ -110,6 +111,10 @@ Route::middleware(['auth', 'role:carer'])
         // Incident Reports
         Route::get('/incident-reports', [IncidentReportController::class, 'index'])->name('incident-reports.index');
         Route::post('/incident-reports', [IncidentReportController::class, 'store'])->name('incident-reports.store');
+
+        // Milestones
+        Route::get('/milestones/{child}', [CarerMilestoneController::class, 'show'])->name('milestones.show');
+        Route::post('/milestones/{child}/{milestone}/toggle', [CarerMilestoneController::class, 'toggle'])->name('milestones.toggle');
 
         // Messaging
         Route::get('/messages', [CarerMessagingController::class, 'index'])->name('messages.index');
