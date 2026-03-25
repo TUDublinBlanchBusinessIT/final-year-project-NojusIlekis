@@ -9,6 +9,7 @@ use App\Policies\ChildPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,12 +26,14 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.navigation', function ($view) {
             $unreadCount = 0;
-            if (auth()->check()) {
-                $unreadCount = Message::where('receiver_id', auth()->id())
+
+            if (auth()->check() && Schema::hasTable('messages')) {
+                $unreadCount = \App\Models\Message::where('receiver_id', auth()->id())
                     ->whereNull('read_at')
                     ->count();
             }
-            $view->with('unreadMessageCount', $unreadCount);
+
+            $view->with('unreadCount', $unreadCount);
         });
     }
 }
