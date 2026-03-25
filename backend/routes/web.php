@@ -18,6 +18,7 @@ use App\Http\Controllers\Manager\IncidentReportsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use App\Http\Controllers\Parent\AcknowledgementController;
 use App\Http\Controllers\Parent\ParentChildrenController;
+use App\Http\Controllers\Parent\ParentIncidentController;
 use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use App\Http\Controllers\Parent\MessagingController;
 use App\Http\Controllers\Parent\MilestoneController as ParentMilestoneController;
@@ -93,6 +94,16 @@ Route::middleware(['auth', 'role:parent'])
         // Parent milestones
         Route::get('/milestones/{child}', [ParentMilestoneController::class, 'show'])
         ->name('milestones.show');
+
+        // Parent incidents
+        Route::get('/incidents', [ParentIncidentController::class, 'index'])
+            ->name('incidents.index');
+
+        Route::get('/incidents/{incident}', [ParentIncidentController::class, 'show'])
+            ->name('incidents.show');
+
+        Route::post('/incidents/{incident}/sign', [ParentIncidentController::class, 'sign'])
+            ->name('incidents.sign');
 
     });
 

@@ -29,6 +29,9 @@
                         <x-nav-link :href="route('parent.children.index')" :active="request()->routeIs('parent.children.*')">
                             {{ __('My Children') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('parent.incidents.index')" :active="request()->routeIs('parent.incidents.*')">
+                            {{ __('Incidents') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
                             {{ __('Invoices') }}
                         </x-nav-link>
@@ -139,6 +142,9 @@
                 @endif
                 <x-responsive-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
                     {{ __('Invoices') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('parent.incidents.index')" :active="request()->routeIs('parent.incidents.*')">
+                    {{ __('Incidents') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
                     {{ __('Messages') }}
