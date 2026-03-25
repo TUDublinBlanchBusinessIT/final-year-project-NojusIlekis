@@ -7,7 +7,9 @@ use App\Models\Room;
 use App\Models\Child;
 use App\Models\Attendance;
 use App\Models\DailyUpdate;
+use App\Models\DailyReport;
 use App\Models\IncidentReport;
+use App\Models\Acknowledgement;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +19,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(MilestoneSeeder::class);
+
         // ----------------------------
         // Users
         // ----------------------------
@@ -239,6 +243,56 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        // ----------------------------
+        // Sample daily reports
+        // ----------------------------
+        $mia = $childModels[0]; // Mia Kelly — parent@test.com
+
+        $dailyReport1 = DailyReport::updateOrCreate(
+            ['child_id' => $mia->id, 'date' => $today],
+            [
+                'carer_id'     => $carer->id,
+                'daily_report' => 'Mia had a wonderful day. She painted a picture and enjoyed storytime.',
+            ]
+        );
+
+        $dailyReport2 = DailyReport::updateOrCreate(
+            ['child_id' => $mia->id, 'date' => now()->subDay()->toDateString()],
+            [
+                'carer_id'     => $carer->id,
+                'daily_report' => 'Mia napped well and played with building blocks in the afternoon.',
+            ]
+        );
+
+        // ----------------------------
+        // Sample acknowledgements
+        // ----------------------------
+        Acknowledgement::updateOrCreate(
+            [
+                'record_type' => 'daily_report',
+                'record_id'   => $dailyReport1->id,
+                'parent_id'   => $parent->id,
+            ],
+            [
+                'status'         => 'pending',
+                'signed_at'      => null,
+                'signature_name' => null,
+            ]
+        );
+
+        Acknowledgement::updateOrCreate(
+            [
+                'record_type' => 'daily_report',
+                'record_id'   => $dailyReport2->id,
+                'parent_id'   => $parent->id,
+            ],
+            [
+                'status'         => 'acknowledged',
+                'signed_at'      => now()->subDays(2),
+                'signature_name' => 'Test Parent',
+            ]
+        );
 
         // ----------------------------
         // Sample incident reports

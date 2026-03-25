@@ -27,7 +27,7 @@ class DailyReportsController extends Controller
                 ->get();
 
             // daily reports for selected date, for children in this room
-            $reports = DailyReport::with(['carer', 'mediaUpdates'])
+            $reports = DailyReport::with(['carer', 'mediaUpdates', 'acknowledgement'])
                 ->where('date', $date)
                 ->whereIn('child_id', $children->pluck('id'))
                 ->get()
@@ -45,7 +45,7 @@ class DailyReportsController extends Controller
 
     public function show(DailyReport $dailyReport)
     {
-        $dailyReport->load(['child.room', 'carer', 'mediaUpdates']);
+        $dailyReport->load(['child.room', 'carer', 'mediaUpdates', 'acknowledgement']);
 
         return view('manager.reports.daily-reports.show', compact('dailyReport'));
     }
@@ -56,8 +56,9 @@ class DailyReportsController extends Controller
         $dailyReport->load('child');
 
         $child = $dailyReport->child;
+        $parent = $child ? $child->parents()->first() : null;
 
-        if (!$child || !$child->parent_user_id) {
+        if (!$parent) {
             return back()->with('error', 'No parent is linked to this child.');
         }
 
@@ -65,7 +66,7 @@ class DailyReportsController extends Controller
             [
                 'record_type' => 'daily_report',
                 'record_id'   => $dailyReport->id,
-                'parent_id'   => $child->parent_user_id,
+                'parent_id'   => $parent->id,
             ],
             [
                 'status'         => 'pending',

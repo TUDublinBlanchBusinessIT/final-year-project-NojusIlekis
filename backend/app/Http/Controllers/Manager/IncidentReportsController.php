@@ -12,7 +12,7 @@ class IncidentReportsController extends Controller
     {
         $date = $request->date;
 
-        $reports = IncidentReport::with(['child','carer','room'])
+        $reports = IncidentReport::with(['child', 'carer', 'room', 'acknowledgement'])
             ->when($date, function ($query) use ($date) {
                 $query->whereDate('incident_date', $date);
             })
