@@ -26,6 +26,9 @@
                         <x-nav-link :href="route('parent.dashboard')" :active="request()->routeIs('parent.dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('parent.children.index')" :active="request()->routeIs('parent.children.*')">
+                            {{ __('My Children') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
                             {{ __('Invoices') }}
                         </x-nav-link>

@@ -265,7 +265,7 @@
     </div>
 </div>
 
-                        {{-- Contact Centre --}}
+            {{-- Contact Centre --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
@@ -283,7 +283,6 @@
                             No centre manager is currently available to contact.
                         </p>
                     @else
-        
                         <form method="POST" action="{{ route('parent.dashboard.enquiry.store') }}" class="space-y-4">
                             @csrf
 
@@ -291,7 +290,6 @@
                                 <span class="font-medium">This enquiry will be sent to:</span>
                                 {{ $centreManager->name }}
                             </div>
-
 
                             <div>
                                 <label for="child_id" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">
@@ -334,8 +332,7 @@
                                 </button>
                             </div>
                         </form>
-
-                   
+                    @endif
                 </div>
             </div>
 
