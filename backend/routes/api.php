@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/children/{child}', [ParentDataController::class, 'showChild'])->name('children.show');
         Route::get('/children/{child}/attendance', [ParentDataController::class, 'childAttendance'])->name('children.attendance');
         Route::get('/children/{child}/daily-updates', [ParentDataController::class, 'childDailyUpdates'])->name('children.daily-updates');
+        Route::get('/children/{child}/timeline', [ParentDataController::class, 'timeline'])->name('children.timeline');
         Route::get('/invoices', [ParentDataController::class, 'invoices'])->name('invoices.index');
         Route::get('/invoices/{invoice}', [ParentDataController::class, 'showInvoice'])->name('invoices.show');
     });
