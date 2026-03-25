@@ -20,9 +20,12 @@ use App\Http\Controllers\Parent\AcknowledgementController;
 use App\Http\Controllers\Parent\ParentChildrenController;
 use App\Http\Controllers\Parent\InvoiceController as ParentInvoiceController;
 use App\Http\Controllers\Parent\MessagingController;
+use App\Http\Controllers\Parent\MilestoneController as ParentMilestoneController;
 use App\Http\Controllers\Carer\MessagingController as CarerMessagingController;
+use App\Http\Controllers\Carer\MilestoneController as CarerMilestoneController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manager\MessagingController as ManagerMessagingController;
+use App\Http\Controllers\Parent\TimelineController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,6 +53,13 @@ Route::middleware(['auth', 'role:parent'])
     ->name('parent.')
     ->group(function () {
         Route::get('/dashboard', [AcknowledgementController::class, 'dashboard'])->name('dashboard');
+        Route::post('/dashboard/enquiry', [MessagingController::class, 'storeDashboardEnquiry'])->name('dashboard.enquiry.store');
+
+        // Parent messaging
+        Route::get('/messages', [MessagingController::class, 'index'])->name('messages.index');
+        Route::get('/messages/new', [MessagingController::class, 'create'])->name('messages.create');
+        Route::post('/messages', [MessagingController::class, 'store'])->name('messages.store');
+        Route::get('/messages/{user}', [MessagingController::class, 'show'])->name('messages.show');
 
         // Parent acknowledgements
         Route::get('/acknowledgements', [AcknowledgementController::class, 'index'])
@@ -68,12 +78,21 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/invoices/{invoice}/print', [ParentInvoiceController::class, 'print'])
             ->name('invoices.print');
 
+
         // Parent children
         Route::get('/children', [ParentChildrenController::class, 'index'])
             ->name('children.index');
 
         Route::get('/children/{child}', [ParentChildrenController::class, 'show'])
             ->name('children.show');
+
+
+        Route::get('/children/{child}/timeline', [TimelineController::class, 'show'])
+        ->name('children.timeline');
+
+        // Parent milestones
+        Route::get('/milestones/{child}', [ParentMilestoneController::class, 'show'])
+        ->name('milestones.show');
 
     });
 
@@ -103,6 +122,11 @@ Route::middleware(['auth', 'role:carer'])
         // Incident Reports
         Route::get('/incident-reports', [IncidentReportController::class, 'index'])->name('incident-reports.index');
         Route::post('/incident-reports', [IncidentReportController::class, 'store'])->name('incident-reports.store');
+
+        // Milestones
+        Route::get('/milestones', [CarerMilestoneController::class, 'index'])->name('milestones.index');
+        Route::get('/milestones/{child}', [CarerMilestoneController::class, 'show'])->name('milestones.show');
+        Route::post('/milestones/{child}/{milestone}/toggle', [CarerMilestoneController::class, 'toggle'])->name('milestones.toggle');
 
         // Messaging
         Route::get('/messages', [CarerMessagingController::class, 'index'])->name('messages.index');

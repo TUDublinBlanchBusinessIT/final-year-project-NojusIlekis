@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApiAuthController;
 use App\Http\Controllers\Api\CarerDataController;
 use App\Http\Controllers\Api\ManagerDataController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\MilestoneController;
 use App\Http\Controllers\Api\ParentDataController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/messages/conversations', [MessageController::class, 'conversations']);
     Route::get('/messages/conversations/{user}', [MessageController::class, 'show']);
     Route::post('/messages', [MessageController::class, 'store']);
+
+    // Milestone endpoints — accessible by all authenticated roles
+    Route::get('/children/{child}/milestones', [MilestoneController::class, 'index']);
+    Route::post('/children/{child}/milestones/{milestone}/toggle', [MilestoneController::class, 'toggle']);
 
     // Parent-only routes
     Route::middleware('api.role:parent')->prefix('parent')->name('api.parent.')->group(function () {
