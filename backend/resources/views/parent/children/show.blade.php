@@ -65,9 +65,17 @@
                         <div class="space-y-4 text-sm">
                             <div>
                                 <p class="font-semibold text-gray-800 dark:text-gray-200">Allergies</p>
-                                <p class="text-gray-700 dark:text-gray-300 mt-1">
-                                    {{ $child->allergies ?: 'No allergies recorded.' }}
-                                </p>
+                                @if($child->allergyArray())
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        @foreach($child->allergyArray() as $allergy)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300">
+                                                {{ $allergy }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <p class="text-gray-700 dark:text-gray-300 mt-1">No allergies recorded.</p>
+                                @endif
                             </div>
 
                             <div>
@@ -81,6 +89,64 @@
                 </div>
             </div>
 
+            {{-- Allergy Alert Banner --}}
+            <x-allergy-alert :child="$child" />
+
+            {{-- Milestone Progress Summary --}}
+            <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Development Milestones</h3>
+                    <a href="{{ route('parent.milestones.show', $child) }}"
+                       class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 font-medium">
+                        View All →
+                    </a>
+                </div>
+
+                @php
+                    $overallProgress = $child->milestoneProgress();
+                    $milestoneCategories = [
+                        'wellbeing'          => ['label' => 'Well-being',          'colour' => 'green'],
+                        'identity-belonging' => ['label' => 'Identity & Belonging', 'colour' => 'blue'],
+                        'communicating'      => ['label' => 'Communicating',        'colour' => 'purple'],
+                        'exploring-thinking' => ['label' => 'Exploring & Thinking', 'colour' => 'amber'],
+                    ];
+                @endphp
+
+                @if($overallProgress['total'] > 0)
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between text-sm mb-1">
+                            <span class="text-gray-600 dark:text-gray-300">Overall Progress</span>
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">
+                                {{ $overallProgress['achieved'] }}/{{ $overallProgress['total'] }} ({{ $overallProgress['percentage'] }}%)
+                            </span>
+                        </div>
+                        <div class="h-3 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-600 rounded-full transition-all"
+                                 style="width: {{ $overallProgress['percentage'] }}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        @foreach($milestoneCategories as $key => $cat)
+                            @php $p = $child->milestoneProgress($key); @endphp
+                            @if($p['total'] > 0)
+                                <div class="flex items-center gap-3 text-sm">
+                                    <span class="text-gray-500 dark:text-gray-400 w-36 truncate">{{ $cat['label'] }}</span>
+                                    <div class="flex-1 h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-{{ $cat['colour'] }}-500 rounded-full"
+                                             style="width: {{ $p['percentage'] }}%"></div>
+                                    </div>
+                                    <span class="text-gray-500 dark:text-gray-400 w-10 text-right">{{ $p['achieved'] }}/{{ $p['total'] }}</span>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                @else
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">No milestones available for this age range yet.</p>
+                @endif
+            </div>
+
+            {{-- Tab Navigation --}}
             <div class="flex flex-wrap gap-2">
                 <a href="{{ route('parent.children.show', $child) }}"
                    class="px-4 py-2 rounded-md text-sm font-medium {{ $tabClasses('profile') }}">
