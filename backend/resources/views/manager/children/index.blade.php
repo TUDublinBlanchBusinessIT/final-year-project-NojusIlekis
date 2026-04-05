@@ -126,6 +126,9 @@
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30">
                                     <td class="px-5 py-4 font-medium text-slate-900 dark:text-slate-100">
                                         {{ $child->first_name }} {{ $child->last_name }}
+                                        @if($child->hasAllergies())
+                                            <span class="ml-1.5 bg-red-100 text-red-700 text-xs font-semibold px-2 py-0.5 rounded-full">⚠️ Allergies</span>
+                                        @endif
                                     </td>
 
                                     <td class="px-5 py-4 text-slate-700 dark:text-slate-200">

@@ -34,6 +34,7 @@ Filter
         <th class="p-3 text-left">Carer</th>
         <th class="p-3 text-left">Parent Contact</th>
         <th class="p-3 text-left">Status</th>
+        <th class="p-3 text-left">Acknowledgement</th>
     </tr>
 </thead>
 
@@ -100,12 +101,40 @@ Filter
     </form>
     </td>
 
+    <td class="p-3">
+        @if($report->acknowledgement)
+            @if($report->acknowledgement->status === 'acknowledged')
+                <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    Acknowledged
+                </span>
+                <span class="text-xs text-gray-500 ml-2">
+                    by {{ $report->acknowledgement->signature_name }}
+                    on {{ $report->acknowledgement->signed_at->format('d M Y, H:i') }}
+                </span>
+            @else
+                <span class="inline-flex items-center bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                    </svg>
+                    Pending
+                </span>
+            @endif
+        @else
+            <span class="inline-flex items-center bg-gray-100 text-gray-500 text-xs font-semibold px-2.5 py-1 rounded-full">
+                Not Requested
+            </span>
+        @endif
+    </td>
+
 </tr>
 
 @empty
 
 <tr>
-    <td colspan="7" class="p-6 text-center text-gray-500">
+    <td colspan="8" class="p-6 text-center text-gray-500">
         No incident reports found
     </td>
 </tr>

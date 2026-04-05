@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Child;
 use App\Models\DailyReport;
 use App\Models\MediaUpdate;
+use App\Models\Room;
 
 class DailyReportController extends Controller
 {
@@ -17,12 +18,23 @@ class DailyReportController extends Controller
         // Get room IDs assigned to this carer
         $roomIds = $carer->rooms()->pluck('rooms.id');
 
-        // Get children in those rooms
+        // Get rooms and children in those rooms
+        $rooms = Room::whereIn('id', $roomIds)->orderBy('name')->get();
+
         $children = Child::whereIn('room_id', $roomIds)
             ->orderBy('first_name')
             ->get();
 
-        return view('carer.daily_reports.index', compact('children'));
+        $allergyData = $children->mapWithKeys(fn($child) => [
+            $child->id => [
+                'name'          => $child->first_name . ' ' . $child->last_name,
+                'has_allergies' => $child->hasAllergies(),
+                'allergies'     => $child->allergyList(),
+                'medical_notes' => $child->medical_notes ?? '',
+            ]
+        ]);
+
+        return view('carer.daily_reports.index', compact('rooms', 'children', 'allergyData'));
     }
 
 

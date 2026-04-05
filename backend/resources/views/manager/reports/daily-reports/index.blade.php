@@ -74,6 +74,7 @@
                                     <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Status</th>
                                     <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Saved</th>
                                     <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Attachments</th>
+                                    <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Acknowledgement</th>
                                     <th class="text-right px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Action</th>
                                 </tr>
                             </thead>
@@ -112,6 +113,32 @@
                                             {{ $mediaCount }}
                                         </td>
 
+                                        <td class="px-5 py-4">
+                                            @if($report && $report->acknowledgement)
+                                                @if($report->acknowledgement->status === 'acknowledged')
+                                                    <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                                        <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        Acknowledged
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                                        <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        Pending
+                                                    </span>
+                                                @endif
+                                            @elseif($report)
+                                                <span class="inline-flex items-center bg-gray-100 text-gray-500 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                                    Not Requested
+                                                </span>
+                                            @else
+                                                <span class="text-slate-400 text-sm">—</span>
+                                            @endif
+                                        </td>
+
                                         <td class="px-5 py-4 text-right">
                                             @if($report)
                                                 <a href="{{ route('manager.reports.daily-reports.show', $report) }}"
@@ -127,7 +154,7 @@
 
                                 @if($children->isEmpty())
                                     <tr>
-                                        <td colspan="5" class="px-5 py-6 text-slate-600 dark:text-slate-300">
+                                        <td colspan="6" class="px-5 py-6 text-slate-600 dark:text-slate-300">
                                             No children found for this room.
                                         </td>
                                     </tr>

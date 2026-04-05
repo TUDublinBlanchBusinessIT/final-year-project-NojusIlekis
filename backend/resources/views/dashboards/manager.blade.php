@@ -81,7 +81,6 @@
                             </a>
                         </div>
 
-                        {{-- Filters --}}
                         <form id="kpiFilterForm" method="GET" action="{{ route('manager.dashboard') }}"
                               class="grid grid-cols-1 md:grid-cols-4 gap-3">
                             <div>
@@ -125,7 +124,6 @@
                         </form>
                     </div>
 
-                    {{-- Overall KPIs --}}
                     <div class="mt-5">
                         <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
                             Overall (All Rooms)
@@ -155,7 +153,6 @@
                         </div>
                     </div>
 
-                    {{-- Selected Room KPIs --}}
                     @if(!empty($kpiRoom))
                         <div class="mt-6">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
@@ -187,7 +184,6 @@
                         </div>
                     @endif
 
-                    {{-- Per-room breakdown --}}
                     <div class="mt-7">
                         <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
                             Room Breakdown
@@ -392,9 +388,9 @@
                     </div>
                 </div>
 
+                {{-- Incident Reports --}}
                 <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-6
                             dark:border-slate-800 dark:bg-slate-950/40">
-
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
                         Incident Reports
                     </h3>
@@ -404,12 +400,35 @@
                     </p>
 
                     <a href="{{ route('manager.reports.incidents') }}"
-                        class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white
-                                bg-gradient-to-r from-red-600 to-red-700
-                                hover:brightness-110 shadow-sm">
-                            View Incidents
+                       class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white
+                              bg-gradient-to-r from-red-600 to-red-700
+                              hover:brightness-110 shadow-sm">
+                        View Incidents
                     </a>
+                </div>
 
+                {{-- Parent Enquiries --}}
+                <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
+                            dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                            Parent Enquiries
+                        </h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+                            View and reply to fee and invoice enquiries sent by parents.
+                        </p>
+
+                        <a href="{{ route('manager.messages.index') }}"
+                           class="mt-4 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
+                                  bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                                  shadow-sm shadow-blue-500/20
+                                  hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
+                                  focus:outline-none focus:ring-4 focus:ring-blue-200
+                                  active:translate-y-[1px]
+                                  dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
+                            View Enquiries
+                        </a>
+                    </div>
                 </div>
 
             </div>

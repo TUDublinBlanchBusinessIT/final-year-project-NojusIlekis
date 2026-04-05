@@ -106,15 +106,10 @@
                         </div>
 
                         <div>
-                            <label for="allergies" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
                                 Allergies
                             </label>
-                            <textarea name="allergies" id="allergies" rows="3"
-                                      placeholder="List any known allergies…"
-                                      class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
-                                             focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
-                                             dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
-                                             @error('allergies') border-red-400 @enderror">{{ old('allergies') }}</textarea>
+                            <x-allergy-input />
                             @error('allergies')
                                 <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror

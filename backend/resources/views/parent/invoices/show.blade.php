@@ -29,6 +29,22 @@
         </div>
     </x-slot>
 
+    @php
+        $displayStatus = strtolower($invoice->status);
+
+        if ($displayStatus === 'sent' && \Carbon\Carbon::parse($invoice->due_date)->isPast()) {
+            $displayStatus = 'overdue';
+        }
+
+        $statusBadgeClasses = match ($displayStatus) {
+            'draft' => 'bg-slate-100 text-slate-700 border border-slate-200',
+            'sent' => 'bg-blue-100 text-blue-700 border border-blue-200',
+            'paid' => 'bg-emerald-100 text-emerald-700 border border-emerald-200',
+            'overdue' => 'bg-red-100 text-red-700 border border-red-200',
+            default => 'bg-slate-100 text-slate-700 border border-slate-200',
+        };
+    @endphp
+
     <div class="py-8">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
@@ -42,7 +58,12 @@
                         <div class="space-y-2 text-slate-800">
                             <p><span class="font-semibold">Invoice ID:</span> #{{ $invoice->id }}</p>
                             <p><span class="font-semibold">Child:</span> {{ $invoice->child->first_name ?? '' }} {{ $invoice->child->last_name ?? '' }}</p>
-                            <p><span class="font-semibold">Status:</span> {{ ucfirst($invoice->status) }}</p>
+                            <p>
+                                <span class="font-semibold">Status:</span>
+                                <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $statusBadgeClasses }}">
+                                    {{ ucfirst($displayStatus) }}
+                                </span>
+                            </p>
                         </div>
 
                         <div class="space-y-2 text-slate-800">
@@ -53,6 +74,39 @@
                             <p><span class="font-semibold">Final Total:</span> €{{ number_format($finalTotal, 2) }}</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-4">
+                        Payment History
+                    </h3>
+
+                    @if (strtolower($invoice->status) === 'paid')
+                        <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-slate-800">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <p class="text-xs font-semibold uppercase text-slate-500">Payment Status</p>
+                                    <p class="mt-1 font-medium text-emerald-700">Paid</p>
+                                </div>
+
+                                <div>
+                                    <p class="text-xs font-semibold uppercase text-slate-500">Amount Recorded</p>
+                                    <p class="mt-1 font-medium">€{{ number_format($finalTotal, 2) }}</p>
+                                </div>
+
+                                <div>
+                                    <p class="text-xs font-semibold uppercase text-slate-500">Recorded On</p>
+                                    <p class="mt-1 font-medium">{{ $invoice->updated_at?->format('d/m/Y H:i') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-700">
+                            No payment has been recorded for this invoice yet.
+                        </div>
+                    @endif
                 </div>
             </div>
 

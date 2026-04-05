@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Child;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Message;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -134,9 +135,26 @@ class InvoiceController extends Controller
             'status' => ['required', 'in:sent,paid'],
         ]);
 
+        $oldStatus = $invoice->status;
+        $newStatus = $validated['status'];
+
+        $invoice->load(['child', 'parent']);
+
         $invoice->update([
-            'status' => $validated['status'],
+            'status' => $newStatus,
         ]);
+
+        if ($newStatus === 'sent' && $oldStatus !== 'sent') {
+            $childName = trim(($invoice->child->first_name ?? '') . ' ' . ($invoice->child->last_name ?? ''));
+
+            Message::create([
+                'sender_id' => auth()->id(),
+                'receiver_id' => $invoice->parent_id,
+                'child_id' => $invoice->child_id,
+                'body' => "A new invoice has been issued for {$childName}. Total: €" . number_format($invoice->total, 2) . ". Due date: " . $invoice->due_date . ". Please review it in your parent portal.",
+            ]);
+        }
+
 
         return redirect()
             ->route('manager.invoices.show', $invoice)

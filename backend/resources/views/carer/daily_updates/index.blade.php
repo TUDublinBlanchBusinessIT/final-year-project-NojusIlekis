@@ -144,6 +144,12 @@
                                                         <div class="text-xs text-slate-500 dark:text-slate-400">
                                                             Room: {{ $child->room?->name ?? '—' }} • ID: {{ $child->id }}
                                                         </div>
+                                                        @if($child->hasAllergies())
+                                                            <span class="mt-1 inline-flex items-center bg-red-100 text-red-700 text-xs font-semibold px-2 py-0.5 rounded-full"
+                                                                  title="Allergies: {{ $child->allergyList() }}">
+                                                                ⚠️ {{ $child->allergyList() }}
+                                                            </span>
+                                                        @endif
                                                     </div>
 
                                                     @if($u)
@@ -168,6 +174,11 @@
                                                               focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                                               dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
                                                               dark:focus:ring-blue-900/40 dark:focus:border-blue-400">
+                                                @if($child->hasAllergies())
+                                                    <p class="mt-1 text-xs text-red-600 font-medium">
+                                                        ⚠️ Allergies: {{ $child->allergyList() }}
+                                                    </p>
+                                                @endif
                                             </td>
 
                                             <td class="px-5 py-4">

@@ -11,23 +11,53 @@
                 </div>
 
                 <!-- Navigation Links -->
-                @php($role = Auth::user()->role)
+                @php
+                    $role = auth()->check() ? auth()->user()->role : null;
+                    $firstChild = ($role === 'parent' && auth()->check()) ? auth()->user()->children()->first() : null;
+                    $unreadMessageCount = auth()->check() ? \App\Models\Message::where('receiver_id', auth()->id())->whereNull('read_at')->count() : 0;
+                @endphp
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-
                     @if ($role === 'parent')
                         <x-nav-link :href="route('parent.dashboard')" :active="request()->routeIs('parent.dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('parent.children.index')" :active="request()->routeIs('parent.children.*')">
+                            {{ __('My Children') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('parent.incidents.index')" :active="request()->routeIs('parent.incidents.*')">
+                            {{ __('Incidents') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
                             {{ __('Invoices') }}
+                        </x-nav-link>
+                        @if($firstChild)
+                            <x-nav-link :href="route('parent.milestones.show', $firstChild)" :active="request()->routeIs('parent.milestones.*')">
+                                {{ __('Milestones') }}
+                            </x-nav-link>
+                        @endif
+                        <x-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
+                            {{ __('Messages') }}
+                            @if($unreadMessageCount > 0)
+                                <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
+                                    {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                                </span>
+                            @endif
                         </x-nav-link>
                     @elseif ($role === 'carer')
                         <x-nav-link :href="route('carer.dashboard')" :active="request()->routeIs('carer.dashboard')">
                             {{ __('Carer') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('carer.milestones.index')" :active="request()->routeIs('carer.milestones.*')">
+                            {{ __('Milestones') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
+                            {{ __('Messages') }}
+                            @if($unreadMessageCount > 0)
+                                <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
+                                    {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                                </span>
+                            @endif
                         </x-nav-link>
                     @elseif ($role === 'manager')
                         <x-nav-link :href="route('manager.dashboard')" :active="request()->routeIs('manager.dashboard')">
@@ -96,13 +126,37 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-
             @if ($role === 'parent')
+                @if($firstChild)
+                    <x-responsive-nav-link :href="route('parent.milestones.show', $firstChild)" :active="request()->routeIs('parent.milestones.*')">
+                        {{ __('Milestones') }}
+                    </x-responsive-nav-link>
+                @endif
                 <x-responsive-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
                     {{ __('Invoices') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('parent.incidents.index')" :active="request()->routeIs('parent.incidents.*')">
+                    {{ __('Incidents') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
+                    {{ __('Messages') }}
+                    @if($unreadMessageCount > 0)
+                        <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
+                            {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                        </span>
+                    @endif
+                </x-responsive-nav-link>
+            @elseif ($role === 'carer')
+                <x-responsive-nav-link :href="route('carer.milestones.index')" :active="request()->routeIs('carer.milestones.*')">
+                    {{ __('Milestones') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
+                    {{ __('Messages') }}
+                    @if($unreadMessageCount > 0)
+                        <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
+                            {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
+                        </span>
+                    @endif
                 </x-responsive-nav-link>
             @endif
         </div>

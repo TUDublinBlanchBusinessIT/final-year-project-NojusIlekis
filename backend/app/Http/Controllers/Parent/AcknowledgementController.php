@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Parent;
 use App\Http\Controllers\Controller;
 use App\Models\Acknowledgement;
 use App\Models\Invoice;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AcknowledgementController extends Controller
@@ -31,10 +32,23 @@ class AcknowledgementController extends Controller
             ->take(5)
             ->get();
 
+        $totalOutstanding = $outstandingInvoices->sum('total');
+        $nextDueInvoice = $outstandingInvoices->sortBy('due_date')->first();
+
+        $centreManager = User::where('role', 'manager')
+            ->orderBy('id')
+            ->first();
+
+        $myChildren = $parent->children()->get();
+
         return view('dashboards.parent', compact(
             'acknowledgements',
             'outstandingInvoices',
-            'recentPaidInvoices'
+            'recentPaidInvoices',
+            'totalOutstanding',
+            'nextDueInvoice',
+            'centreManager',
+            'myChildren'
         ));
     }
 
