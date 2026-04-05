@@ -155,6 +155,7 @@ class InvoiceController extends Controller
             ]);
         }
 
+
         return redirect()
             ->route('manager.invoices.show', $invoice)
             ->with('success', 'Invoice status updated.');

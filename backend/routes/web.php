@@ -79,14 +79,12 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/invoices/{invoice}/print', [ParentInvoiceController::class, 'print'])
             ->name('invoices.print');
 
-
         // Parent children
         Route::get('/children', [ParentChildrenController::class, 'index'])
             ->name('children.index');
 
         Route::get('/children/{child}', [ParentChildrenController::class, 'show'])
             ->name('children.show');
-
 
         Route::get('/children/{child}/timeline', [TimelineController::class, 'show'])
         ->name('children.timeline');
