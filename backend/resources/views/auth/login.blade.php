@@ -1,4 +1,21 @@
 <x-guest-layout>
+    <div class="mb-4 flex justify-end">
+        <form method="POST" action="{{ route('locale.switch') }}">
+            @csrf
+
+            <select
+                name="locale"
+                onchange="this.form.submit()"
+                class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+                <option value="en" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>English</option>
+                <option value="pt" {{ app()->getLocale() === 'pt' ? 'selected' : '' }}>Português</option>
+                <option value="pl" {{ app()->getLocale() === 'pl' ? 'selected' : '' }}>Polski</option>
+                <option value="ro" {{ app()->getLocale() === 'ro' ? 'selected' : '' }}>Română</option>
+            </select>
+        </form>
+    </div>
+
     <div class="mb-6">
         <h1 class="text-2xl font-semibold tracking-tight text-white">
             Sign in to SnugBug
@@ -83,4 +100,3 @@
         </div>
     </div>
 </x-guest-layout>
-

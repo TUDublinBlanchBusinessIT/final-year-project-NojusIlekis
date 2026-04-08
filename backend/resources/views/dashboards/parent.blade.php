@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-            Welcome, {{ auth()->user()->name }}
+            {{ __('parent.welcome') }}, {{ auth()->user()->name }}
         </h2>
     </x-slot>
 

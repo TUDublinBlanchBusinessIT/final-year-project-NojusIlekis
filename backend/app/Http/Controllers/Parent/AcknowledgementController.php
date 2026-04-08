@@ -39,7 +39,7 @@ class AcknowledgementController extends Controller
             ->orderBy('id')
             ->first();
 
-        $myChildren = $parent->children()->get();
+        $myChildren = $parent->children()->with('room')->get();
 
         return view('dashboards.parent', compact(
             'acknowledgements',

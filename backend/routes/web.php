@@ -27,10 +27,21 @@ use App\Http\Controllers\Carer\MilestoneController as CarerMilestoneController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manager\MessagingController as ManagerMessagingController;
 use App\Http\Controllers\Parent\TimelineController;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/locale', function (Request $request) {
+    $request->validate([
+        'locale' => 'required|in:en,pt,pl,ro',
+    ]);
+
+    session(['locale' => $request->locale]);
+
+    return back();
+})->name('locale.switch');
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
