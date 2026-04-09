@@ -29,9 +29,11 @@ use App\Http\Controllers\Manager\MessagingController as ManagerMessagingControll
 use App\Http\Controllers\Parent\TimelineController;
 use Illuminate\Http\Request;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 Route::post('/locale', function (Request $request) {
     $request->validate([
