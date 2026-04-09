@@ -20,61 +20,72 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @if ($role === 'parent')
                         <x-nav-link :href="route('parent.dashboard')" :active="request()->routeIs('parent.dashboard')">
-                            {{ __('Dashboard') }}
+                            {{ __('common.dashboard') }}
                         </x-nav-link>
+
                         <x-nav-link :href="route('parent.children.index')" :active="request()->routeIs('parent.children.*')">
-                            {{ __('My Children') }}
+                            {{ __('common.my_children') }}
                         </x-nav-link>
+
                         <x-nav-link :href="route('parent.incidents.index')" :active="request()->routeIs('parent.incidents.*')">
-                            {{ __('Incidents') }}
+                            {{ __('common.incidents') }}
                         </x-nav-link>
+
                         <x-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
-                            {{ __('Invoices') }}
+                            {{ __('common.invoices') }}
                         </x-nav-link>
+
                         @if($firstChild)
                             <x-nav-link :href="route('parent.milestones.show', $firstChild)" :active="request()->routeIs('parent.milestones.*')">
-                                {{ __('Milestones') }}
+                                {{ __('common.milestones') }}
                             </x-nav-link>
                         @endif
+
                         <x-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
-                            {{ __('Messages') }}
+                            {{ __('common.messages') }}
                             @if($unreadMessageCount > 0)
                                 <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
                                     {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
                                 </span>
                             @endif
                         </x-nav-link>
+
                     @elseif ($role === 'carer')
                         <x-nav-link :href="route('carer.dashboard')" :active="request()->routeIs('carer.dashboard')">
-                            {{ __('Carer') }}
+                            {{ __('common.dashboard') }}
                         </x-nav-link>
+
                         <x-nav-link :href="route('carer.milestones.index')" :active="request()->routeIs('carer.milestones.*')">
-                            {{ __('Milestones') }}
+                            {{ __('common.milestones') }}
                         </x-nav-link>
+
                         <x-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
-                            {{ __('Messages') }}
+                            {{ __('common.messages') }}
                             @if($unreadMessageCount > 0)
                                 <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
                                     {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
                                 </span>
                             @endif
                         </x-nav-link>
+
                     @elseif ($role === 'manager')
                         <x-nav-link :href="route('manager.dashboard')" :active="request()->routeIs('manager.dashboard')">
-                            {{ __('Manager') }}
+                            {{ __('common.dashboard') }}
                         </x-nav-link>
+
                         <x-nav-link :href="route('manager.children.index')" :active="request()->routeIs('manager.children.*')">
-                            {{ __('Children') }}
+                            {{ __('common.children') }}
                         </x-nav-link>
+
                         <x-nav-link :href="route('manager.parents.index')" :active="request()->routeIs('manager.parents.*')">
-                            {{ __('Parents') }}
+                            {{ __('common.parents') }}
                         </x-nav-link>
+
                         <x-nav-link :href="route('manager.carers.index')" :active="request()->routeIs('manager.carers.*')">
-                            {{ __('Carers') }}
+                            {{ __('common.carers') }}
                         </x-nav-link>
                     @endif
                 </div>
-
             </div>
 
             <!-- Settings Dropdown -->
@@ -94,17 +105,15 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('common.profile') }}
                         </x-dropdown-link>
 
-                        <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                {{ __('common.log_out') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -129,34 +138,52 @@
             @if ($role === 'parent')
                 @if($firstChild)
                     <x-responsive-nav-link :href="route('parent.milestones.show', $firstChild)" :active="request()->routeIs('parent.milestones.*')">
-                        {{ __('Milestones') }}
+                        {{ __('common.milestones') }}
                     </x-responsive-nav-link>
                 @endif
+
                 <x-responsive-nav-link :href="route('parent.invoices.index')" :active="request()->routeIs('parent.invoices.*')">
-                    {{ __('Invoices') }}
+                    {{ __('common.invoices') }}
                 </x-responsive-nav-link>
+
                 <x-responsive-nav-link :href="route('parent.incidents.index')" :active="request()->routeIs('parent.incidents.*')">
-                    {{ __('Incidents') }}
+                    {{ __('common.incidents') }}
                 </x-responsive-nav-link>
+
                 <x-responsive-nav-link :href="route('parent.messages.index')" :active="request()->routeIs('parent.messages.*')">
-                    {{ __('Messages') }}
+                    {{ __('common.messages') }}
                     @if($unreadMessageCount > 0)
                         <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
                             {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
                         </span>
                     @endif
                 </x-responsive-nav-link>
+
             @elseif ($role === 'carer')
                 <x-responsive-nav-link :href="route('carer.milestones.index')" :active="request()->routeIs('carer.milestones.*')">
-                    {{ __('Milestones') }}
+                    {{ __('common.milestones') }}
                 </x-responsive-nav-link>
+
                 <x-responsive-nav-link :href="route('carer.messages.index')" :active="request()->routeIs('carer.messages.*')">
-                    {{ __('Messages') }}
+                    {{ __('common.messages') }}
                     @if($unreadMessageCount > 0)
                         <span class="ml-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold w-5 h-5">
                             {{ $unreadMessageCount > 99 ? '99+' : $unreadMessageCount }}
                         </span>
                     @endif
+                </x-responsive-nav-link>
+
+            @elseif ($role === 'manager')
+                <x-responsive-nav-link :href="route('manager.children.index')" :active="request()->routeIs('manager.children.*')">
+                    {{ __('common.children') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('manager.parents.index')" :active="request()->routeIs('manager.parents.*')">
+                    {{ __('common.parents') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('manager.carers.index')" :active="request()->routeIs('manager.carers.*')">
+                    {{ __('common.carers') }}
                 </x-responsive-nav-link>
             @endif
         </div>
@@ -170,17 +197,15 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('common.profile') }}
                 </x-responsive-nav-link>
 
-                <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        onclick="event.preventDefault(); this.closest('form').submit();">
+                        {{ __('common.log_out') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
