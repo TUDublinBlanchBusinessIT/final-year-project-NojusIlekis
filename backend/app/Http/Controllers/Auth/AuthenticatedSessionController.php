@@ -11,23 +11,31 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-
     public function create(): View
     {
         return view('auth.login');
     }
 
-
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
+        $locale = $request->session()->get('locale');
+
         $request->session()->regenerate();
 
+        if (
+            $request->user() &&
+            $locale &&
+            in_array($locale, ['en', 'pt', 'pl', 'ro'], true)
+        ) {
+            $request->user()->update([
+                'preferred_language' => $locale,
+            ]);
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
-
 
     public function destroy(Request $request): RedirectResponse
     {
@@ -40,5 +48,3 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 }
-
-
