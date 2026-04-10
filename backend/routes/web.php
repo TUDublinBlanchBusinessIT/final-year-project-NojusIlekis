@@ -27,6 +27,7 @@ use App\Http\Controllers\Carer\MilestoneController as CarerMilestoneController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manager\MessagingController as ManagerMessagingController;
 use App\Http\Controllers\Parent\TimelineController;
+use App\Http\Controllers\ChatbotController;
 use Illuminate\Http\Request;
 
 
@@ -60,6 +61,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Chatbot
+    Route::post('/chatbot/ask', [ChatbotController::class, 'respond'])->name('chatbot.ask');
+    Route::get('/chatbot/suggestions', [ChatbotController::class, 'suggestions'])->name('chatbot.suggestions');
 });
 
 Route::middleware(['auth', 'role:parent'])
