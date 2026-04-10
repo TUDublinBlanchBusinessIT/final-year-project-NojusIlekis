@@ -113,6 +113,94 @@
                 </div>
             </div>
 
+            {{-- Payment Review Section (Manager) --}}
+            @if($invoice->isPaymentPending())
+                <div class="bg-amber-50 rounded-2xl border border-amber-200 shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-amber-800 mb-4">⏳ Payment Awaiting Your Review</h3>
+
+                    <div class="space-y-3 mb-4">
+                        <p class="text-sm text-gray-700">
+                            <span class="font-medium">Submitted:</span> {{ $invoice->payment_submitted_at->format('d M Y, H:i') }}
+                        </p>
+                        @if($invoice->payment_notes)
+                            <p class="text-sm text-gray-700">
+                                <span class="font-medium">Parent's note:</span> "{{ $invoice->payment_notes }}"
+                            </p>
+                        @endif
+                    </div>
+
+                    {{-- Payment proof viewer --}}
+                    @if($invoice->payment_proof_path)
+                        <div class="mb-4">
+                            <p class="text-sm font-medium text-gray-700 mb-2">Payment Proof:</p>
+                            @if(\Illuminate\Support\Str::endsWith($invoice->payment_proof_path, '.pdf'))
+                                <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank"
+                                   class="inline-flex items-center text-blue-600 hover:text-blue-800 underline text-sm">
+                                    📄 View PDF Receipt
+                                </a>
+                            @else
+                                <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank">
+                                    <img src="{{ Storage::url($invoice->payment_proof_path) }}"
+                                         alt="Payment proof"
+                                         class="max-w-md rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:opacity-90">
+                                </a>
+                                <p class="text-xs text-gray-400 mt-1">Click to view full size</p>
+                            @endif
+                        </div>
+                    @endif
+
+                    {{-- Approve / Reject buttons --}}
+                    <div class="flex gap-3">
+                        <form method="POST" action="{{ route('manager.invoices.approve-payment', $invoice) }}">
+                            @csrf
+                            <button type="submit" onclick="return confirm('Approve this payment and mark invoice as paid?')"
+                                    class="px-5 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition">
+                                ✅ Approve Payment
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ route('manager.invoices.reject-payment', $invoice) }}"
+                              x-data="{ showReason: false }">
+                            @csrf
+                            <button type="button" @click="showReason = !showReason"
+                                    class="px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition">
+                                ❌ Reject Payment
+                            </button>
+                            <div x-show="showReason" x-cloak class="mt-3">
+                                <textarea name="rejection_reason" rows="2" required
+                                          placeholder="Explain why the payment is being rejected..."
+                                          class="w-full text-sm rounded-lg border-slate-200 focus:border-red-500 focus:ring-red-500"></textarea>
+                                <button type="submit" class="mt-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700">
+                                    Confirm Rejection
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Payment status display for non-pending invoices --}}
+            @if($invoice->payment_status === 'approved')
+                <div class="bg-green-50 rounded-2xl border border-green-200 p-6">
+                    <h3 class="text-lg font-semibold text-green-800">✅ Payment Approved</h3>
+                    <p class="text-sm text-gray-600 mt-1">
+                        Approved by {{ $invoice->approvedBy?->first_name ?? $invoice->approvedBy?->name ?? 'Manager' }}
+                        on {{ $invoice->payment_approved_at?->format('d M Y, H:i') }}
+                    </p>
+                    @if($invoice->payment_proof_path)
+                        <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank" class="text-sm text-blue-600 underline mt-2 inline-block">
+                            View payment proof
+                        </a>
+                    @endif
+                </div>
+            @elseif($invoice->payment_status === 'rejected')
+                <div class="bg-red-50 rounded-2xl border border-red-200 p-6">
+                    <h3 class="text-lg font-semibold text-red-800">❌ Payment Rejected</h3>
+                    <p class="text-sm text-gray-600 mt-1">Reason: {{ $invoice->rejection_reason }}</p>
+                    <p class="text-sm text-gray-500 mt-1">Waiting for parent to resubmit.</p>
+                </div>
+            @endif
+
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">

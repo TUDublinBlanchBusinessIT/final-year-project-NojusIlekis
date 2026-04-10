@@ -229,6 +229,9 @@ Route::middleware(['auth', 'role:manager'])
         Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])
             ->name('invoices.print');
 
+        Route::post('/invoices/{invoice}/approve-payment', [InvoiceController::class, 'approvePayment'])->name('invoices.approve-payment');
+        Route::post('/invoices/{invoice}/reject-payment', [InvoiceController::class, 'rejectPayment'])->name('invoices.reject-payment');
+
         // Parent linking & room assignment
         Route::get('children/{child}/link-parent', [ChildController::class, 'linkParentForm'])
             ->name('children.link-parent');

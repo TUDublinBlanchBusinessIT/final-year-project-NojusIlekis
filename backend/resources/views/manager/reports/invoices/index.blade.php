@@ -94,6 +94,9 @@
                                                      dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
                                             {{ ucfirst($invoice->status) }}
                                         </span>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $invoice->paymentStatusColour() }} ml-1">
+                                            {{ $invoice->paymentStatusLabel() }}
+                                        </span>
                                     </td>
 
                                     <td class="px-5 py-4 text-slate-900 dark:text-slate-100 font-medium">

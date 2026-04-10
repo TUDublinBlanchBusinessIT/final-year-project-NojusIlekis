@@ -160,6 +160,30 @@ class InvoiceController extends Controller
             ->with('success', 'Invoice status updated.');
     }
 
+    public function approvePayment(Invoice $invoice)
+    {
+        abort_unless($invoice->isPaymentPending(), 422, 'No pending payment to approve.');
+
+        $invoice->approvePayment(auth()->id());
+
+        return redirect()->route('manager.invoices.show', $invoice)
+            ->with('success', 'Payment approved. Invoice marked as paid.');
+    }
+
+    public function rejectPayment(Request $request, Invoice $invoice)
+    {
+        abort_unless($invoice->isPaymentPending(), 422, 'No pending payment to reject.');
+
+        $request->validate([
+            'rejection_reason' => 'required|string|max:500',
+        ]);
+
+        $invoice->rejectPayment($request->rejection_reason);
+
+        return redirect()->route('manager.invoices.show', $invoice)
+            ->with('success', 'Payment rejected. The parent will be notified and can resubmit.');
+    }
+
     public function print(Invoice $invoice)
     {
         $invoice->load(['child', 'parent', 'items']);
