@@ -190,14 +190,63 @@ class ChatbotController extends Controller
         ]);
 
         $userMessage = strtolower(trim($request->message));
+
+        // Handle greetings
+        $greetings = ['hi', 'hello', 'hey', 'hiya', 'howya', 'good morning', 'good afternoon', 'help', 'helo'];
+        foreach ($greetings as $greeting) {
+            if (str_contains($userMessage, $greeting) && strlen($userMessage) < 20) {
+                return response()->json([
+                    'matched' => true,
+                    'question' => null,
+                    'answer' => "Hi there! 👋 I'm SnugBot, your SnugBug help assistant. I can answer questions about:\n\n📋 Opening hours & enrolment\n💶 Fees, NCS & ECCE\n🍽️ Meals, allergies & daily routine\n🏥 Sickness & medication policies\n📱 Using the app (timeline, milestones, messages)\n\nWhat would you like to know?",
+                    'category' => null,
+                    'related' => [],
+                ]);
+            }
+        }
+
+        // Handle thank you / goodbye
+        $thanks = ['thank', 'thanks', 'cheers', 'brilliant', 'great', 'perfect', 'bye', 'goodbye'];
+        foreach ($thanks as $word) {
+            if (str_contains($userMessage, $word) && strlen($userMessage) < 30) {
+                return response()->json([
+                    'matched' => true,
+                    'question' => null,
+                    'answer' => "You're welcome! 😊 If you have any other questions, I'm here to help. You can also message the centre manager directly through the Messages section for anything specific to your child.",
+                    'category' => null,
+                    'related' => [],
+                ]);
+            }
+        }
+
+        // Common misspelling corrections
+        $corrections = [
+            'alergy' => 'allergy', 'alergies' => 'allergies', 'alergic' => 'allergic',
+            'milstones' => 'milestones', 'millstones' => 'milestones',
+            'medicin' => 'medicine', 'medecine' => 'medicine',
+            'regestration' => 'registration', 'registeration' => 'registration',
+            'scedule' => 'schedule', 'shedule' => 'schedule',
+            'breakfest' => 'breakfast', 'brekfast' => 'breakfast',
+            'colect' => 'collect', 'colection' => 'collection',
+            'enviroment' => 'environment',
+            'creche' => 'crèche', 'cresh' => 'crèche',
+            'timline' => 'timeline',
+        ];
+
+        foreach ($corrections as $wrong => $right) {
+            $userMessage = str_replace($wrong, $right, $userMessage);
+        }
+
         $faqs = $this->getFaqs();
         $matches = [];
 
         foreach ($faqs as $faq) {
             $score = 0;
             foreach ($faq['keywords'] as $keyword) {
-                if (str_contains($userMessage, strtolower($keyword))) {
-                    $score++;
+                $keyword = strtolower($keyword);
+                if (str_contains($userMessage, $keyword)) {
+                    // Multi-word keywords get a higher score
+                    $score += str_word_count($keyword) > 1 ? 3 : 1;
                 }
             }
             if ($score > 0) {
@@ -228,7 +277,7 @@ class ChatbotController extends Controller
         return response()->json([
             'matched' => false,
             'question' => null,
-            'answer' => "I'm not sure about that one! Here are some things I can help with:\n\n• Opening hours & holidays\n• Fees & payments (NCS, ECCE)\n• Meals, allergies & daily routine\n• Sickness & medication policies\n• Using the app (timeline, milestones, messages)\n\nOr you can message the centre manager directly through the Messages section.",
+            'answer' => "I'm not sure about that one! Try asking something simpler, like:\n\n• \"What are your opening hours?\"\n• \"How much does it cost?\"\n• \"How do you handle allergies?\"\n• \"What should my child bring?\"\n• \"How do I see my child's day?\"\n\nOr message the centre manager directly for specific questions about your child.",
             'category' => null,
             'related' => [],
         ]);

@@ -55,12 +55,36 @@
 
             <!-- Message bubbles -->
             <template x-for="(msg, index) in messages" :key="index">
-                <div :class="msg.type === 'user' ? 'flex justify-end' : 'flex justify-start'">
+                <div :class="msg.type === 'user' ? 'flex justify-end' : 'flex flex-col items-start gap-1'">
                     <div :class="msg.type === 'user'
                             ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl rounded-br-sm'
                             : 'bg-slate-100 text-gray-700 rounded-2xl rounded-tl-sm'"
                          class="px-4 py-3 text-sm max-w-[85%]">
                         <p x-html="msg.text" style="white-space: pre-line;"></p>
+
+                        <!-- Category topic buttons (for topics menu message) -->
+                        <template x-if="msg.isTopicsMenu">
+                            <div class="mt-2 pt-2 border-t border-slate-300 flex flex-wrap gap-1.5">
+                                <template x-for="cat in categories" :key="cat">
+                                    <button @click="showCategory(cat)"
+                                            class="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-100 transition"
+                                            x-text="cat">
+                                    </button>
+                                </template>
+                            </div>
+                        </template>
+
+                        <!-- Clickable category questions -->
+                        <template x-if="msg.questions && msg.questions.length > 0">
+                            <div class="mt-2 pt-2 border-t border-slate-300 flex flex-col gap-1">
+                                <template x-for="q in msg.questions" :key="q">
+                                    <button @click="sendMessage(q)"
+                                            class="text-left text-xs bg-white text-blue-700 border border-blue-200 rounded-full px-3 py-1.5 hover:bg-blue-50 hover:border-blue-400 transition"
+                                            x-text="q">
+                                    </button>
+                                </template>
+                            </div>
+                        </template>
 
                         <!-- Related questions -->
                         <template x-if="msg.related && msg.related.length > 0">
@@ -75,6 +99,14 @@
                             </div>
                         </template>
                     </div>
+
+                    <!-- Back to topics link (bot messages only, not the last one if it's a topics menu) -->
+                    <template x-if="msg.type === 'bot'">
+                        <button @click="showTopicsMenu()"
+                                class="text-xs text-slate-400 hover:text-blue-600 transition ml-1">
+                            ← Back to topics
+                        </button>
+                    </template>
                 </div>
             </template>
 
@@ -95,6 +127,11 @@
         <!-- Input area -->
         <div class="border-t border-slate-200 p-3 flex-shrink-0">
             <div class="flex gap-2">
+                <button @click="showTopicsMenu()"
+                        title="Browse topics"
+                        class="w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-600 transition flex-shrink-0 text-base">
+                    📋
+                </button>
                 <input x-model="userInput"
                        @keydown.enter.prevent="sendMessage(userInput)"
                        type="text"
@@ -142,11 +179,34 @@ function chatbot() {
             }
 
             const questions = this.categoryQuestions[category] || [];
-            let text = `📂 <strong>${category}</strong>\n\n`;
-            questions.forEach(q => { text += `• ${q}\n`; });
-            text += '\nClick a question above or type your own!';
+            this.messages.push({
+                type: 'bot',
+                text: `📂 <strong>${category}</strong>\n\nClick a question below or type your own:`,
+                related: [],
+                questions: questions,
+            });
+            this.$nextTick(() => this.scrollToBottom());
+        },
 
-            this.messages.push({ type: 'bot', text: text, related: [] });
+        async showTopicsMenu() {
+            // Preload questions if not cached
+            if (Object.keys(this.categoryQuestions).length === 0) {
+                try {
+                    const res = await fetch('/chatbot/suggestions');
+                    const data = await res.json();
+                    this.categoryQuestions = data.categories;
+                } catch(e) {
+                    console.error('Failed to load suggestions:', e);
+                }
+            }
+
+            this.messages.push({
+                type: 'bot',
+                text: '📋 <strong>Topics</strong>\n\nChoose a category to browse questions:',
+                related: [],
+                questions: [],
+                isTopicsMenu: true,
+            });
             this.$nextTick(() => this.scrollToBottom());
         },
 

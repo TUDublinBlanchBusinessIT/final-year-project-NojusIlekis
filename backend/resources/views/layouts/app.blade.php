@@ -32,5 +32,10 @@
                 {{ $slot }}
             </main>
         </div>
+
+        {{-- Chatbot Widget --}}
+        @auth
+            <x-chatbot-widget />
+        @endauth
     </body>
 </html>
