@@ -77,37 +77,89 @@
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                <div class="p-6">
-                    <h3 class="text-lg font-semibold text-slate-900 mb-4">
-                        Payment History
-                    </h3>
+            {{-- Payment Section --}}
+            <div class="mt-6 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Payment</h3>
 
-                    @if (strtolower($invoice->status) === 'paid')
-                        <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-slate-800">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <p class="text-xs font-semibold uppercase text-slate-500">Payment Status</p>
-                                    <p class="mt-1 font-medium text-emerald-700">Paid</p>
-                                </div>
+                @if(session('success'))
+                    <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-lg">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-                                <div>
-                                    <p class="text-xs font-semibold uppercase text-slate-500">Amount Recorded</p>
-                                    <p class="mt-1 font-medium">€{{ number_format($finalTotal, 2) }}</p>
-                                </div>
-
-                                <div>
-                                    <p class="text-xs font-semibold uppercase text-slate-500">Recorded On</p>
-                                    <p class="mt-1 font-medium">{{ $invoice->updated_at?->format('d/m/Y H:i') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-700">
-                            No payment has been recorded for this invoice yet.
-                        </div>
+                {{-- Current payment status --}}
+                <div class="mb-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $invoice->paymentStatusColour() }}">
+                        {{ $invoice->paymentStatusLabel() }}
+                    </span>
+                    @if($invoice->payment_submitted_at)
+                        <span class="text-sm text-gray-500 ml-2">Submitted {{ $invoice->payment_submitted_at->format('d M Y, H:i') }}</span>
+                    @endif
+                    @if($invoice->payment_approved_at)
+                        <span class="text-sm text-gray-500 ml-2">Approved {{ $invoice->payment_approved_at->format('d M Y, H:i') }}</span>
                     @endif
                 </div>
+
+                {{-- Rejection notice --}}
+                @if($invoice->payment_status === 'rejected')
+                    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-lg">
+                        <p class="font-bold">Payment Rejected</p>
+                        <p class="text-sm mt-1">Reason: {{ $invoice->rejection_reason }}</p>
+                        <p class="text-sm mt-1">Please resubmit your payment with the correct details.</p>
+                    </div>
+                @endif
+
+                {{-- Submit payment form --}}
+                @if($invoice->canSubmitPayment())
+                    <form method="POST" action="{{ route('parent.invoices.pay', $invoice) }}" enctype="multipart/form-data" class="space-y-4">
+                        @csrf
+
+                        <div>
+                            <label for="payment_proof" class="block text-sm font-medium text-gray-700 mb-1">
+                                Upload Payment Proof <span class="text-red-500">*</span>
+                            </label>
+                            <p class="text-xs text-gray-500 mb-2">Upload a screenshot of your bank transfer or payment receipt (JPG, PNG, or PDF, max 5MB)</p>
+                            <input type="file" name="payment_proof" id="payment_proof" required accept=".jpg,.jpeg,.png,.pdf"
+                                   class="w-full text-sm border border-slate-200 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-l-lg file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            @error('payment_proof')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="payment_notes" class="block text-sm font-medium text-gray-700 mb-1">
+                                Payment Reference / Notes (optional)
+                            </label>
+                            <input type="text" name="payment_notes" id="payment_notes"
+                                   placeholder="e.g. Bank ref: 12345678"
+                                   value="{{ old('payment_notes') }}"
+                                   class="w-full rounded-lg border-slate-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                        </div>
+
+                        <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-lg hover:opacity-90 transition">
+                            💳 Submit Payment
+                        </button>
+                    </form>
+                @endif
+
+                {{-- Payment already submitted - waiting --}}
+                @if($invoice->payment_status === 'payment_submitted')
+                    <div class="bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-lg">
+                        <p class="font-bold">⏳ Payment Under Review</p>
+                        <p class="text-sm mt-1">Your payment has been submitted and is waiting for manager approval.</p>
+                        @if($invoice->payment_notes)
+                            <p class="text-sm mt-1">Your note: "{{ $invoice->payment_notes }}"</p>
+                        @endif
+                    </div>
+                @endif
+
+                {{-- Payment approved --}}
+                @if($invoice->payment_status === 'approved')
+                    <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg">
+                        <p class="font-bold">✅ Payment Confirmed</p>
+                        <p class="text-sm mt-1">Your payment has been verified and approved.</p>
+                    </div>
+                @endif
             </div>
 
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">

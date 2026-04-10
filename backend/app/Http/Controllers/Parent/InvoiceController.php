@@ -30,6 +30,26 @@ class InvoiceController extends Controller
         return view('parent.invoices.show', compact('invoice', 'subtotal', 'finalTotal'));
     }
 
+    public function submitPayment(Request $request, Invoice $invoice)
+    {
+        $parent = auth()->user();
+
+        abort_unless($invoice->parent_id === $parent->id, 403);
+        abort_unless($invoice->canSubmitPayment(), 422, 'Payment cannot be submitted for this invoice.');
+
+        $request->validate([
+            'payment_proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'payment_notes' => 'nullable|string|max:500',
+        ]);
+
+        $path = $request->file('payment_proof')->store('payment_proofs', 'public');
+
+        $invoice->markPaymentSubmitted($path, $request->payment_notes);
+
+        return redirect()->route('parent.invoices.show', $invoice)
+            ->with('success', 'Payment submitted successfully. The manager will review and confirm your payment.');
+    }
+
     public function print(Invoice $invoice)
     {
         abort_unless($invoice->parent_id === auth()->id(), 403);

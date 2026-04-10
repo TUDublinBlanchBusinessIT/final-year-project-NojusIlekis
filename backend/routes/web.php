@@ -97,6 +97,9 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/invoices/{invoice}/print', [ParentInvoiceController::class, 'print'])
             ->name('invoices.print');
 
+        Route::post('/invoices/{invoice}/pay', [ParentInvoiceController::class, 'submitPayment'])
+            ->name('invoices.pay');
+
 
         // Parent children
         Route::get('/children', [ParentChildrenController::class, 'index'])

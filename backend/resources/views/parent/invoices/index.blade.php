@@ -65,6 +65,9 @@
                                         <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $badgeClasses }}">
                                             {{ ucfirst($invoice->status) }}
                                         </span>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $invoice->paymentStatusColour() }} ml-1">
+                                            {{ $invoice->paymentStatusLabel() }}
+                                        </span>
                                     </td>
                                     <td class="px-5 py-4 text-slate-900 font-medium">
                                         €{{ number_format($invoice->total, 2) }}
