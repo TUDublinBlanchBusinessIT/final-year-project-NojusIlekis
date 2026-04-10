@@ -88,6 +88,24 @@
                 </div>
             </div>
 
+            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
+
+            <!-- 🌍 Language Switcher -->
+            <form method="POST" action="{{ route('locale.switch') }}">
+                @csrf
+                <select
+                    name="locale"
+                    onchange="this.form.submit()"
+                    class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                >
+                    <option value="en" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>EN</option>
+                    <option value="pt" {{ app()->getLocale() === 'pt' ? 'selected' : '' }}>PT</option>
+                    <option value="pl" {{ app()->getLocale() === 'pl' ? 'selected' : '' }}>PL</option>
+                    <option value="ro" {{ app()->getLocale() === 'ro' ? 'selected' : '' }}>RO</option>
+                </select>
+            </form>
+
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">

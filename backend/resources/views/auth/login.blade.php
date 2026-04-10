@@ -18,10 +18,10 @@
 
     <div class="mb-6">
         <h1 class="text-2xl font-semibold tracking-tight text-white">
-            Sign in to SnugBug
+            {{ __('auth.sign_in_title') }}
         </h1>
         <p class="mt-1 text-sm text-slate-600">
-            Welcome back — please sign in to continue.
+            {{ __('auth.sign_in_subtitle') }}
         </p>
     </div>
 
@@ -33,7 +33,7 @@
                 @csrf
 
                 <div>
-                    <x-input-label for="email" :value="__('Email')" />
+                    <x-input-label for="email" :value="__('auth.email')" />
                     <x-text-input
                         id="email"
                         class="mt-1 block w-full"
@@ -49,7 +49,7 @@
                 </div>
 
                 <div>
-                    <x-input-label for="password" :value="__('Password')" />
+                    <x-input-label for="password" :value="__('auth.password_label')" />
                     <x-text-input
                         id="password"
                         class="mt-1 block w-full"
@@ -71,30 +71,30 @@
                             name="remember"
                         >
                         <span class="ms-2 text-sm text-slate-600">
-                            {{ __('Remember me') }}
+                            {{ __('auth.remember_me') }}
                         </span>
                     </label>
 
                     @if (Route::has('password.request'))
                         <a class="text-sm font-medium text-blue-700 hover:text-blue-800"
                            href="{{ route('password.request') }}">
-                            {{ __('Forgot password?') }}
+                            {{ __('auth.forgot_password') }}
                         </a>
                     @endif
                 </div>
 
                 <x-primary-button class="w-full justify-center">
-                    {{ __('Sign in') }}
+                    {{ __('auth.sign_in') }}
                 </x-primary-button>
             </form>
         </div>
 
         <div class="border-t border-slate-200 px-6 py-4 text-center text-sm text-slate-600">
-            Don’t have an account?
+            {{ __('auth.no_account') }}
             @if (Route::has('register'))
                 <a class="font-medium text-blue-700 hover:text-blue-800"
                    href="{{ route('register') }}">
-                    Create one
+                    {{ __('auth.create_one') }}
                 </a>
             @endif
         </div>

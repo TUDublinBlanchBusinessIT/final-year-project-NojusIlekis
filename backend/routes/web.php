@@ -43,6 +43,12 @@ Route::post('/locale', function (Request $request) {
 
     session(['locale' => $request->locale]);
 
+    if (auth()->check()) {
+        auth()->user()->update([
+            'preferred_language' => $request->locale,
+        ]);
+    }
+
     return back();
 })->name('locale.switch');
 
