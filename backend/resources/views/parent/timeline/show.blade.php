@@ -3,7 +3,7 @@
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    {{ $child->first_name }} {{ $child->last_name }} — Daily Timeline
+                    {{ $child->first_name }} {{ $child->last_name }} — {{ __('parent.daily_timeline') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
                     {{ \Carbon\Carbon::parse($date)->format('l, d F Y') }}
@@ -22,14 +22,14 @@
                         class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white
                                bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
                                shadow-sm shadow-blue-500/20 hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200">
-                    View
+                    {{ __('parent.view') }}
                 </button>
 
                 <a href="{{ route('parent.children.timeline', $child) }}"
                    class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold
                           border border-slate-300 text-slate-700 bg-white hover:bg-slate-50
                           dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800">
-                    Today
+                    {{ __('parent.today') }}
                 </a>
             </form>
         </div>
@@ -43,7 +43,6 @@
 
             {{-- Timeline --}}
             <div class="relative">
-                {{-- Vertical line --}}
                 <div class="absolute left-7 top-0 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700"></div>
 
                 @forelse($events as $event)
@@ -105,12 +104,10 @@
                     @endphp
 
                     <div class="relative flex items-start mb-6 pl-4">
-                        {{-- Icon circle on the timeline line --}}
                         <div class="absolute left-3 w-9 h-9 {{ $c['bg'] }} rounded-full flex items-center justify-center text-base shadow-md z-10 -translate-x-1/2 flex-shrink-0">
                             {{ $c['icon'] }}
                         </div>
 
-                        {{-- Event card --}}
                         <div class="ml-10 flex-1 {{ $c['light'] }} border {{ $c['border'] }} rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-xs font-semibold uppercase tracking-wide {{ $c['label'] }}">
@@ -136,9 +133,9 @@
                 @empty
                     <div class="text-center py-16">
                         <div class="text-6xl mb-4">🌟</div>
-                        <h3 class="text-lg font-semibold text-slate-600 dark:text-slate-300">No updates for this day</h3>
+                        <h3 class="text-lg font-semibold text-slate-600 dark:text-slate-300">{{ __('parent.no_updates_day') }}</h3>
                         <p class="text-slate-400 dark:text-slate-500 mt-1 text-sm">
-                            Check back later or pick another date above.
+                            {{ __('parent.check_back') }}
                         </p>
                     </div>
                 @endforelse

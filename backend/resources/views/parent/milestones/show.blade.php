@@ -3,20 +3,20 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    {{ $child->first_name }} {{ $child->last_name }} — Milestones
+                    {{ $child->first_name }} {{ $child->last_name }} — {{ __('parent.milestones') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Age: {{ $child->age_in_months }} months ·
+                    {{ __('parent.age') }}: {{ $child->age_in_months }} {{ __('parent.months') }} ·
                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200">
                         {{ \App\Models\Milestone::AGE_RANGES[$ageRange] ?? $ageRange }}
                     </span>
-                    · {{ $overallProgress['achieved'] }}/{{ $overallProgress['total'] }} milestones observed
+                    · {{ $overallProgress['achieved'] }}/{{ $overallProgress['total'] }} {{ __('parent.milestones_observed') }}
                 </p>
             </div>
 
             <a href="{{ route('parent.children.index') }}"
                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100">
-                ← My Children
+                ← {{ __('parent.children') }}
             </a>
         </div>
     </x-slot>
@@ -27,7 +27,7 @@
             {{-- Overall Progress Bar --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40 p-5">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wide">Overall Progress</h3>
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wide">{{ __('parent.overall_progress') }}</h3>
                     <span class="text-sm font-bold text-slate-900 dark:text-slate-100">
                         {{ $overallProgress['achieved'] }} / {{ $overallProgress['total'] }} — {{ $overallProgress['percentage'] }}%
                     </span>
@@ -63,7 +63,7 @@
                                 {{ $data['achieved'] }}/{{ $data['total'] }}
                             </span>
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ $data['percentage'] }}% observed</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ $data['percentage'] }}% {{ __('parent.observed') }}</p>
                     </div>
                 @endforeach
             </div>
@@ -71,9 +71,9 @@
             {{-- Milestone List per Category --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">All Milestones</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('parent.all_milestones') }}</h3>
                     <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                        Milestones for the {{ \App\Models\Milestone::AGE_RANGES[$ageRange] ?? $ageRange }} age range.
+                        {{ __('parent.milestones_for_age_range') }} {{ \App\Models\Milestone::AGE_RANGES[$ageRange] ?? $ageRange }} {{ __('parent.age_range') }}.
                     </p>
                 </div>
 
@@ -113,8 +113,8 @@
                                                 @php $data = $achievedData[$milestone->id] ?? null; @endphp
                                                 @if($data)
                                                     <p class="text-xs text-green-600 dark:text-green-400 mt-0.5">
-                                                        Observed on {{ $data->observed_at->format('d M Y') }}
-                                                        by {{ $data->observer->name ?? 'a carer' }}
+                                                        {{ __('parent.observed_on') }} {{ $data->observed_at->format('d M Y') }}
+                                                        {{ __('parent.by') }} {{ $data->observer->name ?? __('parent.a_carer') }}
                                                         @if($data->notes)
                                                             · <span class="italic">"{{ $data->notes }}"</span>
                                                         @endif
@@ -128,7 +128,7 @@
                             </div>
                         </div>
                     @empty
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">No milestones found for this age range.</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">{{ __('parent.no_milestones_for_age') }}</p>
                     @endforelse
                 </div>
             </div>

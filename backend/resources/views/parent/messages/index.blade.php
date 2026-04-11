@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    Messages
+                    {{ __('parent.messages') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Conversations with your child's carers.
+                    {{ __('parent.messages_description') }}
                 </p>
             </div>
             <a href="{{ route('parent.messages.create') }}"
@@ -14,7 +14,7 @@
                       bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
                       shadow-sm shadow-blue-500/20 hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
                       active:translate-y-[1px]">
-                + New Message
+                {{ __('parent.new_message') }}
             </a>
         </div>
     </x-slot>
@@ -24,7 +24,7 @@
 
             @if ($conversations->isEmpty())
                 <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-8 text-center text-slate-500">
-                    No messages yet. Start a conversation with your child's carer.
+                    {{ __('parent.no_messages') }}
                 </div>
             @else
                 @foreach ($conversations as $conversation)
@@ -45,9 +45,9 @@
 
                                 <p class="text-xs text-slate-400 mt-1">
                                     @if ($conversation->last_message->child)
-                                        About: {{ $conversation->last_message->child->first_name }} {{ $conversation->last_message->child->last_name }}
+                                        {{ __('parent.about') }}: {{ $conversation->last_message->child->first_name }} {{ $conversation->last_message->child->last_name }}
                                     @else
-                                        General
+                                        {{ __('parent.general') }}
                                     @endif
                                 </p>
                             </div>

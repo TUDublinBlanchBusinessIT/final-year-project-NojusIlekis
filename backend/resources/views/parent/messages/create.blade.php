@@ -3,15 +3,15 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    New Message
+                    {{ __('parent.new_message') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Choose a carer to start a conversation with.
+                    {{ __('parent.choose_carer') }}
                 </p>
             </div>
             <a href="{{ route('parent.messages.index') }}"
                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100">
-                ← Back to Messages
+                ← {{ __('parent.back_to_messages') }}
             </a>
         </div>
     </x-slot>
@@ -21,7 +21,7 @@
 
             @if ($carers->isEmpty())
                 <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-8 text-center text-slate-500">
-                    No carers are currently assigned to your children's rooms.
+                    {{ __('parent.no_carers') }}
                 </div>
             @else
                 @foreach ($carers as $carer)
@@ -35,7 +35,7 @@
                                 </p>
                             @endif
                         </div>
-                        <span class="text-sm text-blue-600 font-medium">Message →</span>
+                        <span class="text-sm text-blue-600 font-medium">{{ __('parent.message_action') }}</span>
                     </a>
                 @endforeach
             @endif
