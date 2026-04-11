@@ -5,14 +5,14 @@
                 <a href="{{ route('carer.attendance.index') }}"
                    class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50
                           dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
-                    ← Back
+                    ← {{ __('carer.back') }}
                 </a>
                 <div>
                     <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                        {{ $child->first_name }} {{ $child->last_name }} — Milestones
+                        {{ $child->first_name }} {{ $child->last_name }} — {{ __('carer.milestones') }}
                     </h2>
                     <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                        Age: {{ $child->age_in_months }} months ·
+                        {{ __('carer.age') }}: {{ $child->age_in_months }} {{ __('carer.months') }} ·
                         <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200">
                             {{ \App\Models\Milestone::AGE_RANGES[$ageRange] ?? $ageRange }}
                         </span>
@@ -57,7 +57,7 @@
                         <div class="mt-2 h-2 rounded-full bg-white/60">
                             <div class="h-2 rounded-full {{ $c['bar'] }}" style="width: {{ $p['percentage'] }}%"></div>
                         </div>
-                        <p class="text-xs {{ $c['text'] }} mt-1">{{ $p['percentage'] }}% achieved</p>
+                        <p class="text-xs {{ $c['text'] }} mt-1">{{ $p['percentage'] }}% {{ __('carer.achieved') }}</p>
                     </div>
                 @endforeach
             </div>
@@ -68,7 +68,7 @@
                     <a href="{{ route('carer.milestones.show', $child) }}"
                        class="rounded-lg px-4 py-2 text-sm font-medium transition
                               {{ !$categoryFilter ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800' }}">
-                        All
+                        {{ __('carer.all') }}
                     </a>
                     @foreach(\App\Models\Milestone::CATEGORIES as $key => $label)
                         <a href="{{ route('carer.milestones.show', [$child, 'category' => $key]) }}"
@@ -119,8 +119,8 @@
                                                     @php $data = $achievedData[$milestone->id] ?? null; @endphp
                                                     @if($data)
                                                         <div class="mt-2 text-sm text-green-700 dark:text-green-400">
-                                                            Observed by {{ $data->observer->name ?? 'Unknown' }}
-                                                            on {{ $data->observed_at->format('d M Y') }}
+                                                            {{ __('carer.observed_by') }} {{ $data->observer->name ?? __('carer.unknown') }}
+                                                            {{ __('carer.on') }} {{ $data->observed_at->format('d M Y') }}
                                                             @if($data->notes)
                                                                 <br><span class="text-slate-500 italic">"{{ $data->notes }}"</span>
                                                             @endif
@@ -129,7 +129,7 @@
                                                     <form method="POST" action="{{ route('carer.milestones.toggle', [$child, $milestone]) }}" class="mt-2">
                                                         @csrf
                                                         <button type="submit" class="text-xs text-red-600 hover:text-red-800 underline">
-                                                            Remove observation
+                                                            {{ __('carer.remove_observation') }}
                                                         </button>
                                                     </form>
                                                 @else
@@ -140,16 +140,16 @@
                                                             <button type="submit"
                                                                     class="inline-flex items-center rounded-lg px-3 py-1.5 text-sm font-semibold text-white
                                                                            bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:brightness-110 shadow-sm">
-                                                                Mark as Observed
+                                                                {{ __('carer.mark_as_observed') }}
                                                             </button>
                                                             <button type="button" @click="showNotes = !showNotes"
                                                                     class="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 underline">
-                                                                Add note
+                                                                {{ __('carer.add_note') }}
                                                             </button>
                                                         </div>
                                                         <div x-show="showNotes" x-cloak class="mt-2">
                                                             <textarea name="notes" rows="2"
-                                                                      placeholder="Optional observation notes..."
+                                                                      placeholder="{{ __('carer.observation_notes_placeholder') }}"
                                                                       class="w-full text-sm rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500
                                                                              dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"></textarea>
                                                         </div>
@@ -163,7 +163,7 @@
                             </div>
                         </div>
                     @empty
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">No milestones found for this age range.</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">{{ __('carer.no_milestones_age_range') }}</p>
                     @endforelse
                 </div>
             </div>
