@@ -204,4 +204,40 @@ return [
     'back_to_dashboard' => 'Back to Dashboard',
     'already_signed' => 'Already signed',
 
+    'record' => 'Record',
+    'type_full_name_sign' => 'Type your full name to sign',
+    'confirm_read_understood' => 'I confirm I have read and understood this item',
+    'sign_acknowledge' => 'Sign & Acknowledge',
+    'no_pending_caught_up' => 'No pending acknowledgements — you\'re all caught up!',
+
+    'outstanding_invoices' => 'Outstanding Invoices',
+    'unpaid' => 'unpaid',
+    'total_outstanding' => 'Total Outstanding',
+    'next_due_date' => 'Next Due Date',
+    'none' => 'None',
+    'unpaid_invoices' => 'Unpaid Invoices',
+    'overdue' => 'Overdue',
+    'no_outstanding_caught_up' => 'No outstanding invoices — you\'re all caught up!',
+
+    'recently_paid' => 'Recently Paid',
+    'view_all_invoices' => 'View all invoices →',
+
+    'child_timelines' => 'Child Timelines',
+    'child_timeline_description' => 'View your child’s daily timeline.',
+    'not_assigned' => 'Not assigned',
+    'view_timeline' => 'View Timeline',
+    'no_children_linked' => 'No children linked to your account.',
+
+    'contact_centre' => 'Contact Centre',
+    'contact_centre_description' => 'Send a quick fee enquiry directly to the centre manager.',
+    'no_manager_contact' => 'No centre manager is currently available to contact.',
+    'enquiry_sent_to' => 'This enquiry will be sent to:',
+    'general_fee_enquiry' => 'General fee enquiry',
+    'type_fee_enquiry' => 'Type your fee enquiry here...',
+    'send_enquiry' => 'Send Enquiry',
+
+'acknowledgement_description' => 'View items waiting for your acknowledgement.',
+'back_to_dashboard' => 'Back to Dashboard',
+'already_signed' => 'Already signed',
+
 ];
