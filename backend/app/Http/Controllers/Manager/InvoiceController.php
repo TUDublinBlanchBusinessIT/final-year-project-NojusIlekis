@@ -160,6 +160,16 @@ class InvoiceController extends Controller
             ->with('success', 'Invoice status updated.');
     }
 
+    public function cancel(Invoice $invoice)
+    {
+        abort_unless($invoice->canBeCancelled(), 422, 'This invoice cannot be cancelled.');
+
+        $invoice->cancelInvoice();
+
+        return redirect()->route('manager.invoices.index')
+            ->with('success', 'Invoice #' . $invoice->id . ' has been cancelled.');
+    }
+
     public function approvePayment(Invoice $invoice)
     {
         abort_unless($invoice->isPaymentPending(), 422, 'No pending payment to approve.');

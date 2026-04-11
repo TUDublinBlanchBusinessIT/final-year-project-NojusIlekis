@@ -109,6 +109,23 @@
                                 </button>
                             </form>
                         @endif
+
+                        @if($invoice->canBeEdited())
+                            <a href="{{ route('manager.invoices.items.create', $invoice) }}"
+                               class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">
+                                ✏️ Edit Invoice
+                            </a>
+                        @endif
+
+                        @if($invoice->canBeCancelled())
+                            <form method="POST" action="{{ route('manager.invoices.cancel', $invoice) }}">
+                                @csrf
+                                <button type="submit" onclick="return confirm('Are you sure you want to cancel this invoice? This cannot be undone.')"
+                                        class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition">
+                                    🚫 Cancel Invoice
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>

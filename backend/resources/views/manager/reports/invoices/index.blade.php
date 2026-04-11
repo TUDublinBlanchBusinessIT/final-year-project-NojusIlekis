@@ -67,7 +67,7 @@
 
                         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
                             @forelse ($invoices as $invoice)
-                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30">
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 {{ $invoice->status === 'cancelled' ? 'opacity-50' : '' }}">
                                     <td class="px-5 py-4 text-slate-900 dark:text-slate-100 font-medium">
                                         #{{ $invoice->id }}
                                     </td>
@@ -89,14 +89,20 @@
                                     </td>
 
                                     <td class="px-5 py-4">
-                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
-                                                     bg-slate-100 text-slate-700 border border-slate-200
-                                                     dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                                            {{ ucfirst($invoice->status) }}
-                                        </span>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $invoice->paymentStatusColour() }} ml-1">
-                                            {{ $invoice->paymentStatusLabel() }}
-                                        </span>
+                                        @if($invoice->status === 'cancelled')
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
+                                                Cancelled
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
+                                                         bg-slate-100 text-slate-700 border border-slate-200
+                                                         dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
+                                                {{ ucfirst($invoice->status) }}
+                                            </span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $invoice->paymentStatusColour() }} ml-1">
+                                                {{ $invoice->paymentStatusLabel() }}
+                                            </span>
+                                        @endif
                                     </td>
 
                                     <td class="px-5 py-4 text-slate-900 dark:text-slate-100 font-medium">
