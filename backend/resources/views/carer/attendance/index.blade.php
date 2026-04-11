@@ -9,16 +9,16 @@
                 <a href="{{ route('carer.dashboard') }}"
                    class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 transition
                           dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
-                    ← Back to Dashboard
+                    ← {{ __('carer.back_to_dashboard') }}
                 </a>
 
                 <!-- Title + Description -->
                 <div>
                     <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                        Attendance
+                        {{ __('carer.attendance') }}
                     </h2>
                     <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                        Select a room and date, then mark each child present or absent.
+                        {{ __('carer.attendance_instruction') }}
                     </p>
                 </div>
 
@@ -28,7 +28,7 @@
             <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium
                          bg-blue-50 text-blue-700 border border-blue-200
                          dark:bg-blue-950/40 dark:text-blue-200 dark:border-blue-900/60">
-                Carer View
+                {{ __('carer.carer_view') }}
             </span>
 
         </div>
@@ -42,7 +42,7 @@
                             dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-200">
                     <div class="flex items-center justify-between">
                         <span>{{ session('success') }}</span>
-                        <span class="text-xs opacity-80">Saved</span>
+                        <span class="text-xs opacity-80">{{ __('carer.saved') }}</span>
                     </div>
                 </div>
             @endif
@@ -51,15 +51,15 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Filters</h3>
-                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Load children for a room and date.</p>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('carer.filters') }}</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">{{ __('carer.load_children') }}</p>
                 </div>
 
                 <div class="p-5">
                     <form method="GET" action="{{ route('carer.attendance.index') }}"
                           class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Date</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">{{ __('carer.date') }}</label>
                             <input type="date" name="date" value="{{ $date }}"
                                    class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900
                                           focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
@@ -68,13 +68,13 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Room</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">{{ __('carer.room') }}</label>
                             <select name="room_id"
                                     class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900
                                            focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                            dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
                                            dark:focus:ring-blue-900/40 dark:focus:border-blue-400">
-                                <option value="">Select room...</option>
+                                <option value="">{{ __('carer.select_room') }}</option>
                                 @foreach ($rooms as $room)
                                     <option value="{{ $room->id }}" @selected((string)$roomId === (string)$room->id)>
                                         {{ $room->name }}
@@ -91,7 +91,7 @@
                                        focus:outline-none focus:ring-4 focus:ring-blue-200
                                        active:translate-y-[1px]
                                        dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                            <span>Load</span>
+                            <span>{{ __('carer.load') }}</span>
                             <svg class="h-4 w-4 opacity-90 group-hover:translate-x-0.5 transition-transform"
                                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd"
@@ -110,16 +110,16 @@
 
                     <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
                         <div>
-                            <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Children</h3>
+                            <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('carer.children') }}</h3>
                             <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                                Mark each child and save. Defaults to <span class="font-medium text-blue-700 dark:text-blue-300">Present</span>.
+                                {{ __('carer.mark_children') }} <span class="font-medium text-blue-700 dark:text-blue-300">{{ __('carer.present') }}</span>.
                             </p>
                         </div>
 
                         <div class="inline-flex items-center gap-2 rounded-xl px-3 py-2
                                     bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium
                                     dark:bg-blue-950/40 dark:border-blue-900/60 dark:text-blue-200">
-                            <span>Date:</span>
+                            <span>{{ __('carer.date') }}:</span>
                             <span class="font-semibold">{{ $date }}</span>
                         </div>
                     </div>
@@ -134,10 +134,10 @@
                                 <thead>
                                     <tr class="bg-slate-50 dark:bg-slate-900/60">
                                         <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                            Child
+                                            {{ __('carer.child') }}
                                         </th>
                                         <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                            Status
+                                            {{ __('carer.status') }}
                                         </th>
                                     </tr>
                                 </thead>
@@ -171,7 +171,7 @@
                                                         @endif
                                                         <a href="{{ route('carer.milestones.show', $child) }}"
                                                            class="mt-1 inline-flex items-center text-blue-600 hover:text-blue-800 text-xs font-medium">
-                                                            Milestones
+                                                            {{ __('carer.milestones') }}
                                                         </a>
                                                     </div>
                                                 </div>
@@ -184,8 +184,8 @@
                                                                focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                                                dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
                                                                dark:focus:ring-blue-900/40 dark:focus:border-blue-400">
-                                                    <option value="present" @selected($status === 'present')>Present</option>
-                                                    <option value="absent" @selected($status === 'absent')>Absent</option>
+                                                    <option value="present" @selected($status === 'present')>{{ __('carer.present') }}</option>
+                                                    <option value="absent" @selected($status === 'absent')>{{ __('carer.absent') }}</option>
                                                 </select>
 
                                                 <div class="mt-2 text-xs">
@@ -193,13 +193,13 @@
                                                         <span class="inline-flex items-center rounded-full px-2 py-0.5
                                                                     bg-emerald-50 text-emerald-700 border border-emerald-200
                                                                     dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-900/60">
-                                                            Ready
+                                                            {{ __('carer.ready') }}
                                                         </span>
                                                     @else
                                                         <span class="incline-flex items-center rounded-full px-2 py-0.5
                                                         bg-red-50 text-red-700 border border-red-200
                                                         dark:bg-red-950/40 dark:text-red-200 dark:border-red-900/60">
-                                                            Marked Absent
+                                                            {{ __('carer.marked_absent') }}
                                                         </span>
                                                     @endif
                                                 </div>
@@ -208,7 +208,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="2" class="px-5 py-6 text-slate-600 dark:text-slate-300">
-                                                No children found for this room.
+                                                {{ __('carer.no_children_room') }}
                                             </td>
                                         </tr>
                                     @endforelse
@@ -218,7 +218,7 @@
 
                         <div class="px-5 py-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                             <div class="text-sm text-slate-600 dark:text-slate-300">
-                                Tip: You can save multiple times — it updates existing records.
+                                {{ __('carer.tip') }}
                             </div>
 
                             <button type="submit"
@@ -233,7 +233,7 @@
                                      viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path d="M17 3a1 1 0 00-1-1H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V3zM5 4h10v4H5V4zm0 12v-6h10v6H5z"/>
                                 </svg>
-                                <span>Save Attendance</span>
+                                <span>{{ __('carer.save_attendance') }}</span>
                             </button>
                         </div>
                     </form>
