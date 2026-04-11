@@ -1,7 +1,8 @@
 <div x-data="chatbot()" x-cloak>
     <!-- Chat bubble button -->
     <button @click="toggle()"
-            class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full shadow-lg flex items-center justify-center text-white text-2xl hover:scale-110 transition-transform z-50">
+            style="touch-action: manipulation;"
+            class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full shadow-lg flex items-center justify-center text-white text-2xl hover:scale-110 transition-transform z-[50]">
         <span x-show="!isOpen">💬</span>
         <span x-show="isOpen">✕</span>
     </button>
@@ -14,7 +15,7 @@
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-4"
-         class="chatbot-panel fixed bottom-24 right-6 w-[380px] h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 border border-slate-200">
+         class="chatbot-panel fixed bottom-24 right-6 w-[380px] h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[50] border border-slate-200">
 
         <!-- Header -->
         <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 flex items-center justify-between flex-shrink-0">
@@ -25,7 +26,9 @@
                     <p class="text-xs text-blue-100">SnugBug Help Assistant</p>
                 </div>
             </div>
-            <button @click="toggle()" class="text-white/80 hover:text-white">
+            <button @click="toggle()"
+                    style="touch-action: manipulation;"
+                    class="w-10 h-10 flex items-center justify-center text-white/80 hover:text-white rounded-full transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>

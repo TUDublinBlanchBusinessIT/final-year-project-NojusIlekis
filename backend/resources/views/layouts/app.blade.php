@@ -31,10 +31,16 @@
         <!-- PWA CSS -->
         <link rel="stylesheet" href="/css/pwa.css">
 
+        <!-- x-cloak: hide Alpine elements before JS initialises -->
+        <style>[x-cloak] { display: none !important; }</style>
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
+        @auth
+            <x-pwa-install-prompt />
+        @endauth
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             @include('layouts.navigation')
 
