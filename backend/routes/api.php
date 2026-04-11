@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/children/{child}/timeline', [ParentDataController::class, 'timeline'])->name('children.timeline');
         Route::get('/invoices', [ParentDataController::class, 'invoices'])->name('invoices.index');
         Route::get('/invoices/{invoice}', [ParentDataController::class, 'showInvoice'])->name('invoices.show');
+        Route::post('/invoices/{invoice}/pay', [ParentDataController::class, 'submitPayment'])->name('invoices.pay');
     });
 
     // Carer-only routes
@@ -54,5 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/carers', [ManagerDataController::class, 'carers'])->name('carers.index');
         Route::get('/rooms', [ManagerDataController::class, 'rooms'])->name('rooms.index');
         Route::get('/dashboard', [ManagerDataController::class, 'dashboard'])->name('dashboard');
+        Route::get('/payments/pending', [ManagerDataController::class, 'pendingPayments'])->name('payments.pending');
+        Route::post('/invoices/{invoice}/approve', [ManagerDataController::class, 'approvePayment'])->name('invoices.approve');
+        Route::post('/invoices/{invoice}/reject', [ManagerDataController::class, 'rejectPayment'])->name('invoices.reject');
     });
 });

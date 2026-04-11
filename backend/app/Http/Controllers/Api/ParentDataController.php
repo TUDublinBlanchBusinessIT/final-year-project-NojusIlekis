@@ -276,6 +276,32 @@ class ParentDataController extends Controller
     // Helpers
     // -----------------------------------------------------------------------
 
+    /**
+     * Submit payment proof for an invoice.
+     * POST /api/parent/invoices/{invoice}/pay
+     */
+    public function submitPayment(Request $request, \App\Models\Invoice $invoice)
+    {
+        $parent = $request->user();
+        abort_unless($invoice->parent_id === $parent->id, 403);
+        abort_unless($invoice->canSubmitPayment(), 422, 'Payment cannot be submitted for this invoice.');
+
+        $request->validate([
+            'payment_proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'payment_notes' => 'nullable|string|max:500',
+        ]);
+
+        $path = $request->file('payment_proof')->store('payment_proofs', 'public');
+        $invoice->markPaymentSubmitted($path, $request->payment_notes);
+
+        return response()->json([
+            'message' => 'Payment submitted successfully.',
+            'invoice_id' => $invoice->id,
+            'payment_status' => $invoice->payment_status,
+            'payment_submitted_at' => $invoice->payment_submitted_at,
+        ]);
+    }
+
     private function authoriseChild(Request $request, Child $child): void
     {
         $linked = $request->user()->children()->where('children.id', $child->id)->exists();
