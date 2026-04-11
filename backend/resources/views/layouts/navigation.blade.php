@@ -98,10 +98,18 @@
                     onchange="this.form.submit()"
                     class="rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 >
-                    <option value="en" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>EN</option>
-                    <option value="pt" {{ app()->getLocale() === 'pt' ? 'selected' : '' }}>PT</option>
-                    <option value="pl" {{ app()->getLocale() === 'pl' ? 'selected' : '' }}>PL</option>
-                    <option value="ro" {{ app()->getLocale() === 'ro' ? 'selected' : '' }}>RO</option>
+                    <option value="en" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>
+                        {{ __('common.english') }}
+                    </option>
+                    <option value="pt" {{ app()->getLocale() === 'pt' ? 'selected' : '' }}>
+                        {{ __('common.portuguese') }}
+                    </option>
+                    <option value="pl" {{ app()->getLocale() === 'pl' ? 'selected' : '' }}>
+                        {{ __('common.polish') }}
+                    </option>
+                    <option value="ro" {{ app()->getLocale() === 'ro' ? 'selected' : '' }}>
+                            {{ __('common.romanian') }}
+                    </option>
                 </select>
             </form>
 

@@ -25,4 +25,9 @@ return [
     'messages' => 'Messages',
     'profile' => 'Profile',
     'log_out' => 'Log Out',
+
+    'english' => 'English',
+    'portuguese' => 'Portuguese',
+    'polish' => 'Polish',
+    'romanian' => 'Romanian',
 ];
