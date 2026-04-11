@@ -1,5 +1,7 @@
 <x-app-layout>
     @php
+        $pendingPayments = $pendingPayments ?? collect([]);
+        $pendingPaymentCount = $pendingPaymentCount ?? 0;
         $filters = $filters ?? [
             'start_date' => now()->subDays(6)->toDateString(),
             'end_date' => now()->toDateString(),
@@ -56,6 +58,42 @@
                     </p>
                 </div>
             </div>
+
+            {{-- Pending Payments Card --}}
+            @if($pendingPaymentCount > 0)
+                <div class="bg-amber-50 rounded-2xl border border-amber-200 shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-amber-800">
+                            💳 Pending Payments
+                            <span class="ml-2 inline-flex items-center justify-center w-6 h-6 bg-amber-500 text-white text-xs font-bold rounded-full">
+                                {{ $pendingPaymentCount }}
+                            </span>
+                        </h3>
+                        <a href="{{ route('manager.invoices.index') }}" class="text-sm text-amber-700 hover:underline">View all invoices →</a>
+                    </div>
+
+                    <div class="space-y-3">
+                        @foreach($pendingPayments as $payment)
+                            <a href="{{ route('manager.invoices.show', $payment) }}"
+                               class="flex items-center justify-between bg-white rounded-xl p-4 border border-amber-100 hover:border-amber-300 transition">
+                                <div>
+                                    <p class="font-medium text-gray-800">
+                                        {{ $payment->parent->first_name ?? $payment->parent->name ?? 'Parent' }} {{ $payment->parent->last_name ?? '' }}
+                                    </p>
+                                    <p class="text-sm text-gray-500">
+                                        {{ $payment->child->first_name ?? '' }} {{ $payment->child->last_name ?? '' }} —
+                                        Invoice #{{ $payment->id }}
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-semibold text-gray-800">€{{ number_format($payment->total, 2) }}</p>
+                                    <p class="text-xs text-gray-400">{{ $payment->payment_submitted_at->diffForHumans() }}</p>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             {{-- Attendance KPIs + Filters --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm

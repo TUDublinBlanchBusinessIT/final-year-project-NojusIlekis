@@ -15,6 +15,7 @@
                     $role = auth()->check() ? auth()->user()->role : null;
                     $firstChild = ($role === 'parent' && auth()->check()) ? auth()->user()->children()->first() : null;
                     $unreadMessageCount = auth()->check() ? \App\Models\Message::where('receiver_id', auth()->id())->whereNull('read_at')->count() : 0;
+                    $pendingPaymentsBadge = ($role === 'manager') ? \App\Models\Invoice::where('payment_status', 'payment_submitted')->count() : 0;
                 @endphp
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -83,6 +84,15 @@
 
                         <x-nav-link :href="route('manager.carers.index')" :active="request()->routeIs('manager.carers.*')">
                             {{ __('common.carers') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('manager.invoices.index')" :active="request()->routeIs('manager.invoices.*')">
+                            {{ __('common.invoices') }}
+                            @if($pendingPaymentsBadge > 0)
+                                <span class="ml-1 inline-flex items-center justify-center rounded-full bg-amber-500 text-white text-xs font-bold w-5 h-5">
+                                    {{ $pendingPaymentsBadge }}
+                                </span>
+                            @endif
                         </x-nav-link>
                     @endif
                 </div>
@@ -210,6 +220,15 @@
 
                 <x-responsive-nav-link :href="route('manager.carers.index')" :active="request()->routeIs('manager.carers.*')">
                     {{ __('common.carers') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('manager.invoices.index')" :active="request()->routeIs('manager.invoices.*')">
+                    {{ __('common.invoices') }}
+                    @if($pendingPaymentsBadge > 0)
+                        <span class="ml-1 inline-flex items-center justify-center rounded-full bg-amber-500 text-white text-xs font-bold w-5 h-5">
+                            {{ $pendingPaymentsBadge }}
+                        </span>
+                    @endif
                 </x-responsive-nav-link>
             @endif
         </div>
