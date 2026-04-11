@@ -3,15 +3,15 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    Conversation with {{ $user->name }}
+                    {{ __('parent.conversation_with') }} {{ $user->name }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    {{ $user->role === 'carer' ? 'Carer' : ucfirst($user->role) }}
+                    {{ $user->role === 'carer' ? __('parent.carer') : ucfirst($user->role) }}
                 </p>
             </div>
             <a href="{{ route('parent.messages.index') }}"
                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100">
-                ← Back to Messages
+                ← {{ __('parent.back_to_messages') }}
             </a>
         </div>
     </x-slot>
@@ -22,7 +22,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 flex flex-col gap-4 max-h-[60vh] overflow-y-auto">
                 @if($messages->count() === 1)
                     <p class="text-center text-xs text-slate-400">
-                        Start of conversation
+                        {{ __('parent.start_conversation') }}
                     </p>
                 @endif
 
@@ -33,7 +33,7 @@
                         <div class="max-w-sm">
                             @if ($messageItem->child)
                                 <p class="text-xs text-slate-400 mb-1 {{ $isMine ? 'text-right' : 'text-left' }}">
-                                    Re: {{ $messageItem->child->first_name }} {{ $messageItem->child->last_name }}
+                                    {{ __('parent.re') }}: {{ $messageItem->child->first_name }} {{ $messageItem->child->last_name }}
                                 </p>
                             @endif
 
@@ -49,14 +49,14 @@
                                 &middot; {{ $messageItem->created_at->format('d M') }}
 
                                 @if ($isMine)
-                                    &middot; {{ $messageItem->read_at ? 'Read' : 'Sent' }}
+                                    &middot; {{ $messageItem->read_at ? __('parent.read') : __('parent.sent') }}
                                 @endif
                             </p>
                         </div>
                     </div>
                 @empty
                     <p class="text-slate-400 text-sm text-center py-8">
-                        No messages yet. Send the first one below.
+                        {{ __('parent.no_messages_send') }}
                     </p>
                 @endforelse
             </div>
@@ -75,11 +75,11 @@
                     @if ($myChildren->isNotEmpty())
                         <div>
                             <label for="child_id" class="block text-xs font-medium text-slate-600 mb-1">
-                                About child (optional)
+                                {{ __('parent.about_child_optional') }}
                             </label>
                             <select name="child_id" id="child_id"
                                     class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">— Select child —</option>
+                                <option value="">{{ __('parent.select_child') }}</option>
                                 @foreach ($myChildren as $child)
                                     <option value="{{ $child->id }}">
                                         {{ $child->first_name }} {{ $child->last_name }}
@@ -91,10 +91,10 @@
 
                     <div>
                         <label for="body" class="block text-xs font-medium text-slate-600 mb-1">
-                            Message
+                            {{ __('parent.message') }}
                         </label>
                         <textarea name="body" id="body" rows="3" required maxlength="2000"
-                                  placeholder="Type your message..."
+                                  placeholder="{{ __('parent.type_message') }}"
                                   class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none">{{ old('body') }}</textarea>
 
                         @if ($errors->has('body'))
@@ -108,7 +108,7 @@
                                        bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
                                        shadow-sm shadow-blue-500/20 hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
                                        active:translate-y-[1px]">
-                            Send
+                            {{ __('parent.send') }}
                         </button>
                     </div>
                 </form>

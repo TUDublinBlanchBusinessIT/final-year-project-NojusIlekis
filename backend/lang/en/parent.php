@@ -159,4 +159,49 @@ return [
     'unit_price' => 'Unit Price',
     'no_line_items' => 'No line items added yet.',
 
+    'messages_description' => 'Conversations with your child\'s carers.',
+    'new_message' => 'New Message',
+    'no_messages' => 'No messages yet. Start a conversation with your child\'s carer.',
+    'about' => 'About',
+    'general' => 'General',
+
+    'choose_carer' => 'Choose a carer to start a conversation with.',
+    'back_to_messages' => 'Back to Messages',
+    'no_carers' => 'No carers are currently assigned to your children\'s rooms.',
+    'message_action' => 'Message →',
+
+    'conversation_with' => 'Conversation with',
+    'start_conversation' => 'Start of conversation',
+    're' => 'Re',
+    'read' => 'Read',
+    'sent' => 'Sent',
+    'no_messages_send' => 'No messages yet. Send the first one below.',
+
+    'about_child_optional' => 'About child (optional)',
+    'select_child' => '— Select child —',
+    'message' => 'Message',
+    'type_message' => 'Type your message...',
+    'send' => 'Send',
+
+    'age' => 'Age',
+    'months' => 'months',
+    'milestones_observed' => 'milestones observed',
+    'observed' => 'observed',
+    'all_milestones' => 'All Milestones',
+    'milestones_for_age_range' => 'Milestones for the',
+    'age_range' => 'age range',
+    'observed_on' => 'Observed on',
+    'by' => 'by',
+    'a_carer' => 'a carer',
+    'no_milestones_for_age' => 'No milestones found for this age range.',
+
+    'daily_timeline' => 'Daily Timeline',
+    'today' => 'Today',
+    'no_updates_day' => 'No updates for this day',
+    'check_back' => 'Check back later or pick another date above.',
+
+    'acknowledgement_description' => 'View items waiting for your acknowledgement.',
+    'back_to_dashboard' => 'Back to Dashboard',
+    'already_signed' => 'Already signed',
+
 ];
