@@ -6,10 +6,10 @@ return [
     'edit' => 'Edytuj',
     'delete' => 'Usuń',
     'back' => 'Wstecz',
-    'submit' => 'Prześlij',
+    'submit' => 'Zatwierdź',
     'search' => 'Szukaj',
     'filter' => 'Filtruj',
-    'view' => 'Pokaż',
+    'view' => 'Zobacz',
     'logout' => 'Wyloguj się',
     'yes' => 'Tak',
     'no' => 'Nie',
@@ -25,4 +25,9 @@ return [
     'messages' => 'Wiadomości',
     'profile' => 'Profil',
     'log_out' => 'Wyloguj się',
+
+    'english' => 'Angielski',
+    'portuguese' => 'Portugalski',
+    'polish' => 'Polski',
+    'romanian' => 'Rumuński',
 ];
