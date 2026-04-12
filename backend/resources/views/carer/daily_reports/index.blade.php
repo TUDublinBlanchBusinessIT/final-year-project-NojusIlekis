@@ -6,16 +6,16 @@
     <a href="{{ route('carer.dashboard') }}"
        class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50
               dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
-        ← Back to Dashboard
+        ← {{ __('carer.back_to_dashboard') }}
     </a>
 
     <h2 class="text-2xl font-bold mb-2 text-white mt-4">
-        Daily Child Updates
+        {{ __('carer.daily_reports') }}
     </h2>
 
     {{-- Current Time (Live) --}}
     <div class="mb-6 text-slate-300 text-sm">
-        Current Time: <span id="currentTime" class="font-semibold text-white"></span>
+        {{ __('carer.current_time') }}: <span id="currentTime" class="font-semibold text-white"></span>
     </div>
 
     {{-- success / error messages --}}
@@ -36,14 +36,14 @@
 
     <template x-if="childId && data[childId]?.has_allergies">
         <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-lg shadow-sm" role="alert">
-            <p class="font-bold text-red-800">⚠️ Allergy Alert — <span x-text="data[childId].name"></span></p>
-            <p class="text-sm mt-1">Allergies: <strong x-text="data[childId].allergies"></strong></p>
+            <p class="font-bold text-red-800">⚠️ {{ __('carer.allergy_alert') }} — <span x-text="data[childId].name"></span></p>
+            <p class="text-sm mt-1">{{ __('carer.allergies') }}: <strong x-text="data[childId].allergies"></strong></p>
         </div>
     </template>
 
     <template x-if="childId && data[childId]?.medical_notes">
         <div class="bg-amber-50 border-l-4 border-amber-500 text-amber-800 p-4 mb-4 rounded-lg shadow-sm" role="alert">
-            <p class="font-bold">📋 Medical Notes — <span x-text="data[childId].name"></span></p>
+            <p class="font-bold">📋 {{ __('carer.medical_notes') }} — <span x-text="data[childId].name"></span></p>
             <p class="text-sm mt-1" x-text="data[childId].medical_notes"></p>
         </div>
     </template>
@@ -55,15 +55,12 @@
 
         @csrf
 
-        {{-- Hidden field to submit current time --}}
         <input type="hidden" name="report_time" id="reportTimeInput">
 
-        {{-- Date + Class Row --}}
         <div style="display:flex;gap:15px;flex-wrap:wrap;margin-bottom:15px;">
 
-            {{-- Select Date --}}
             <div style="flex:1;min-width:220px;">
-                <label style="font-weight:600;">Select Date</label>
+                <label style="font-weight:600;">{{ __('carer.date') }}</label>
                 <input type="date"
                        name="date"
                        value="{{ old('date', now()->toDateString()) }}"
@@ -71,13 +68,12 @@
                        style="width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #ccc;">
             </div>
 
-            {{-- Class Dropdown --}}
             <div style="flex:1;min-width:220px;">
-                <label style="font-weight:600;">Class</label>
+                <label style="font-weight:600;">{{ __('carer.room') }}</label>
                 <select name="room"
                         required
                         style="width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #ccc;">
-                    <option value="">Select class...</option>
+                    <option value="">{{ __('carer.select_room') }}</option>
                     @foreach($rooms as $room)
                         <option value="{{ $room->name }}" @selected(old('room') === $room->name)>
                             {{ $room->name }}
@@ -88,13 +84,11 @@
 
         </div>
 
-
-        {{-- Child Selection --}}
-        <label style="font-weight:600;">Select Child</label>
+        <label style="font-weight:600;">{{ __('carer.select_child') }}</label>
         <select name="child_id" required
                 x-model="childId"
                 style="width:100%;padding:10px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc;">
-            <option value="">Choose child...</option>
+            <option value="">{{ __('carer.choose_child') }}</option>
             @foreach($children as $child)
                 <option value="{{ $child->id }}" @selected(old('child_id') == $child->id)>
                     {{ $child->first_name }} {{ $child->last_name }}
@@ -102,34 +96,29 @@
             @endforeach
         </select>
 
-
-        {{-- Daily Report Label + Edit Button --}}
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-            <label style="font-weight:600;">Daily Behaviour & Wellbeing Report</label>
+            <label style="font-weight:600;">{{ __('carer.daily_report_label') }}</label>
 
             <button type="button"
                     id="editReportBtn"
                     style="background:#f1f5f9;border:1px solid #cbd5e1;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;">
-                ✏️ Edit
+                ✏️ {{ __('carer.edit') }}
             </button>
         </div>
 
-        {{-- Daily Report Text --}}
         <textarea id="dailyReportTextarea"
                   name="daily_report"
                   rows="5"
                   required
                   readonly
                   style="width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;background:#f8fafc;"
-                  placeholder="Write how the child was throughout the day...">{{ old('daily_report') }}</textarea>
+                  placeholder="{{ __('carer.daily_report_placeholder') }}">{{ old('daily_report') }}</textarea>
 
         <p id="editHint" style="margin-bottom:20px;color:#64748b;font-size:14px;">
-            Click <strong>Edit</strong> to update this report.
+            {{ __('carer.edit_hint') }}
         </p>
 
-
-        {{-- Media Upload --}}
-        <label style="font-weight:600;">Upload Photos / Videos</label>
+        <label style="font-weight:600;">{{ __('carer.upload_media') }}</label>
         <input type="file"
                name="media[]"
                id="mediaInput"
@@ -137,17 +126,16 @@
                accept="image/*,video/*"
                style="display:block;margin-top:10px;margin-bottom:15px;">
 
-        {{-- Preview Area --}}
         <div id="previewContainer"
              style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;"></div>
 
         <button type="submit"
                 style="background:#2563eb;color:white;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;">
-            Save Daily Report
+            {{ __('carer.save_daily_report') }}
         </button>
 
     </form>
-    </div>{{-- end x-data --}}
+    </div>
 
 </div>
 

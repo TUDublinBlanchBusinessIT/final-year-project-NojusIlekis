@@ -139,4 +139,34 @@ return [
     'message' => 'Message',
     'type_message' => 'Type your message…',
     'send' => 'Send',
+
+    'current_time' => 'Current Time',
+
+    'daily_report_label' => 'Daily Behaviour & Wellbeing Report',
+    'daily_report_placeholder' => 'Write how the child was throughout the day...',
+
+    'edit' => 'Edit',
+    'edit_hint' => 'Click Edit to update this report.',
+
+    'upload_media' => 'Upload Photos / Videos',
+    'save_daily_report' => 'Save Daily Report',
+
+    'milestones_intro' => 'Select a child to view or record their Aistear milestone progress.',
+    'children_in_rooms' => 'Children in Your Rooms',
+    'months' => 'months',
+    'no_children_active_rooms' => 'No children found in your active rooms.',
+
+    'back' => 'Back',
+    'age' => 'Age',
+    'achieved' => 'achieved',
+    'all' => 'All',
+
+    'observed_by' => 'Observed by',
+    'unknown' => 'Unknown',
+    'on' => 'on',
+    'remove_observation' => 'Remove observation',
+    'mark_as_observed' => 'Mark as Observed',
+    'add_note' => 'Add note',
+    'observation_notes_placeholder' => 'Optional observation notes...',
+    'no_milestones_age_range' => 'No milestones found for this age range.',
 ];
