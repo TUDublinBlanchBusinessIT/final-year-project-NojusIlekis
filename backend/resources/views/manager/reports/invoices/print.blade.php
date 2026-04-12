@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice #{{ $invoice->id }}</title>
+    <title>{{ __('manager.invoice') }} #{{ $invoice->id }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -68,34 +68,34 @@
 <body onload="window.print()">
 
     <div class="header">
-        <h1>Invoice #{{ $invoice->id }}</h1>
-        <p>Status: {{ ucfirst($invoice->status) }}</p>
+        <h1>{{ __('manager.invoice') }} #{{ $invoice->id }}</h1>
+        <p>{{ __('manager.status') }}: {{ ucfirst($invoice->status) }}</p>
     </div>
 
     <div class="section grid">
         <div>
-            <h3>Invoice Details</h3>
-            <p><strong>Child:</strong> {{ $invoice->child->first_name ?? '' }} {{ $invoice->child->last_name ?? '' }}</p>
-            <p><strong>Parent:</strong> {{ $invoice->parent->name ?? 'N/A' }}</p>
+            <h3>{{ __('manager.invoice_details') }}</h3>
+            <p><strong>{{ __('manager.child') }}:</strong> {{ $invoice->child->first_name ?? '' }} {{ $invoice->child->last_name ?? '' }}</p>
+            <p><strong>{{ __('manager.parent') }}:</strong> {{ $invoice->parent->name ?? __('manager.not_available') }}</p>
         </div>
 
         <div>
-            <h3>Billing Period</h3>
-            <p><strong>Period:</strong> {{ $invoice->period_start }} to {{ $invoice->period_end }}</p>
-            <p><strong>Due Date:</strong> {{ $invoice->due_date }}</p>
+            <h3>{{ __('manager.billing_period') }}</h3>
+            <p><strong>{{ __('manager.period') }}:</strong> {{ $invoice->period_start }} {{ __('manager.to') }} {{ $invoice->period_end }}</p>
+            <p><strong>{{ __('manager.due_date') }}:</strong> {{ $invoice->due_date }}</p>
         </div>
     </div>
 
     <div class="section">
-        <h3>Line Items</h3>
+        <h3>{{ __('manager.line_items') }}</h3>
 
         <table>
             <thead>
                 <tr>
-                    <th>Description</th>
-                    <th>Qty</th>
-                    <th>Unit Price</th>
-                    <th>Total</th>
+                    <th>{{ __('manager.description') }}</th>
+                    <th>{{ __('manager.qty') }}</th>
+                    <th>{{ __('manager.unit_price') }}</th>
+                    <th>{{ __('manager.total') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,7 +108,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4">No line items added yet.</td>
+                        <td colspan="4">{{ __('manager.no_line_items') }}</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -116,9 +116,9 @@
     </div>
 
     <div class="totals">
-        <p><span>Subtotal:</span> <span>€{{ number_format($subtotal, 2) }}</span></p>
-        <p><span>Discount:</span> <span>€{{ number_format($invoice->discount, 2) }}</span></p>
-        <h3><span>Final Total:</span> <span>€{{ number_format($finalTotal, 2) }}</span></h3>
+        <p><span>{{ __('manager.subtotal') }}:</span> <span>€{{ number_format($subtotal, 2) }}</span></p>
+        <p><span>{{ __('manager.discount') }}:</span> <span>€{{ number_format($invoice->discount, 2) }}</span></p>
+        <h3><span>{{ __('manager.final_total') }}:</span> <span>€{{ number_format($finalTotal, 2) }}</span></h3>
     </div>
 
 </body>

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-            Add Invoice Items
+            {{ __('manager.add_invoice_items') }}
         </h2>
     </x-slot>
 
@@ -30,22 +30,22 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                        Invoice Details
+                        {{ __('manager.invoice_details') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div class="text-slate-800 dark:text-slate-200">
-                            <p><span class="font-semibold">Child:</span> {{ $invoice->child->first_name }} {{ $invoice->child->last_name }}</p>
-                            <p><span class="font-semibold">Parent:</span> {{ $invoice->parent->name ?? 'N/A' }}</p>
+                            <p><span class="font-semibold">{{ __('manager.child') }}:</span> {{ $invoice->child->first_name }} {{ $invoice->child->last_name }}</p>
+                            <p><span class="font-semibold">{{ __('manager.parent') }}:</span> {{ $invoice->parent->name ?? __('manager.not_available') }}</p>
                         </div>
 
                         <div class="text-slate-800 dark:text-slate-200">
-                            <p><span class="font-semibold">Period:</span> {{ $invoice->period_start }} to {{ $invoice->period_end }}</p>
-                            <p><span class="font-semibold">Due Date:</span> {{ $invoice->due_date }}</p>
-                            <p><span class="font-semibold">Status:</span> {{ ucfirst($invoice->status) }}</p>
-                            <p><span class="font-semibold">Subtotal:</span> €{{ number_format($subtotal, 2) }}</p>
-                            <p><span class="font-semibold">Discount:</span> €{{ number_format($invoice->discount, 2) }}</p>
-                            <p><span class="font-semibold">Final Total:</span> €{{ number_format($finalTotal, 2) }}</p>
+                            <p><span class="font-semibold">{{ __('manager.period') }}:</span> {{ $invoice->period_start }} {{ __('manager.to') }} {{ $invoice->period_end }}</p>
+                            <p><span class="font-semibold">{{ __('manager.due_date') }}:</span> {{ $invoice->due_date }}</p>
+                            <p><span class="font-semibold">{{ __('manager.status') }}:</span> {{ ucfirst($invoice->status) }}</p>
+                            <p><span class="font-semibold">{{ __('manager.subtotal') }}:</span> €{{ number_format($subtotal, 2) }}</p>
+                            <p><span class="font-semibold">{{ __('manager.discount') }}:</span> €{{ number_format($invoice->discount, 2) }}</p>
+                            <p><span class="font-semibold">{{ __('manager.final_total') }}:</span> €{{ number_format($finalTotal, 2) }}</p>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                        Add Line Item
+                        {{ __('manager.add_line_item') }}
                     </h3>
 
                     <form method="POST" action="{{ route('manager.invoices.items.store', $invoice) }}" class="space-y-6">
@@ -63,19 +63,19 @@
 
                         <div>
                             <label for="description" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                Description
+                                {{ __('manager.description') }}
                             </label>
                             <input type="text" name="description" id="description" value="{{ old('description') }}"
                                    class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
                                           focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                           dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
-                                   placeholder="e.g. Monthly childcare fee">
+                                   placeholder="{{ __('manager.invoice_item_description_placeholder') }}">
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="qty" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    Quantity
+                                    {{ __('manager.quantity') }}
                                 </label>
                                 <input type="number" name="qty" id="qty" value="{{ old('qty', 1) }}"
                                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
@@ -86,7 +86,7 @@
 
                             <div>
                                 <label for="unit_price" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    Unit Price
+                                    {{ __('manager.unit_price') }}
                                 </label>
                                 <input type="number" step="0.01" name="unit_price" id="unit_price" value="{{ old('unit_price') }}"
                                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
@@ -102,7 +102,7 @@
                                        shadow-sm shadow-blue-500/20
                                        hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                                        focus:outline-none focus:ring-4 focus:ring-blue-200">
-                            Add Item
+                            {{ __('manager.add_item') }}
                         </button>
                     </form>
                 </div>
@@ -112,7 +112,7 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                        Apply Discount
+                        {{ __('manager.apply_discount') }}
                     </h3>
 
                     <form method="POST" action="{{ route('manager.invoices.discount.update', $invoice) }}" class="space-y-6">
@@ -121,7 +121,7 @@
 
                         <div class="max-w-sm">
                             <label for="discount" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                Discount Amount
+                                {{ __('manager.discount_amount') }}
                             </label>
                             <input type="number" step="0.01" name="discount" id="discount" value="{{ old('discount', $invoice->discount) }}"
                                    class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
@@ -136,7 +136,7 @@
                                        shadow-sm shadow-blue-500/20
                                        hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                                        focus:outline-none focus:ring-4 focus:ring-blue-200">
-                            Update Discount
+                            {{ __('manager.update_discount') }}
                         </button>
                     </form>
                 </div>
@@ -146,7 +146,7 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                        Current Line Items
+                        {{ __('manager.current_line_items') }}
                     </h3>
 
                     @if ($invoice->items->count())
@@ -154,10 +154,10 @@
                             <table class="min-w-full text-sm text-slate-800 dark:text-slate-200">
                                 <thead>
                                     <tr class="border-b border-slate-200 dark:border-slate-700">
-                                        <th class="text-left py-2 font-semibold">Description</th>
-                                        <th class="text-left py-2 font-semibold">Qty</th>
-                                        <th class="text-left py-2 font-semibold">Unit Price</th>
-                                        <th class="text-left py-2 font-semibold">Total</th>
+                                        <th class="text-left py-2 font-semibold">{{ __('manager.description') }}</th>
+                                        <th class="text-left py-2 font-semibold">{{ __('manager.qty') }}</th>
+                                        <th class="text-left py-2 font-semibold">{{ __('manager.unit_price') }}</th>
+                                        <th class="text-left py-2 font-semibold">{{ __('manager.total') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -173,7 +173,7 @@
                             </table>
                         </div>
                     @else
-                        <p class="text-sm text-slate-600 dark:text-slate-300">No line items added yet.</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('manager.no_line_items') }}</p>
                     @endif
                 </div>
             </div>

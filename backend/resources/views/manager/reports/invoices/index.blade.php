@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                    Invoices
+                    {{ __('manager.invoices') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    View all invoices created for children and parents.
+                    {{ __('manager.invoices_index_desc') }}
                 </p>
             </div>
 
@@ -18,7 +18,7 @@
                       focus:outline-none focus:ring-4 focus:ring-blue-200
                       active:translate-y-[1px]
                       dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                Create Invoice
+                {{ __('manager.create_invoice') }}
             </a>
         </div>
     </x-slot>
@@ -30,7 +30,7 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
                     <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
-                        All Invoices
+                        {{ __('manager.all_invoices') }}
                     </h3>
                 </div>
 
@@ -39,28 +39,28 @@
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-900/60">
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Invoice ID
+                                    {{ __('manager.invoice_id') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Child
+                                    {{ __('manager.child') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Parent
+                                    {{ __('manager.parent') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Period
+                                    {{ __('manager.period') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Due Date
+                                    {{ __('manager.due_date') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Status
+                                    {{ __('manager.status') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Total
+                                    {{ __('manager.total') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Action
+                                    {{ __('manager.action') }}
                                 </th>
                             </tr>
                         </thead>
@@ -77,11 +77,11 @@
                                     </td>
 
                                     <td class="px-5 py-4 text-slate-700 dark:text-slate-200">
-                                        {{ $invoice->parent->name ?? 'N/A' }}
+                                        {{ $invoice->parent->name ?? __('manager.not_available') }}
                                     </td>
 
                                     <td class="px-5 py-4 text-slate-700 dark:text-slate-200">
-                                        {{ $invoice->period_start }} to {{ $invoice->period_end }}
+                                        {{ $invoice->period_start }} {{ __('manager.to') }} {{ $invoice->period_end }}
                                     </td>
 
                                     <td class="px-5 py-4 text-slate-700 dark:text-slate-200">
@@ -91,7 +91,7 @@
                                     <td class="px-5 py-4">
                                         @if($invoice->status === 'cancelled')
                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
-                                                Cancelled
+                                                {{ __('manager.cancelled') }}
                                             </span>
                                         @else
                                             <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
@@ -118,14 +118,14 @@
                                                   focus:outline-none focus:ring-4 focus:ring-blue-200
                                                   active:translate-y-[1px]
                                                   dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                                            View
+                                            {{ __('manager.view') }}
                                         </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="8" class="px-5 py-6 text-slate-600 dark:text-slate-300">
-                                        No invoices found.
+                                        {{ __('manager.no_invoices_found') }}
                                     </td>
                                 </tr>
                             @endforelse

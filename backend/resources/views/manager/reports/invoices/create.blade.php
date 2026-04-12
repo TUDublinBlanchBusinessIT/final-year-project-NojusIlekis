@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-            Create Invoice
+            {{ __('manager.create_invoice') }}
         </h2>
     </x-slot>
 
@@ -24,20 +24,20 @@
 
                         <div>
                             <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                Select Child
+                                {{ __('manager.select_child') }}
                             </label>
 
                             <select name="child_id"
                                     class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
                                            focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                            dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
-                                <option value="">Choose a child</option>
+                                <option value="">{{ __('manager.choose_child') }}</option>
 
                                 @foreach($children as $child)
                                     <option value="{{ $child->id }}" {{ old('child_id') == $child->id ? 'selected' : '' }}>
                                         {{ $child->first_name }} {{ $child->last_name }}
                                         @if($child->parents->count())
-                                            - Parent: {{ $child->parents->first()->name }}
+                                            - {{ __('manager.parent') }}: {{ $child->parents->first()->name }}
                                         @endif
                                     </option>
                                 @endforeach
@@ -48,7 +48,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    Period Start
+                                    {{ __('manager.period_start') }}
                                 </label>
 
                                 <input type="date"
@@ -61,7 +61,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    Period End
+                                    {{ __('manager.period_end') }}
                                 </label>
 
                                 <input type="date"
@@ -74,7 +74,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    Due Date
+                                    {{ __('manager.due_date') }}
                                 </label>
 
                                 <input type="date"
@@ -92,7 +92,7 @@
                                        bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
                                        shadow-sm shadow-blue-500/20
                                        hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110">
-                            Create Invoice Draft
+                            {{ __('manager.create_invoice_draft') }}
                         </button>
 
                     </form>
