@@ -2,14 +2,20 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                Link Parent to {{ $child->first_name }} {{ $child->last_name }}
+                {{ __('manager.children.link_parent_title', [
+                    'first_name' => $child->first_name,
+                    'last_name' => $child->last_name,
+                ]) }}
             </h2>
 
             <a href="{{ route('manager.children.show', $child) }}"
                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
                       bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100
                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                Back to {{ $child->first_name }} {{ $child->last_name }}
+                {{ __('manager.children.back_to_child', [
+                    'first_name' => $child->first_name,
+                    'last_name' => $child->last_name,
+                ]) }}
             </a>
         </div>
     </x-slot>
@@ -40,10 +46,10 @@
 
                     @if ($availableParents->isEmpty())
                         <p class="text-sm text-slate-600 dark:text-slate-300">
-                            All parents are already linked or no parents exist.
+                            {{ __('manager.children.no_available_parents') }}
                             <a href="{{ route('manager.parents.create') }}"
                                class="ml-1 text-blue-600 hover:underline dark:text-blue-400">
-                                Create a parent first.
+                                {{ __('manager.parents.create_first') }}
                             </a>
                         </p>
                     @else
@@ -54,7 +60,10 @@
 
                             <div x-data="{
                                 search: '',
-                                parents: @js($availableParents->map(fn($p) => ['id' => $p->id, 'label' => $p->name . ' (' . $p->email . ')'])),
+                                parents: @js($availableParents->map(fn($p) => [
+                                    'id' => $p->id,
+                                    'label' => $p->name . ' (' . $p->email . ')'
+                                ])),
                                 get filtered() {
                                     if (!this.search) return this.parents;
                                     const q = this.search.toLowerCase();
@@ -62,12 +71,12 @@
                                 }
                             }">
                                 <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    Parent <span class="text-red-500">*</span>
+                                    {{ __('manager.children.parent') }} <span class="text-red-500">*</span>
                                 </label>
 
                                 <input type="text"
                                        x-model="search"
-                                       placeholder="Search by name or email…"
+                                       placeholder="{{ __('manager.children.search_parent_placeholder') }}"
                                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 mb-2
                                               focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                               dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
@@ -77,7 +86,7 @@
                                                focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                                dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
                                                @error('parent_id') border-red-400 @enderror">
-                                    <option value="">Select a parent…</option>
+                                    <option value="">{{ __('manager.children.select_parent') }}</option>
                                     <template x-for="p in filtered" :key="p.id">
                                         <option :value="p.id" :selected="p.id == {{ old('parent_id', 'null') }}" x-text="p.label"></option>
                                     </template>
@@ -89,19 +98,20 @@
 
                             <div>
                                 <label for="relationship_type" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    Relationship Type <span class="text-red-500">*</span>
+                                    {{ __('manager.children.relationship_type') }} <span class="text-red-500">*</span>
                                 </label>
                                 <select name="relationship_type" id="relationship_type"
                                         class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
                                                focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                                dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
                                                @error('relationship_type') border-red-400 @enderror">
-                                    <option value="">Select relationship…</option>
-                                    <option value="mother"      @selected(old('relationship_type') === 'mother')>Mother</option>
-                                    <option value="father"      @selected(old('relationship_type') === 'father')>Father</option>
-                                    <option value="guardian"    @selected(old('relationship_type') === 'guardian')>Guardian</option>
-                                    <option value="grandparent" @selected(old('relationship_type') === 'grandparent')>Grandparent</option>
-                                    <option value="other"       @selected(old('relationship_type') === 'other')>Other</option>
+                                    <option value="">{{ __('manager.children.select_relationship') }}</option>
+
+                                    @foreach (__('manager.relationship_types') as $value => $label)
+                                        <option value="{{ $value }}" @selected(old('relationship_type') === $value)>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('relationship_type')
                                     <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -117,7 +127,7 @@
                                        class="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500
                                               dark:border-slate-600 dark:bg-slate-900">
                                 <label for="legal_guardian" class="text-sm text-slate-700 dark:text-slate-200">
-                                    This person is a legal guardian
+                                    {{ __('manager.children.legal_guardian') }}
                                 </label>
                             </div>
 
@@ -129,7 +139,7 @@
                                                hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                                                focus:outline-none focus:ring-4 focus:ring-blue-200
                                                active:translate-y-[1px]">
-                                    Link Parent
+                                    {{ __('manager.children.link_parent_button') }}
                                 </button>
 
                                 <a href="{{ route('manager.children.show', $child) }}"
@@ -137,7 +147,7 @@
                                           bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200
                                           dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700
                                           focus:outline-none focus:ring-4 focus:ring-slate-200">
-                                    Cancel
+                                    {{ __('manager.actions.cancel') }}
                                 </a>
                             </div>
                         </form>

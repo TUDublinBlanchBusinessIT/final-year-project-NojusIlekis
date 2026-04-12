@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                    Carers
+                    {{ __('manager.carers') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Manage all registered carers.
+                    {{ __('manager.manage_carers') }}
                 </p>
             </div>
 
@@ -19,7 +19,7 @@
                       focus:outline-none focus:ring-4 focus:ring-blue-200
                       active:translate-y-[1px]
                       dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                Add Carer
+                {{ __('manager.add_carer') }}
             </a>
             @endcan
         </div>
@@ -45,7 +45,7 @@
                             <input type="text"
                                    name="search"
                                    value="{{ request('search') }}"
-                                   placeholder="Search by name or email…"
+                                   placeholder="{{ __('manager.search_carers') }}"
                                    class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900
                                           focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                           dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" />
@@ -56,7 +56,7 @@
                                     class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900
                                            focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                            dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
-                                <option value="">All Rooms</option>
+                                <option value="">{{ __('manager.all_rooms') }}</option>
                                 @foreach ($rooms as $room)
                                     <option value="{{ $room->id }}" @selected(request('room') == $room->id)>
                                         {{ $room->name }}
@@ -72,7 +72,7 @@
                                        hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                                        focus:outline-none focus:ring-4 focus:ring-blue-200
                                        active:translate-y-[1px]">
-                            Search
+                            {{ __('manager.search') }}
                         </button>
 
                         @if (request('search') || request('room'))
@@ -80,7 +80,7 @@
                                class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-medium
                                       bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100
                                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                                Clear
+                                {{ __('manager.clear') }}
                             </a>
                         @endif
                     </form>
@@ -92,7 +92,7 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
                     <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
-                        All Carers
+                        {{ __('manager.all_carers') }}
                         <span class="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">
                             ({{ $carers->total() }})
                         </span>
@@ -104,16 +104,16 @@
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-900/60">
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Name
+                                    {{ __('manager.name') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Email
+                                    {{ __('manager.email') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Current Room
+                                    {{ __('manager.current_room') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Actions
+                                    {{ __('manager.actions') }}
                                 </th>
                             </tr>
                         </thead>
@@ -137,7 +137,7 @@
                                             <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
                                                          bg-amber-50 text-amber-700 border border-amber-200
                                                          dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800/60">
-                                                Unassigned
+                                                {{ __('manager.unassigned') }}
                                             </span>
                                         @endif
                                     </td>
@@ -150,7 +150,7 @@
                                                       shadow-sm shadow-blue-500/20
                                                       hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
                                                       active:translate-y-[1px]">
-                                                View
+                                                {{ __('manager.view') }}
                                             </a>
 
                                             @can('update', $carerUser)
@@ -160,7 +160,7 @@
                                                       hover:bg-slate-200
                                                       dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700
                                                       focus:outline-none focus:ring-4 focus:ring-slate-200">
-                                                Edit
+                                                {{ __('manager.edit') }}
                                             </a>
                                             @endcan
 
@@ -175,7 +175,7 @@
                                                                hover:bg-red-100
                                                                dark:bg-red-950/30 dark:text-red-300 dark:border-red-800/60 dark:hover:bg-red-950/50
                                                                focus:outline-none focus:ring-4 focus:ring-red-200">
-                                                    Delete
+                                                    {{ __('manager.delete') }}
                                                 </button>
                                             </form>
                                             @endcan
@@ -185,10 +185,10 @@
                             @empty
                                 <tr>
                                     <td colspan="4" class="px-5 py-8 text-center text-slate-600 dark:text-slate-300">
-                                        No carers found.
+                                        {{ __('manager.no_carers') }}
                                         @if (request('search') || request('room'))
                                             <a href="{{ route('manager.carers.index') }}" class="ml-1 text-blue-600 hover:underline dark:text-blue-400">
-                                                Clear filters
+                                                {{ __('manager.clear_filters') }}
                                             </a>
                                         @endif
                                     </td>

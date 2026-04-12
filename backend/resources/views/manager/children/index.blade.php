@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                    Children
+                    {{ __('manager.children') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Manage all enrolled children.
+                    {{ __('manager.manage_all_enrolled_children') }}.
                 </p>
             </div>
 
@@ -19,7 +19,7 @@
                       focus:outline-none focus:ring-4 focus:ring-blue-200
                       active:translate-y-[1px]
                       dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                Add Child
+                {{ __('manager.add_child') }}
             </a>
             @endcan
         </div>
@@ -56,7 +56,7 @@
                                     class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900
                                            focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                            dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
-                                <option value="">All Rooms</option>
+                                <option value="">{{ __('manager.all_rooms') }}</option>
                                 @foreach ($rooms as $room)
                                     <option value="{{ $room->id }}" @selected(request('room') == $room->id)>
                                         {{ $room->name }}
@@ -72,7 +72,7 @@
                                        hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                                        focus:outline-none focus:ring-4 focus:ring-blue-200
                                        active:translate-y-[1px]">
-                            Search
+                            {{ __('manager.search') }}
                         </button>
 
                         @if (request('search') || request('room'))
@@ -80,7 +80,7 @@
                                class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-medium
                                       bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100
                                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                                Clear
+                                {{ __('manager.clear') }}
                             </a>
                         @endif
                     </form>
@@ -92,7 +92,7 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
                     <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
-                        All Children
+                        {{ __('manager.all_children') }}
                         <span class="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">
                             ({{ $children->total() }})
                         </span>
@@ -104,19 +104,19 @@
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-900/60">
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Name
+                                    {{ __('manager.name') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Date of Birth
+                                    {{ __('manager.date_of_birth') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Room
+                                    {{ __('manager.room') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Parents
+                                    {{ __('manager.parents') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                    Actions
+                                    {{ __('manager.actions') }}
                                 </th>
                             </tr>
                         </thead>
@@ -127,7 +127,7 @@
                                     <td class="px-5 py-4 font-medium text-slate-900 dark:text-slate-100">
                                         {{ $child->first_name }} {{ $child->last_name }}
                                         @if($child->hasAllergies())
-                                            <span class="ml-1.5 bg-red-100 text-red-700 text-xs font-semibold px-2 py-0.5 rounded-full">⚠️ Allergies</span>
+                                            <span class="ml-1.5 bg-red-100 text-red-700 text-xs font-semibold px-2 py-0.5 rounded-full">⚠️ Allergies{{ __('manager.allergies') }}</span>
                                         @endif
                                     </td>
 
@@ -142,7 +142,7 @@
                                             <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
                                                          bg-amber-50 text-amber-700 border border-amber-200
                                                          dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800/60">
-                                                Unassigned
+                                                {{ __('manager.unassigned') }}
                                             </span>
                                         @endif
                                     </td>
@@ -151,7 +151,7 @@
                                         @if ($child->parents->count())
                                             {{ $child->parents->map(fn($p) => $p->name)->join(', ') }}
                                         @else
-                                            <span class="text-slate-400 dark:text-slate-500">None</span>
+                                            <span class="text-slate-400 dark:text-slate-500">{{ __('manager.none') }}</span>
                                         @endif
                                     </td>
 
@@ -163,7 +163,7 @@
                                                       shadow-sm shadow-blue-500/20
                                                       hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
                                                       active:translate-y-[1px]">
-                                                View
+                                                {{ __('manager.view') }}
                                             </a>
 
                                             @can('update', $child)
@@ -173,7 +173,7 @@
                                                       hover:bg-slate-200
                                                       dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700
                                                       focus:outline-none focus:ring-4 focus:ring-slate-200">
-                                                Edit
+                                                {{ __('manager.edit') }}
                                             </a>
                                             @endcan
 
@@ -188,7 +188,7 @@
                                                                hover:bg-red-100
                                                                dark:bg-red-950/30 dark:text-red-300 dark:border-red-800/60 dark:hover:bg-red-950/50
                                                                focus:outline-none focus:ring-4 focus:ring-red-200">
-                                                    Delete
+                                                    {{ __('manager.delete') }}
                                                 </button>
                                             </form>
                                             @endcan
@@ -198,10 +198,10 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="px-5 py-8 text-center text-slate-600 dark:text-slate-300">
-                                        No children found.
+                                        {{ __('manager.no_children_found') }}
                                         @if (request('search') || request('room'))
                                             <a href="{{ route('manager.children.index') }}" class="ml-1 text-blue-600 hover:underline dark:text-blue-400">
-                                                Clear filters
+                                                {{ __('manager.clear_filters') }}
                                             </a>
                                         @endif
                                     </td>

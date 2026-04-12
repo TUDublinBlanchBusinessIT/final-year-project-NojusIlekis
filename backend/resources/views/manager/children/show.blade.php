@@ -6,7 +6,7 @@
                     {{ $child->first_name }} {{ $child->last_name }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Child Profile
+                    {{ __('manager.child_profile') }}
                 </p>
             </div>
 
@@ -19,13 +19,13 @@
                           hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                           focus:outline-none focus:ring-4 focus:ring-blue-200
                           active:translate-y-[1px]">
-                    Edit
+                    {{ __('manager.edit') }}
                 </a>
                 @endcan
 
                 @can('delete', $child)
                 <form method="POST" action="{{ route('manager.children.destroy', $child) }}"
-                      onsubmit="return confirm('Delete {{ addslashes($child->first_name . ' ' . $child->last_name) }}? This cannot be undone.')">
+                      onsubmit="return confirm('{{ __('manager.delete_child_confirm', ['name' => addslashes($child->first_name . ' ' . $child->last_name)]) }}')">
                     @csrf
                     @method('DELETE')
                     <button type="submit"
@@ -34,7 +34,7 @@
                                    hover:bg-red-100
                                    dark:bg-red-950/30 dark:text-red-300 dark:border-red-800/60 dark:hover:bg-red-950/50
                                    focus:outline-none focus:ring-4 focus:ring-red-200">
-                        Delete
+                        {{ __('manager.delete') }}
                     </button>
                 </form>
                 @endcan
@@ -43,7 +43,7 @@
                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
                           bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100
                           dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                    Back
+                    {{ __('manager.back') }}
                 </a>
             </div>
         </div>
@@ -73,20 +73,20 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Details</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.details') }}</h3>
                 </div>
                 <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
                     <div class="space-y-3 text-slate-800 dark:text-slate-200">
                         <p>
-                            <span class="font-semibold text-slate-600 dark:text-slate-400">Full Name:</span>
+                            <span class="font-semibold text-slate-600 dark:text-slate-400">{{ __('manager.full_name') }}:</span>
                             {{ $child->first_name }} {{ $child->last_name }}
                         </p>
                         <p>
-                            <span class="font-semibold text-slate-600 dark:text-slate-400">Date of Birth:</span>
+                            <span class="font-semibold text-slate-600 dark:text-slate-400">{{ __('manager.date_of_birth') }}:</span>
                             {{ $child->dob ? $child->dob->format('d M Y') : '—' }}
                         </p>
                         <div>
-                            <span class="font-semibold text-slate-600 dark:text-slate-400">Room:</span>
+                            <span class="font-semibold text-slate-600 dark:text-slate-400">{{ __('manager.room') }}:</span>
                             @can('assignRoom', $child)
                             <form method="POST"
                                   action="{{ route('manager.children.assign-room', $child) }}"
@@ -97,7 +97,7 @@
                                         class="rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-900
                                                focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                                dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
-                                    <option value="">— Unassigned —</option>
+                                    <option value="">{{ __('manager.unassigned_option') }}</option>
                                     @foreach ($rooms as $room)
                                         <option value="{{ $room->id }}" @selected($child->room_id == $room->id)>
                                             {{ $room->name }}
@@ -109,19 +109,19 @@
                                                bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200
                                                dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700
                                                focus:outline-none focus:ring-4 focus:ring-slate-200">
-                                    Update
+                                    {{ __('manager.update') }}
                                 </button>
                             </form>
                             @else
                             <span class="ml-2 text-slate-800 dark:text-slate-200">
-                                {{ $child->room?->name ?? '— Unassigned —' }}
+                                {{ $child->room?->name ?? __('manager.unassigned_option') }}
                             </span>
                             @endcan
                         </div>
                     </div>
                     <div class="space-y-3 text-slate-800 dark:text-slate-200">
                         <div>
-                            <span class="font-semibold text-slate-600 dark:text-slate-400">Allergies:</span>
+                            <span class="font-semibold text-slate-600 dark:text-slate-400">{{ __('manager.allergies') }}:</span>
                             @if($child->hasAllergies())
                                 <div class="flex flex-wrap gap-2 mt-2">
                                     @foreach($child->allergyArray() as $allergy)
@@ -134,12 +134,12 @@
                                     @endforeach
                                 </div>
                             @else
-                                <p class="text-slate-400 mt-2 text-sm">None recorded</p>
+                                <p class="text-slate-400 mt-2 text-sm">{{ __('manager.none_recorded') }}</p>
                             @endif
                         </div>
                         <div>
-                            <span class="font-semibold text-slate-600 dark:text-slate-400">Medical Notes:</span>
-                            <p class="mt-1">{{ $child->medical_notes ?: 'None' }}</p>
+                            <span class="font-semibold text-slate-600 dark:text-slate-400">{{ __('manager.medical_notes') }}:</span>
+                            <p class="mt-1">{{ $child->medical_notes ?: __('manager.none') }}</p>
                         </div>
                     </div>
                 </div>
@@ -149,7 +149,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Linked Parents</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.linked_parents') }}</h3>
                     @can('linkParent', $child)
                         @if ($child->parents->count() < 2)
                             <a href="{{ route('manager.children.link-parent', $child) }}"
@@ -158,10 +158,10 @@
                                       shadow-sm shadow-blue-500/20
                                       hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
                                       active:translate-y-[1px]">
-                                Link Parent
+                                {{ __('manager.link_parent_button') }}
                             </a>
                         @else
-                            <span class="text-xs text-slate-500 dark:text-slate-400">Maximum of 2 parents reached</span>
+                            <span class="text-xs text-slate-500 dark:text-slate-400">{{ __('manager.max_parents_reached') }}</span>
                         @endif
                     @endcan
                 </div>
@@ -180,20 +180,20 @@
                                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
                                                  bg-slate-100 text-slate-700 border border-slate-200
                                                  dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                                        {{ ucfirst($parent->pivot->relationship_type) }}
+                                        {{ __('manager.relationship_types.' . $parent->pivot->relationship_type) }}
                                     </span>
                                 @endif
                                 @if ($parent->pivot->legal_guardian)
                                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
                                                  bg-indigo-50 text-indigo-700 border border-indigo-200
                                                  dark:bg-indigo-950/30 dark:text-indigo-300 dark:border-indigo-800/60">
-                                        Legal Guardian
+                                        {{ __('manager.legal_guardian_badge') }}
                                     </span>
                                 @endif
                                 @can('linkParent', $child)
                                 <form method="POST"
                                       action="{{ route('manager.children.unlink-parent', [$child, $parent]) }}"
-                                      onsubmit="return confirm('Unlink {{ addslashes($parent->name) }} from this child?')">
+                                      onsubmit="return confirm('{{ __('manager.unlink_parent_confirm', ['name' => addslashes($parent->name)]) }}')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -201,14 +201,14 @@
                                                    bg-red-50 text-red-700 border border-red-200 hover:bg-red-100
                                                    dark:bg-red-950/30 dark:text-red-300 dark:border-red-800/60 dark:hover:bg-red-950/50
                                                    focus:outline-none focus:ring-4 focus:ring-red-200">
-                                        Unlink
+                                        {{ __('manager.unlink') }}
                                     </button>
                                 </form>
                                 @endcan
                             </div>
                         </div>
                     @empty
-                        <p class="text-sm text-slate-600 dark:text-slate-300">No parents linked yet.</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('manager.no_parents_linked') }}</p>
                     @endforelse
                 </div>
             </div>
@@ -217,15 +217,15 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Recent Attendance</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.recent_attendance') }}</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-900/60">
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Date</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Status</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Room</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.date') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.status') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.room') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -239,7 +239,7 @@
                                                      {{ $attendance->status === 'present'
                                                         ? 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-950/30 dark:text-green-300 dark:border-green-800/60'
                                                         : 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/30 dark:text-red-300 dark:border-red-800/60' }}">
-                                            {{ ucfirst($attendance->status) }}
+                                            {{ __('manager.' . $attendance->status) }}
                                         </span>
                                     </td>
                                     <td class="px-5 py-3 text-slate-700 dark:text-slate-200">
@@ -248,7 +248,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="px-5 py-4 text-slate-600 dark:text-slate-300">No attendance records.</td>
+                                    <td colspan="3" class="px-5 py-4 text-slate-600 dark:text-slate-300">{{ __('manager.no_attendance_records_short') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -260,15 +260,15 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Recent Daily Reports</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.recent_daily_reports') }}</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-900/60">
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Date</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Carer</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Excerpt</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.date') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.carer') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.excerpt') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -286,7 +286,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="px-5 py-4 text-slate-600 dark:text-slate-300">No daily reports.</td>
+                                    <td colspan="3" class="px-5 py-4 text-slate-600 dark:text-slate-300">{{ __('manager.no_daily_reports') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -298,16 +298,16 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Recent Medication Logs</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.recent_medication_logs') }}</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-900/60">
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Date</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Medication</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Dosage</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Carer</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.date') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.medication') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.dosage') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.carer') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -328,7 +328,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-5 py-4 text-slate-600 dark:text-slate-300">No medication logs.</td>
+                                    <td colspan="4" class="px-5 py-4 text-slate-600 dark:text-slate-300">{{ __('manager.no_medication_logs') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>

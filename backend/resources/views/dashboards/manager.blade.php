@@ -9,7 +9,7 @@
         ];
 
         $kpiOverall = $kpiOverall ?? ($kpi ?? [
-            'rangeLabel' => 'Last 7 days',
+            'rangeLabel' => __('manager.last_7_days'),
             'present' => 0,
             'absent' => 0,
             'rate' => 0,
@@ -28,17 +28,17 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                    Manager Dashboard
+                    {{ __('manager.dashboard_title') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    View attendance and daily update summaries by room and date.
+                    {{ __('manager.dashboard_description') }}
                 </p>
             </div>
 
             <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium
                          bg-indigo-50 text-indigo-700 border border-indigo-200
                          dark:bg-indigo-950/40 dark:text-indigo-200 dark:border-indigo-900/60">
-                Role: {{ auth()->user()->role }}
+                {{ __('manager.role') }}: {{ auth()->user()->role }}
             </span>
         </div>
     </x-slot>
@@ -51,10 +51,10 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
                     <p class="text-slate-700 dark:text-slate-200">
-                        Welcome, <span class="font-semibold">{{ auth()->user()->name }}</span>.
+                        {{ __('manager.welcome') }}, <span class="font-semibold">{{ auth()->user()->name }}</span>.
                     </p>
                     <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                        Use the reports below to monitor attendance and daily updates.
+                        {{ __('manager.dashboard_hint') }}
                     </p>
                 </div>
             </div>
@@ -64,12 +64,12 @@
                 <div class="bg-amber-50 rounded-2xl border border-amber-200 shadow-sm p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-semibold text-amber-800">
-                            💳 Pending Payments
+                            💳 {{ __('manager.pending_payments') }}
                             <span class="ml-2 inline-flex items-center justify-center w-6 h-6 bg-amber-500 text-white text-xs font-bold rounded-full">
                                 {{ $pendingPaymentCount }}
                             </span>
                         </h3>
-                        <a href="{{ route('manager.invoices.index') }}" class="text-sm text-amber-700 hover:underline">View all invoices →</a>
+                        <a href="{{ route('manager.invoices.index') }}" class="text-sm text-amber-700 hover:underline">{{ __('manager.view_all_invoices') }} →</a>
                     </div>
 
                     <div class="space-y-3">
@@ -78,11 +78,11 @@
                                class="flex items-center justify-between bg-white rounded-xl p-4 border border-amber-100 hover:border-amber-300 transition">
                                 <div>
                                     <p class="font-medium text-gray-800">
-                                        {{ $payment->parent->first_name ?? $payment->parent->name ?? 'Parent' }} {{ $payment->parent->last_name ?? '' }}
+                                        {{ $payment->parent->first_name ?? $payment->parent->name ?? __('manager.parent') }} {{ $payment->parent->last_name ?? '' }}
                                     </p>
                                     <p class="text-sm text-gray-500">
                                         {{ $payment->child->first_name ?? '' }} {{ $payment->child->last_name ?? '' }} —
-                                        Invoice #{{ $payment->id }}
+                                        {{ __('manager.invoice') }} #{{ $payment->id }}
                                     </p>
                                 </div>
                                 <div class="text-right">
@@ -103,10 +103,10 @@
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                                    Attendance KPIs
+                                    {{ __('manager.attendance_kpis') }}
                                 </h3>
                                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                                    Range: {{ $kpiOverall['rangeLabel'] ?? 'Last 7 days' }}
+                                    {{ __('manager.range') }}: {{ $kpiOverall['rangeLabel'] ?? __('manager.last_7_days') }}
                                 </p>
                             </div>
 
@@ -115,29 +115,29 @@
                                       bg-slate-50 text-slate-700 border border-slate-200
                                       hover:bg-slate-100
                                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                                Clear
+                                {{ __('manager.clear') }}
                             </a>
                         </div>
 
                         <form id="kpiFilterForm" method="GET" action="{{ route('manager.dashboard') }}"
                               class="grid grid-cols-1 md:grid-cols-4 gap-3">
                             <div>
-                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Start date</label>
+                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('manager.start_date') }}</label>
                                 <input type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}"
                                        class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40" />
                             </div>
 
                             <div>
-                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">End date</label>
+                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('manager.end_date') }}</label>
                                 <input type="date" name="end_date" value="{{ $filters['end_date'] ?? '' }}"
                                        class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40" />
                             </div>
 
                             <div>
-                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">Room</label>
+                                <label class="text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('manager.room') }}</label>
                                 <select name="room_id"
                                         class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40">
-                                    <option value="">All rooms</option>
+                                    <option value="">{{ __('manager.all_rooms') }}</option>
                                     @foreach($rooms as $room)
                                         <option value="{{ $room->id }}"
                                             @selected(($filters['room_id'] ?? null) == $room->id)>
@@ -156,7 +156,7 @@
                                                focus:outline-none focus:ring-4 focus:ring-blue-200
                                                active:translate-y-[1px]
                                                dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                                    Apply
+                                    {{ __('manager.apply') }}
                                 </button>
                             </div>
                         </form>
@@ -164,26 +164,26 @@
 
                     <div class="mt-5">
                         <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
-                            Overall (All Rooms)
+                            {{ __('manager.overall_all_rooms') }}
                         </p>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                                <p class="text-sm text-slate-600 dark:text-slate-300">Present</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('manager.present') }}</p>
                                 <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
                                     {{ $kpiOverall['present'] ?? 0 }}
                                 </p>
                             </div>
 
                             <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                                <p class="text-sm text-slate-600 dark:text-slate-300">Absent</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('manager.absent') }}</p>
                                 <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
                                     {{ $kpiOverall['absent'] ?? 0 }}
                                 </p>
                             </div>
 
                             <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                                <p class="text-sm text-slate-600 dark:text-slate-300">Attendance Rate</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('manager.attendance_rate') }}</p>
                                 <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
                                     {{ $kpiOverall['rate'] ?? 0 }}%
                                 </p>
@@ -194,26 +194,26 @@
                     @if(!empty($kpiRoom))
                         <div class="mt-6">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
-                                Selected Room: {{ $kpiRoom['room_name'] ?? ('Room #' . ($kpiRoom['room_id'] ?? '')) }}
+                                {{ __('manager.selected_room') }}: {{ $kpiRoom['room_name'] ?? ('Room #' . ($kpiRoom['room_id'] ?? '')) }}
                             </p>
 
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                                    <p class="text-sm text-slate-600 dark:text-slate-300">Present</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('manager.present') }}</p>
                                     <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
                                         {{ $kpiRoom['present'] ?? 0 }}
                                     </p>
                                 </div>
 
                                 <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                                    <p class="text-sm text-slate-600 dark:text-slate-300">Absent</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('manager.absent') }}</p>
                                     <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
                                         {{ $kpiRoom['absent'] ?? 0 }}
                                     </p>
                                 </div>
 
                                 <div class="rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-                                    <p class="text-sm text-slate-600 dark:text-slate-300">Attendance Rate</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('manager.attendance_rate') }}</p>
                                     <p class="mt-1 text-2xl font-semibold text-slate-900 dark:text-slate-100">
                                         {{ $kpiRoom['rate'] ?? 0 }}%
                                     </p>
@@ -224,17 +224,17 @@
 
                     <div class="mt-7">
                         <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3">
-                            Room Breakdown
+                            {{ __('manager.room_breakdown') }}
                         </p>
 
                         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
                             <table class="min-w-full text-sm">
                                 <thead class="bg-slate-50 dark:bg-slate-900/40">
                                     <tr class="text-left">
-                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Room</th>
-                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Present</th>
-                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Absent</th>
-                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">Rate</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">{{ __('manager.room') }}</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">{{ __('manager.present') }}</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">{{ __('manager.absent') }}</th>
+                                        <th class="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">{{ __('manager.rate') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -256,7 +256,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="4" class="px-4 py-4 text-slate-600 dark:text-slate-300">
-                                                No room attendance found in this date range.
+                                                {{ __('manager.no_room_data') }}
                                             </td>
                                         </tr>
                                     @endforelse
@@ -275,11 +275,11 @@
                     <div class="flex items-start justify-between gap-4">
                         <div>
                             <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                                Attendance Trend
+                                {{ __('manager.attendance_trend') }}
                             </h3>
                             <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                                {{ !empty($filters['room_id']) ? 'Filtered by selected room' : 'All rooms' }}
-                                (Present vs Absent per day)
+                                {{ !empty($filters['room_id']) ? __('manager.filtered_room') : __('manager.all_rooms') }}
+                                ({{ __('manager.present') }} vs {{ __('manager.absent') }} {{ __('manager.per_day') }})
                             </p>
                         </div>
                     </div>
@@ -292,12 +292,12 @@
                     @if(!$hasTrendData)
                         <div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700
                                     dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-200">
-                            No attendance records found for this range{{ !empty($filters['room_id']) ? ' in the selected room' : '' }}.
-                            Try a different date range{{ empty($filters['room_id']) ? '' : ' or select All rooms' }}.
+                            {{ __('manager.no_attendance_records') }}{{ !empty($filters['room_id']) ? ' ' . __('manager.in_selected_room') : '' }}.
+                            {{ __('manager.try_different_range') }}{{ empty($filters['room_id']) ? '' : ' ' . __('manager.or_select_all_rooms') }}.
                         </div>
                     @else
                         <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">
-                            Tip: Use the filters above to compare rooms and date ranges.
+                            {{ __('manager.filter_tip') }}
                         </p>
                     @endif
                 </div>
@@ -311,10 +311,10 @@
                             dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                            Attendance Summary
+                            {{ __('manager.attendance_summary') }}
                         </h3>
                         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                            See present/absent/not marked totals and a per-child breakdown.
+                            {{ __('manager.attendance_summary_desc') }}
                         </p>
 
                         <a href="{{ route('manager.reports.attendance') }}"
@@ -325,7 +325,7 @@
                                   focus:outline-none focus:ring-4 focus:ring-blue-200
                                   active:translate-y-[1px]
                                   dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                            View Attendance
+                            {{ __('manager.view_attendance') }}
                         </a>
                     </div>
                 </div>
@@ -335,10 +335,10 @@
                             dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                            Tasks Summary (Daily Updates)
+                            {{ __('manager.tasks_summary') }}
                         </h3>
                         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                            Track daily update completion (meals/sleep/notes) by room and date.
+                            {{ __('manager.tasks_summary_desc') }}
                         </p>
 
                         <a href="{{ route('manager.reports.tasks') }}"
@@ -349,7 +349,7 @@
                                   focus:outline-none focus:ring-4 focus:ring-blue-200
                                   active:translate-y-[1px]
                                   dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                            View Tasks
+                            {{ __('manager.view_tasks') }}
                         </a>
                     </div>
                 </div>
@@ -359,10 +359,10 @@
                             dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                            Daily Reports
+                            {{ __('manager.daily_reports') }}
                         </h3>
                         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                            View each child’s end-of-day report and any uploaded photos/videos.
+                            {{ __('manager.daily_reports_desc') }}
                         </p>
 
                         <a href="{{ route('manager.reports.daily-reports.index') }}"
@@ -373,7 +373,7 @@
                                   focus:outline-none focus:ring-4 focus:ring-blue-200
                                   active:translate-y-[1px]
                                   dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                            View Daily Reports
+                            {{ __('manager.view_daily_reports') }}
                         </a>
                     </div>
                 </div>
@@ -383,10 +383,10 @@
                             dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                            Medication Logs
+                            {{ __('manager.medication_logs') }}
                         </h3>
                         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                            Track medication records logged by carers for each child.
+                            {{ __('manager.medication_logs_desc') }}
                         </p>
 
                         <a href="{{ route('manager.reports.medication.index') }}"
@@ -397,7 +397,7 @@
                                   focus:outline-none focus:ring-4 focus:ring-blue-200
                                   active:translate-y-[1px]
                                   dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                            View Medication Logs
+                            {{ __('manager.view_medication') }}
                         </a>
                     </div>
                 </div>
@@ -407,10 +407,10 @@
                             dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                            Invoices
+                            {{ __('manager.invoices') }}
                         </h3>
                         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                            Create and manage monthly invoices for children and parents.
+                            {{ __('manager.invoices_desc') }}
                         </p>
 
                         <a href="{{ route('manager.invoices.index') }}"
@@ -421,7 +421,7 @@
                                   focus:outline-none focus:ring-4 focus:ring-blue-200
                                   active:translate-y-[1px]
                                   dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                            View Invoices
+                            {{ __('manager.view_invoices') }}
                         </a>
                     </div>
                 </div>
@@ -430,18 +430,18 @@
                 <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-6
                             dark:border-slate-800 dark:bg-slate-950/40">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                        Incident Reports
+                        {{ __('manager.incident_reports') }}
                     </h3>
 
                     <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">
-                        Review incidents reported by carers and follow up with parents if required.
+                        {{ __('manager.incident_reports_desc') }}
                     </p>
 
                     <a href="{{ route('manager.reports.incidents') }}"
                        class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white
                               bg-gradient-to-r from-red-600 to-red-700
                               hover:brightness-110 shadow-sm">
-                        View Incidents
+                        {{ __('manager.view_incidents') }}
                     </a>
                 </div>
 
@@ -450,10 +450,10 @@
                             dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                            Parent Enquiries
+                            {{ __('manager.parent_enquiries') }}
                         </h3>
                         <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                            View and reply to fee and invoice enquiries sent by parents.
+                            {{ __('manager.parent_enquiries_desc') }}
                         </p>
 
                         <a href="{{ route('manager.messages.index') }}"
@@ -464,7 +464,7 @@
                                   focus:outline-none focus:ring-4 focus:ring-blue-200
                                   active:translate-y-[1px]
                                   dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                            View Enquiries
+                            {{ __('manager.view_enquiries') }}
                         </a>
                     </div>
                 </div>
