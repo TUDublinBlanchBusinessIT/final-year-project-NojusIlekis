@@ -330,4 +330,10 @@ return [
 'discount_amount' => 'Discount Amount',
 'update_discount' => 'Update Discount',
 'current_line_items' => 'Current Line Items',
+
+'manage_all_enrolled_children' => 'Manage all enrolled children.',
+'manage_carers' => 'Manage all registered carers.',
+'search_carers' => 'Search by name or email…',
+'all_carers' => 'All Carers',
+'current_room' => 'Current Room',
 ];
