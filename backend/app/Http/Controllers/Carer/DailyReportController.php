@@ -46,6 +46,11 @@ class DailyReportController extends Controller
             'media.*' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mov|max:10240'
         ]);
 
+        // Verify the child belongs to one of this carer's assigned rooms
+        $child = Child::findOrFail($request->child_id);
+        $carerRoomIds = auth()->user()->activeRooms()->pluck('rooms.id')->toArray();
+        abort_unless(in_array($child->room_id, $carerRoomIds), 403, 'This child is not in your assigned rooms.');
+
         $today = now()->toDateString();
 
         // Prevent duplicate for same child + date

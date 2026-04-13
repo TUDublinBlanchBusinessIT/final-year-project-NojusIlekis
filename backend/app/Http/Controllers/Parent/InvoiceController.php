@@ -50,6 +50,7 @@ class InvoiceController extends Controller
             ->with('success', 'Payment submitted successfully. The manager will review and confirm your payment.');
     }
 
+    // Note: shares the manager print view — if manager-only variables are added to that view, create a separate parent print view
     public function print(Invoice $invoice)
     {
         abort_unless($invoice->parent_id === auth()->id(), 403);

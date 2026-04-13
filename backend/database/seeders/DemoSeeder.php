@@ -241,11 +241,15 @@ class DemoSeeder extends Seeder
             $this->makeInvoice($lilyMurphy, $parent2, '2026-03-01', '2026-03-31', '2026-03-31', 650, 0, 'sent', [
                 ['3-day care Mon/Wed/Fri', 1, 600.00],
                 ['Art supplies',           1,  50.00],
+            ], [
+                'payment_status'       => 'payment_submitted',
+                'payment_submitted_at' => now()->subDays(3),
+                'payment_notes'        => 'Bank transfer receipt uploaded.',
             ]);
         }
 
         if ($oliverDavis && $parent3) {
-            $this->makeInvoice($oliverDavis, $parent3, '2026-03-01', '2026-03-31', '2026-03-31', 900, 0, 'draft', [
+            $this->makeInvoice($oliverDavis, $parent3, '2026-04-01', '2026-04-30', '2026-04-30', 900, 0, 'draft', [
                 ['Full-day care Mon–Fri', 1, 850.00],
                 ['Settling-in sessions',  1,  50.00],
             ]);
@@ -391,7 +395,8 @@ class DemoSeeder extends Seeder
         float  $total,
         float  $discount,
         string $status,
-        array  $items
+        array  $items,
+        array  $extra = []
     ): Invoice {
         $invoice = Invoice::updateOrCreate(
             [
@@ -400,12 +405,12 @@ class DemoSeeder extends Seeder
                 'period_start' => $start,
                 'period_end'   => $end,
             ],
-            [
+            array_merge([
                 'due_date'  => $due,
                 'total'     => $total,
                 'discount'  => $discount,
                 'status'    => $status,
-            ]
+            ], $extra)
         );
 
         // Only add line items on first creation (avoid duplicates on re-run)
