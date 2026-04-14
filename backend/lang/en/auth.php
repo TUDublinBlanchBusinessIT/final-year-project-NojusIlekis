@@ -33,4 +33,39 @@ return [
     'resend_verification' => 'Resend Verification Email',
     'logout' => 'Log Out',
 
+    'app_title' => 'SnugBug | Childcare Updates',
+    'logo_alt' => 'SnugBug Logo',
+    'app_name' => 'SnugBug',
+    'app_tagline' => 'Snug updates for Bug size humans.',
+
+    'hero_title' => "Childcare updates,\nmade simple.",
+    'hero_subtitle' => 'Calm, secure access for Parents, Carers and Managers — keeping everyone connected throughout the day.',
+
+    'feature_1' => 'Role-based dashboards',
+    'feature_2' => 'Live daily updates',
+    'feature_3' => 'Attendance tracking',
+    'feature_4' => 'Secure & privacy-focused',
+
+    'log_in' => 'Log In',
+    'create_account' => 'Create Account',
+
+    'why_snugbug' => 'Why SnugBug?',
+    'for_parents' => 'For Parents',
+    'for_parents_desc' => 'Real-time updates, photos and reports.',
+    'for_carers' => 'For Carers',
+    'for_carers_desc' => 'Simple tools to log daily progress.',
+    'for_managers' => 'For Managers',
+    'for_managers_desc' => 'Clear oversight and attendance tracking.',
+
+    'app_title' => 'SnugBug | Childcare Updates',
+    'logo_alt' => 'SnugBug Logo',
+    'app_tagline' => 'Snug updates for Bug size humans.',
+    'hero_title' => "Childcare updates,\nmade simple.",
+    'hero_subtitle' => 'Calm, secure access for Parents, Carers and Managers — without distraction.',
+    'feature_1' => 'Role dashboards + protected routes',
+    'feature_2' => 'Updates that are easy to read',
+    'feature_3' => 'Privacy-first approach (GDPR mindful)',
+    'feature_4' => 'Secure & privacy-focused',
+    'footer_copy' => '© :year SnugBug. All rights reserved.',
 ];
+

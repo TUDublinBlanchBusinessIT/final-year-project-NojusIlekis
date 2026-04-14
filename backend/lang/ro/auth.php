@@ -33,4 +33,29 @@ return [
     'resend_verification' => 'Retrimite emailul de verificare',
     'logout' => 'Deconectare',
 
+
+    'app_title' => 'SnugBug | Actualizări pentru îngrijirea copiilor',
+    'logo_alt' => 'Logo SnugBug',
+    'app_name' => 'SnugBug',
+    'app_tagline' => 'Actualizări confortabile pentru oameni cât o gânganie.',
+
+    'hero_title' => "Actualizări despre îngrijirea copiilor,\nfăcute simple.",
+    'hero_subtitle' => 'Acces calm și sigur pentru Părinți, Îngrijitori și Manageri — menținând pe toată lumea conectată pe parcursul zilei.',
+
+    'feature_1' => 'Tablouri de bord bazate pe rol',
+    'feature_2' => 'Actualizări zilnice live',
+    'feature_3' => 'Monitorizarea prezenței',
+    'feature_4' => 'Sigur și axat pe confidențialitate',
+
+    'log_in' => 'Autentificare',
+    'create_account' => 'Creează cont',
+
+    'why_snugbug' => 'De ce SnugBug?',
+    'for_parents' => 'Pentru Părinți',
+    'for_parents_desc' => 'Actualizări în timp real, fotografii și rapoarte.',
+    'for_carers' => 'Pentru Îngrijitori',
+    'for_carers_desc' => 'Instrumente simple pentru a înregistra progresul zilnic.',
+    'for_managers' => 'Pentru Manageri',
+    'for_managers_desc' => 'Supraveghere clară și monitorizarea prezenței.',
 ];
+

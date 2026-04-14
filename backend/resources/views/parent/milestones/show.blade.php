@@ -8,7 +8,7 @@
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
                     {{ __('parent.age') }}: {{ $child->age_in_months }} {{ __('parent.months') }} ·
                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200">
-                        {{ \App\Models\Milestone::AGE_RANGES[$ageRange] ?? $ageRange }}
+                        {{ __('parent.age_range_' . str_replace('-', '_', $ageRange)) }}
                     </span>
                     · {{ $overallProgress['achieved'] }}/{{ $overallProgress['total'] }} {{ __('parent.milestones_observed') }}
                 </p>
@@ -27,7 +27,9 @@
             {{-- Overall Progress Bar --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40 p-5">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wide">{{ __('parent.overall_progress') }}</h3>
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wide">
+                        {{ __('parent.overall_progress') }}
+                    </h3>
                     <span class="text-sm font-bold text-slate-900 dark:text-slate-100">
                         {{ $overallProgress['achieved'] }} / {{ $overallProgress['total'] }} — {{ $overallProgress['percentage'] }}%
                     </span>
@@ -53,7 +55,7 @@
                     @php $c = $colours[$category] ?? ['bg' => 'bg-gray-500', 'light' => 'bg-gray-100', 'text' => 'text-gray-700', 'border' => 'border-gray-200']; @endphp
                     <div class="rounded-2xl border {{ $c['border'] }} bg-white shadow-sm dark:bg-slate-950/40 p-5">
                         <h3 class="font-semibold {{ $c['text'] }} mb-3">
-                            {{ \App\Models\Milestone::CATEGORIES[$category] ?? $category }}
+                            {{ __('parent.category_' . str_replace('-', '_', $category)) }}
                         </h3>
                         <div class="flex items-center gap-3">
                             <div class="flex-1 h-3 {{ $c['light'] }} rounded-full overflow-hidden">
@@ -63,7 +65,9 @@
                                 {{ $data['achieved'] }}/{{ $data['total'] }}
                             </span>
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ $data['percentage'] }}% {{ __('parent.observed') }}</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                            {{ $data['percentage'] }}% {{ __('parent.observed') }}
+                        </p>
                     </div>
                 @endforeach
             </div>
@@ -71,9 +75,13 @@
             {{-- Milestone List per Category --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('parent.all_milestones') }}</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
+                        {{ __('parent.all_milestones') }}
+                    </h3>
                     <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                        {{ __('parent.milestones_for_age_range') }} {{ \App\Models\Milestone::AGE_RANGES[$ageRange] ?? $ageRange }} {{ __('parent.age_range') }}.
+                        {{ __('parent.milestones_for_age_range', [
+                        'range' => __('parent.age_range_' . str_replace('-', '_', $ageRange))
+                            ]) }}
                     </p>
                 </div>
 
@@ -83,7 +91,7 @@
                         <div>
                             <h4 class="text-sm font-semibold {{ $c['text'] }} uppercase tracking-wide mb-3 flex items-center gap-2">
                                 <span class="inline-block w-2.5 h-2.5 rounded-full {{ $c['bg'] }}"></span>
-                                {{ \App\Models\Milestone::CATEGORIES[$category] ?? $category }}
+                                {{ __('parent.category_' . str_replace('-', '_', $category)) }}
                             </h4>
 
                             <div class="space-y-2">
@@ -92,7 +100,6 @@
                                     <div class="flex items-start gap-3 rounded-xl p-3
                                                 {{ $achieved ? 'bg-green-50 dark:bg-green-950/10' : 'bg-slate-50 dark:bg-slate-900/20' }}">
 
-                                        {{-- Status icon --}}
                                         <div class="mt-0.5 flex-shrink-0">
                                             @if($achieved)
                                                 <div class="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
@@ -128,7 +135,9 @@
                             </div>
                         </div>
                     @empty
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">{{ __('parent.no_milestones_for_age') }}</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">
+                            {{ __('parent.no_milestones_for_age') }}
+                        </p>
                     @endforelse
                 </div>
             </div>

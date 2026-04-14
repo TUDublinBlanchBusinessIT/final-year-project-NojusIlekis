@@ -6,7 +6,7 @@
                     {{ __('parent.my_invoices') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    {{ __('parent.view_invoices_description') }}
+                    {{ __('parent.my_invoices_desc') }}
                 </p>
             </div>
         </div>
@@ -82,7 +82,7 @@
                             @empty
                                 <tr>
                                     <td colspan="7" class="px-5 py-6 text-slate-600">
-                                        {{ __('parent.no_invoices') }}
+                                        {{ __('parent.no_invoices_available') }}
                                     </td>
                                 </tr>
                             @endforelse

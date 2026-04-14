@@ -239,5 +239,22 @@ return [
 'acknowledgement_description' => 'View items waiting for your acknowledgement.',
 'back_to_dashboard' => 'Back to Dashboard',
 'already_signed' => 'Already signed',
+'my_invoices' => 'My Invoices',
+'my_invoices_desc' => 'View invoices for your children.',
+'invoice_list' => 'Invoice List',
+'invoice_id' => 'Invoice ID',
+'no_invoices_available' => 'No invoices available.',
+
+
+
+'category_wellbeing' => 'Well-being',
+'category_identity_belonging' => 'Identity & Belonging',
+'category_communicating' => 'Communicating',
+'category_exploring_thinking' => 'Exploring & Thinking',
+
+'milestones_for_age_range' => 'Milestones for :range.',
+'age_range_48_60' => '4 to 5 years',
+'age_range_36_48' => '3 to 4 years',
+'age_range_24_36' => '2 to 3 years',
 
 ];

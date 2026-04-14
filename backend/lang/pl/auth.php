@@ -33,4 +33,28 @@ return [
     'resend_verification' => 'Wyślij ponownie email weryfikacyjny',
     'logout' => 'Wyloguj się',
 
+    'app_title' => 'SnugBug | Aktualizacje opieki nad dziećmi',
+    'logo_alt' => 'Logo SnugBug',
+    'app_name' => 'SnugBug',
+    'app_tagline' => 'Przytulne aktualizacje dla małych ludzików.',
+
+    'hero_title' => "Aktualizacje opieki nad dziećmi,\nw prostszej formie.",
+    'hero_subtitle' => 'Spokojny i bezpieczny dostęp dla Rodziców, Opiekunów i Menedżerów — utrzymujący wszystkich w kontakcie przez cały dzień.',
+
+    'feature_1' => 'Panele zależne od roli',
+    'feature_2' => 'Bieżące codzienne aktualizacje',
+    'feature_3' => 'Śledzenie obecności',
+    'feature_4' => 'Bezpieczne i dbające o prywatność',
+
+    'log_in' => 'Zaloguj się',
+    'create_account' => 'Utwórz konto',
+
+    'why_snugbug' => 'Dlaczego SnugBug?',
+    'for_parents' => 'Dla Rodziców',
+    'for_parents_desc' => 'Aktualizacje na żywo, zdjęcia i raporty.',
+    'for_carers' => 'Dla Opiekunów',
+    'for_carers_desc' => 'Proste narzędzia do zapisywania codziennych postępów.',
+    'for_managers' => 'Dla Menedżerów',
+    'for_managers_desc' => 'Jasny nadzór i monitorowanie obecności.',
 ];
+

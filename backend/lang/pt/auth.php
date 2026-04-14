@@ -33,4 +33,28 @@ return [
     'resend_verification' => 'Reenviar email de verificação',
     'logout' => 'Terminar sessão',
 
+    'app_title' => 'SnugBug | Atualizações sobre cuidados infantis',
+    'logo_alt' => 'Logótipo SnugBug',
+    'app_name' => 'SnugBug',
+    'app_tagline' => 'Atualizações aconchegantes para pequenos humanos.',
+
+    'hero_title' => "Atualizações sobre cuidados infantis,\nfeitas de forma simples.",
+    'hero_subtitle' => 'Acesso calmo e seguro para Pais, Cuidadores e Gestores — mantendo todos ligados ao longo do dia.',
+
+    'feature_1' => 'Painéis por função',
+    'feature_2' => 'Atualizações diárias em tempo real',
+    'feature_3' => 'Controlo de presenças',
+    'feature_4' => 'Seguro e focado na privacidade',
+
+    'log_in' => 'Iniciar sessão',
+    'create_account' => 'Criar conta',
+
+    'why_snugbug' => 'Porquê SnugBug?',
+    'for_parents' => 'Para Pais',
+    'for_parents_desc' => 'Atualizações em tempo real, fotografias e relatórios.',
+    'for_carers' => 'Para Cuidadores',
+    'for_carers_desc' => 'Ferramentas simples para registar o progresso diário.',
+    'for_managers' => 'Para Gestores',
+    'for_managers_desc' => 'Supervisão clara e controlo de presenças.',
 ];
+

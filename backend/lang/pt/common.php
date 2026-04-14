@@ -48,4 +48,11 @@ return [
     'subtotal' => 'Subtotal',
     'discount' => 'Desconto',
     'final_total' => 'Total final',
+
+    'dashboard' => 'Painel',
+'my_children' => 'Os Meus Filhos',
+'incidents' => 'Incidentes',
+'invoices' => 'Faturas',
+'milestones' => 'Marcos',
+'messages' => 'Mensagens',
 ];
