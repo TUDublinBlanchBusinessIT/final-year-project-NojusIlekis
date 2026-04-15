@@ -116,4 +116,26 @@ return [
 
     'messages' => 'Mesaje',
     'send' => 'Trimite',
+
+    'current_time' => 'Ora curentă',
+'select_child' => 'Selectează copil',
+'choose_child' => 'Alege copil...',
+'daily_report_label' => 'Raport zilnic de comportament și stare de bine',
+'edit' => 'Editează',
+'daily_report_placeholder' => 'Scrie cum a fost ziua copilului...',
+'edit_hint' => 'Apasă pe Editează pentru a actualiza acest raport.',
+'upload_media' => 'Încarcă Poze / Videoclipuri',
+'save_daily_report' => 'Salvează Raportul Zilnic',
+
+'milestones_intro' => 'Selectează un copil pentru a vedea sau înregistra progresul reperelor Aistear.',
+'children_in_rooms' => 'Copii din camerele tale',
+'back' => 'Înapoi',
+'all' => 'Toate',
+'mark_observed' => 'Marchează ca observat',
+'add_note' => 'Adaugă notă',
+'remove_observation' => 'Elimină observația',
+'observed_by' => 'Observat de',
+
+'conversations_with_parents' => 'Conversații cu părinții.',
+'new_message' => 'Mesaj nou',
 ];

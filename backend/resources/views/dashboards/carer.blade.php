@@ -1,20 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center gap-4">
-            <img src="{{ asset('images/image.png') }}"
-                 alt="SnugBug Logo"
-                 class="h-12 w-12 object-contain">
 
-            <div>
-                <h2 class="text-2xl font-bold text-slate-800 text-white">
-                    {{ __('carer.app_name') }}
-                </h2>
-                <p class="text-sm text-slate-500">
-                    {{ __('carer.app_tagline') }}
-                </p>
-            </div>
-        </div>
-    </x-slot>
 
     <div class="py-10 px-6 max-w-6xl mx-auto">
 
