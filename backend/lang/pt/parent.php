@@ -147,4 +147,18 @@ return [
 
 'milestones_for_age_range' => 'Marcos para :range.',
 'age_range_48_60' => '4 a 5 anos',
+
+    'pending_acknowledgements' => 'Confirmações pendentes',
+    'pending' => 'Pendente',
+
+    'daily_report' => 'Relatório Diário',
+    'record' => 'Registo',
+
+    'type_full_name_sign' => 'Digite o seu nome completo para assinar',
+    'confirm_read_understood' => 'Confirmo que li e compreendi este item',
+    'sign_acknowledge' => 'Assinar e Confirmar',
+
+    'no_pending_caught_up' => 'Sem confirmações pendentes — está tudo atualizado.',
+    
+
 ];

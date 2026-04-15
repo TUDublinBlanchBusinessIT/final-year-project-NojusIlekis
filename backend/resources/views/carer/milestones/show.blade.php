@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div class="flex items-start gap-6">
-                <a href="{{ route('carer.attendance.index') }}"
+                <a href="{{ route('carer.milestones.index') }}"
                    class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50
                           dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
                     ← {{ __('carer.back') }}
@@ -25,17 +25,14 @@
     <div class="py-8">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            {{-- Flash messages --}}
             @if(session('success'))
                 <div class="rounded-2xl border border-emerald-200 bg-emerald-50/30 p-4 text-emerald-800 dark:border-emerald-900/60 dark:bg-emerald-950/10 dark:text-emerald-100">
                     {{ session('success') }}
                 </div>
             @endif
 
-            {{-- Allergy Alert --}}
             <x-allergy-alert :child="$child" />
 
-            {{-- Progress Summary Cards --}}
             @php
                 $categoryColours = [
                     'wellbeing'           => ['bg' => 'bg-green-100',  'text' => 'text-green-800',  'bar' => 'bg-green-500',  'border' => 'border-green-200'],
@@ -52,17 +49,22 @@
                         $c = $categoryColours[$key];
                     @endphp
                     <div class="rounded-2xl border {{ $c['border'] }} {{ $c['bg'] }} p-4 shadow-sm">
-                        <p class="text-xs font-semibold {{ $c['text'] }} uppercase tracking-wide mb-2">{{ $label }}</p>
-                        <p class="text-2xl font-bold {{ $c['text'] }}">{{ $p['achieved'] }}<span class="text-base font-normal">/{{ $p['total'] }}</span></p>
+                        <p class="text-xs font-semibold {{ $c['text'] }} uppercase tracking-wide mb-2">
+                            {{ __('carer.category_' . str_replace('-', '_', $key)) }}
+                        </p>
+                        <p class="text-2xl font-bold {{ $c['text'] }}">
+                            {{ $p['achieved'] }}<span class="text-base font-normal">/{{ $p['total'] }}</span>
+                        </p>
                         <div class="mt-2 h-2 rounded-full bg-white/60">
                             <div class="h-2 rounded-full {{ $c['bar'] }}" style="width: {{ $p['percentage'] }}%"></div>
                         </div>
-                        <p class="text-xs {{ $c['text'] }} mt-1">{{ $p['percentage'] }}% {{ __('carer.achieved') }}</p>
+                        <p class="text-xs {{ $c['text'] }} mt-1">
+                            {{ $p['percentage'] }}% {{ __('carer.achieved') }}
+                        </p>
                     </div>
                 @endforeach
             </div>
 
-            {{-- Category Filter Tabs --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40">
                 <div class="flex flex-wrap gap-1 p-3 border-b border-slate-200 dark:border-slate-800">
                     <a href="{{ route('carer.milestones.show', $child) }}"
@@ -70,23 +72,23 @@
                               {{ !$categoryFilter ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800' }}">
                         {{ __('carer.all') }}
                     </a>
+
                     @foreach(\App\Models\Milestone::CATEGORIES as $key => $label)
                         <a href="{{ route('carer.milestones.show', [$child, 'category' => $key]) }}"
                            class="rounded-lg px-4 py-2 text-sm font-medium transition
                                   {{ $categoryFilter === $key ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800' }}">
-                            {{ $label }}
+                            {{ __('carer.category_' . str_replace('-', '_', $key)) }}
                         </a>
                     @endforeach
                 </div>
 
-                {{-- Milestone Checklist --}}
                 <div class="p-5 space-y-8">
                     @forelse($milestones as $category => $categoryMilestones)
                         @php $c = $categoryColours[$category]; @endphp
                         <div>
                             <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100 mb-3 flex items-center gap-2">
                                 <span class="inline-block w-3 h-3 rounded-full {{ $c['bar'] }}"></span>
-                                {{ \App\Models\Milestone::CATEGORIES[$category] ?? $category }}
+                                {{ __('carer.category_' . str_replace('-', '_', $category)) }}
                             </h3>
 
                             <div class="space-y-3">
@@ -96,7 +98,6 @@
                                                 {{ $achieved ? 'border-green-300 bg-green-50 dark:border-green-900/60 dark:bg-green-950/10' : 'border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/20' }}">
                                         <div class="flex items-start gap-4">
 
-                                            {{-- Status circle --}}
                                             <div class="mt-0.5 flex-shrink-0">
                                                 @if($achieved)
                                                     <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
@@ -111,6 +112,7 @@
 
                                             <div class="flex-1 min-w-0">
                                                 <p class="font-semibold text-slate-900 dark:text-slate-100">{{ $milestone->name }}</p>
+
                                                 @if($milestone->description)
                                                     <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{{ $milestone->description }}</p>
                                                 @endif
@@ -126,6 +128,7 @@
                                                             @endif
                                                         </div>
                                                     @endif
+
                                                     <form method="POST" action="{{ route('carer.milestones.toggle', [$child, $milestone]) }}" class="mt-2">
                                                         @csrf
                                                         <button type="submit" class="text-xs text-red-600 hover:text-red-800 underline">

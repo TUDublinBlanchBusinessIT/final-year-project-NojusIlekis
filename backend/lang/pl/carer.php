@@ -138,4 +138,24 @@ return [
 
 'conversations_with_parents' => 'Rozmowy z rodzicami.',
 'new_message' => 'Nowa wiadomość',
+
+
+'milestones' => 'Kamienie milowe',
+'back' => 'Powrót',
+'age' => 'Wiek',
+'months' => 'miesięcy',
+'achieved' => 'osiągnięto',
+'all' => 'Wszystkie',
+'observed_by' => 'Zaobserwowane przez',
+'unknown' => 'Nieznany',
+'on' => 'dnia',
+'remove_observation' => 'Usuń obserwację',
+'mark_as_observed' => 'Oznacz jako zaobserwowane',
+'add_note' => 'Dodaj notatkę',
+'observation_notes_placeholder' => 'Dodaj notatkę z obserwacji...',
+'no_milestones_age_range' => 'Nie znaleziono kamieni milowych dla tego przedziału wiekowego.',
+'category_wellbeing' => 'Dobrostan',
+'category_identity_belonging' => 'Tożsamość i przynależność',
+'category_communicating' => 'Komunikacja',
+'category_exploring_thinking' => 'Odkrywanie i myślenie',
 ];

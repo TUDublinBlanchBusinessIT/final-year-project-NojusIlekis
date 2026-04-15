@@ -16,65 +16,65 @@
             @endif
 
             {{-- Pending Acknowledgements --}}
-            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
-                        dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
-                <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
-                        {{ __('parent.pending_acknowledgements') }}
-                    </h3>
-                    @if ($acknowledgements->count())
-                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold
-                                     bg-amber-50 text-amber-700 border border-amber-200
-                                     dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800/60">
-                            {{ $acknowledgements->count() }} {{ __('parent.pending') }}
-                        </span>
-                    @endif
+<div class="rounded-2xl border border-slate-200 bg-white shadow-sm
+            dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
+    <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
+            {{ __('parent.pending_acknowledgements') }}
+        </h3>
+        @if ($acknowledgements->count())
+            <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold
+                         bg-amber-50 text-amber-700 border border-amber-200
+                         dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800/60">
+                {{ $acknowledgements->count() }} {{ __('parent.pending') }}
+            </span>
+        @endif
+    </div>
+    <div class="divide-y divide-slate-100 dark:divide-slate-800">
+        @forelse($acknowledgements as $ack)
+            <div class="p-5 space-y-4">
+                <div class="text-sm text-slate-700 dark:text-slate-300">
+                    <span class="font-medium text-slate-900 dark:text-slate-100">
+                        {{ __('parent.' . $ack->record_type) }}
+                    </span>
+                    <span class="text-slate-500 dark:text-slate-400 ml-2">{{ __('parent.record') }} #{{ $ack->record_id }}</span>
                 </div>
-                <div class="divide-y divide-slate-100 dark:divide-slate-800">
-                    @forelse($acknowledgements as $ack)
-                        <div class="p-5 space-y-4">
-                            <div class="text-sm text-slate-700 dark:text-slate-300">
-                                <span class="font-medium text-slate-900 dark:text-slate-100">
-                                    {{ ucfirst($ack->record_type) }}
-                                </span>
-                                <span class="text-slate-500 dark:text-slate-400 ml-2">{{ __('parent.record') }} #{{ $ack->record_id }}</span>
-                            </div>
 
-                            <form method="POST" action="{{ route('parent.acknowledgements.sign', $ack) }}"
-                                  class="space-y-3">
-                                @csrf
-                                <input type="text"
-                                       name="signature_name"
-                                       placeholder="{{ __('parent.type_full_name_sign') }}"
-                                       class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900
-                                              focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
-                                              dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
-                                       required>
+                <form method="POST" action="{{ route('parent.acknowledgements.sign', $ack) }}"
+                      class="space-y-3">
+                    @csrf
+                    <input type="text"
+                           name="signature_name"
+                           placeholder="{{ __('parent.type_full_name_sign') }}"
+                           class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900
+                                  focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
+                                  dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                           required>
 
-                                <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-                                    <input type="checkbox" name="confirm_acknowledgement" value="1" required
-                                           class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500
-                                                  dark:border-slate-600 dark:bg-slate-900">
-                                    {{ __('parent.confirm_read_understood') }}
-                                </label>
+                    <label class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
+                        <input type="checkbox" name="confirm_acknowledgement" value="1" required
+                               class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500
+                                      dark:border-slate-600 dark:bg-slate-900">
+                        {{ __('parent.confirm_read_understood') }}
+                    </label>
 
-                                <button type="submit"
-                                        class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-white
-                                               bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
-                                               shadow-sm shadow-blue-500/20
-                                               hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
-                                               active:translate-y-[1px]">
-                                    {{ __('parent.sign_acknowledge') }}
-                                </button>
-                            </form>
-                        </div>
-                    @empty
-                        <div class="px-5 py-6 text-sm text-slate-600 dark:text-slate-300">
-                            {{ __('parent.no_pending_caught_up') }}
-                        </div>
-                    @endforelse
-                </div>
+                    <button type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-white
+                                   bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
+                                   shadow-sm shadow-blue-500/20
+                                   hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
+                                   active:translate-y-[1px]">
+                        {{ __('parent.sign_acknowledge') }}
+                    </button>
+                </form>
             </div>
+        @empty
+            <div class="px-5 py-6 text-sm text-slate-600 dark:text-slate-300">
+                {{ __('parent.no_pending_caught_up') }}
+            </div>
+        @endforelse
+    </div>
+</div>
 
             {{-- Outstanding Invoices --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm

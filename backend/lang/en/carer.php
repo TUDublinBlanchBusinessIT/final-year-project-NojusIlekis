@@ -169,4 +169,37 @@ return [
     'add_note' => 'Add note',
     'observation_notes_placeholder' => 'Optional observation notes...',
     'no_milestones_age_range' => 'No milestones found for this age range.',
+
+    'milestones' => 'Milestones',
+'milestones_intro' => 'Track and review milestone progress for children in your rooms.',
+'children_in_rooms' => 'Children in your rooms',
+'months' => 'months',
+'no_children_active_rooms' => 'No children found in your active rooms.',
+
+'back' => 'Back',
+'age' => 'Age',
+'all' => 'All',
+
+'achieved' => 'achieved',
+'observed_by' => 'Observed by',
+'unknown' => 'Unknown',
+'on' => 'on',
+
+'mark_as_observed' => 'Mark as Observed',
+'remove_observation' => 'Remove observation',
+'add_note' => 'Add note',
+
+'observation_notes_placeholder' => 'Add an observation note...',
+'no_milestones_age_range' => 'No milestones found for this age range.',
+
+'category_wellbeing' => 'Well-being',
+'category_identity_belonging' => 'Identity & Belonging',
+'category_communicating' => 'Communicating',
+'category_exploring_thinking' => 'Exploring & Thinking',
+
+'age_range_0_1' => '0 to 1 year',
+'age_range_1_2' => '1 to 2 years',
+'age_range_2_3' => '2 to 3 years',
+'age_range_3_4' => '3 to 4 years',
+'age_range_4_5' => '4 to 5 years',
 ];

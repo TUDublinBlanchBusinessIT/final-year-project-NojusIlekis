@@ -14,6 +14,7 @@ return [
     'medication_logs' => 'Medication Logs',
     'manage_users' => 'Manage Users',
     'view_reports' => 'View Reports',
+    'back_to_dashboard' => 'Back to Dashboard',
 
     'dashboard_description' => 'View attendance and daily update summaries by room and date.',
     'role' => 'Role',
@@ -69,6 +70,7 @@ return [
 
     'invoices_desc' => 'Create and manage monthly invoices for children and parents.',
     'view_invoices' => 'View Invoices',
+    'no_parent_enquiries' => 'No parent enquiries yet.',
 
     'incident_reports' => 'Incident Reports',
     'incident_reports_desc' => 'Review incidents reported by carers and follow up with parents if required.',

@@ -124,19 +124,19 @@
                             <div>
                                 <label class="text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('manager.start_date') }}</label>
                                 <input type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}"
-                                       class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40" />
+                                    class="mt-1 w-full rounded-xl border-slate-200 text-slate-900 dark:border-slate-800 dark:bg-slate-950/40 dark:text-white [color-scheme:dark]" />
                             </div>
 
                             <div>
                                 <label class="text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('manager.end_date') }}</label>
                                 <input type="date" name="end_date" value="{{ $filters['end_date'] ?? '' }}"
-                                       class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40" />
+                                        class="mt-1 w-full rounded-xl border-slate-200 text-slate-900 dark:border-slate-800 dark:bg-slate-950/40 dark:text-white [color-scheme:dark]" />
                             </div>
 
                             <div>
                                 <label class="text-xs font-medium text-slate-600 dark:text-slate-300">{{ __('manager.room') }}</label>
                                 <select name="room_id"
-                                        class="mt-1 w-full rounded-xl border-slate-200 dark:border-slate-800 dark:bg-slate-950/40">
+                                        class="mt-1 w-full rounded-xl border-slate-200 text-slate-900 dark:border-slate-800 dark:bg-slate-950/40 dark:text-white dark:[color-scheme:dark]">
                                     <option value="">{{ __('manager.all_rooms') }}</option>
                                     @foreach($rooms as $room)
                                         <option value="{{ $room->id }}"
@@ -144,7 +144,7 @@
                                             {{ $room->name ?? ('Room #' . $room->id) }}
                                         </option>
                                     @endforeach
-                                </select>
+                            </select>
                             </div>
 
                             <div class="flex items-end">

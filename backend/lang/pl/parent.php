@@ -159,4 +159,39 @@ return [
 'milestones_age_range' => 'Kamienie milowe dla wieku 4–5 lat.',
 'milestones_for_age_range' => 'Kamienie milowe dla :range.',
 'age_range_48_60' => '4 do 5 lat',
+
+    'pending_acknowledgements' => 'Oczekujące potwierdzenia',
+    'pending' => 'Oczekujące',
+
+    'daily_report' => 'Raport dzienny',
+    'record' => 'Rekord',
+
+    'type_full_name_sign' => 'Wpisz swoje pełne imię i nazwisko, aby podpisać',
+    'confirm_read_understood' => 'Potwierdzam, że przeczytałem/am i zrozumiałem/am ten element',
+    'sign_acknowledge' => 'Podpisz i potwierdź',
+
+    'no_pending_caught_up' => 'Brak oczekujących potwierdzeń — wszystko aktualne.',
+
+    'milestones' => 'Kamienie milowe',
+'milestones_intro' => 'Śledź i przeglądaj postępy kamieni milowych dzieci w swoich salach.',
+'children_in_rooms' => 'Dzieci w Twoich salach',
+'months' => 'miesięcy',
+'no_children_active_rooms' => 'Nie znaleziono dzieci w Twoich aktywnych salach.',
+
+'back' => 'Powrót',
+'age' => 'Wiek',
+'all' => 'Wszystkie',
+
+'achieved' => 'osiągnięto',
+'observed_by' => 'Zaobserwowane przez',
+'unknown' => 'Nieznany',
+'on' => 'dnia',
+
+'mark_as_observed' => 'Oznacz jako zaobserwowane',
+'remove_observation' => 'Usuń obserwację',
+'add_note' => 'Dodaj notatkę',
+
+'observation_notes_placeholder' => 'Dodaj notatkę z obserwacji...',
+'no_milestones_age_range' => 'Nie znaleziono kamieni milowych dla tego przedziału wiekowego.',
+
 ];

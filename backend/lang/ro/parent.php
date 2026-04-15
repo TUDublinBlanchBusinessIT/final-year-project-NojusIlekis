@@ -152,4 +152,39 @@ return [
 'milestones_for_age_range' => 'Etape pentru :range.',
 'age_range_48_60' => '4 până la 5 ani',
 'all_milestones' => 'Toate Etapele',
+
+    'pending_acknowledgements' => 'Confirmări în așteptare',
+    'pending' => 'În așteptare',
+
+    'daily_report' => 'Raport zilnic',
+    'record' => 'Înregistrare',
+
+    'type_full_name_sign' => 'Introdu numele complet pentru a semna',
+    'confirm_read_understood' => 'Confirm că am citit și am înțeles acest element',
+    'sign_acknowledge' => 'Semnează și confirmă',
+
+    'no_pending_caught_up' => 'Nu există confirmări în așteptare — totul este actualizat.',
+'milestones' => 'Repere de dezvoltare',
+'milestones_intro' => 'Urmărește și revizuiește progresul reperelor copiilor din camerele tale.',
+'children_in_rooms' => 'Copii din camerele tale',
+'months' => 'luni',
+'no_children_active_rooms' => 'Nu au fost găsiți copii în camerele tale active.',
+
+'back' => 'Înapoi',
+'age' => 'Vârstă',
+'all' => 'Toate',
+
+'achieved' => 'realizat',
+'observed_by' => 'Observat de',
+'unknown' => 'Necunoscut',
+'on' => 'la data de',
+
+'mark_as_observed' => 'Marchează ca observat',
+'remove_observation' => 'Elimină observația',
+'add_note' => 'Adaugă notă',
+
+'observation_notes_placeholder' => 'Adaugă o notă de observație...',
+'no_milestones_age_range' => 'Nu au fost găsite repere pentru acest interval de vârstă.',
+
+
 ];

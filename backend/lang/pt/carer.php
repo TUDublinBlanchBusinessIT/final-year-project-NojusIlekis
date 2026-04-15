@@ -138,4 +138,48 @@ return [
 
 'conversations_with_parents' => 'Conversas com os pais.',
 'new_message' => 'Nova mensagem',
+
+'overall_progress' => 'PROGRESSO GERAL',
+'observed' => 'observado',
+
+'milestones' => 'Marcos de desenvolvimento',
+'milestones_intro' => 'Acompanhe e reveja o progresso dos marcos das crianças nas suas salas.',
+'children_in_rooms' => 'Crianças nas suas salas',
+'months' => 'meses',
+'no_children_active_rooms' => 'Não foram encontradas crianças nas suas salas ativas.',
+
+'back' => 'Voltar',
+'age' => 'Idade',
+'all' => 'Todos',
+
+'achieved' => 'concluído',
+'observed_by' => 'Observado por',
+'unknown' => 'Desconhecido',
+'on' => 'em',
+
+'mark_as_observed' => 'Marcar como observado',
+'remove_observation' => 'Remover observação',
+'add_note' => 'Adicionar nota',
+
+
+'milestones' => 'Marcos de desenvolvimento',
+'back' => 'Voltar',
+'age' => 'Idade',
+'months' => 'meses',
+'achieved' => 'concluído',
+'all' => 'Todos',
+'observed_by' => 'Observado por',
+'unknown' => 'Desconhecido',
+'on' => 'em',
+'remove_observation' => 'Remover observação',
+'mark_as_observed' => 'Marcar como observado',
+'add_note' => 'Adicionar nota',
+'observation_notes_placeholder' => 'Adicione uma nota de observação...',
+'no_milestones_age_range' => 'Não foram encontrados marcos para esta faixa etária.',
+'category_wellbeing' => 'Bem-estar',
+'category_identity_belonging' => 'Identidade e Pertença',
+'category_communicating' => 'Comunicação',
+'category_exploring_thinking' => 'Exploração e Pensamento',
+
+
 ];

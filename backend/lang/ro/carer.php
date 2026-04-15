@@ -138,4 +138,24 @@ return [
 
 'conversations_with_parents' => 'Conversații cu părinții.',
 'new_message' => 'Mesaj nou',
+
+
+'milestones' => 'Repere de dezvoltare',
+'back' => 'Înapoi',
+'age' => 'Vârstă',
+'months' => 'luni',
+'achieved' => 'realizat',
+'all' => 'Toate',
+'observed_by' => 'Observat de',
+'unknown' => 'Necunoscut',
+'on' => 'la data de',
+'remove_observation' => 'Elimină observația',
+'mark_as_observed' => 'Marchează ca observat',
+'add_note' => 'Adaugă notă',
+'observation_notes_placeholder' => 'Adaugă o notă de observație...',
+'no_milestones_age_range' => 'Nu au fost găsite repere pentru acest interval de vârstă.',
+'category_wellbeing' => 'Stare de bine',
+'category_identity_belonging' => 'Identitate și apartenență',
+'category_communicating' => 'Comunicare',
+'category_exploring_thinking' => 'Explorare și gândire',
 ];
