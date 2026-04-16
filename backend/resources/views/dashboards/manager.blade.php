@@ -2,6 +2,14 @@
     @php
         $pendingPayments = $pendingPayments ?? collect([]);
         $pendingPaymentCount = $pendingPaymentCount ?? 0;
+        $totalIncidents = $totalIncidents ?? 0;
+        $openIncidents = $openIncidents ?? 0;
+        $reviewedIncidents = $reviewedIncidents ?? 0;
+        $closedIncidents = $closedIncidents ?? 0;
+        $highSeverity = $highSeverity ?? 0;
+        $mediumSeverity = $mediumSeverity ?? 0;
+        $lowSeverity = $lowSeverity ?? 0;
+        $incidentTrend = $incidentTrend ?? [];
         $filters = $filters ?? [
             'start_date' => now()->subDays(6)->toDateString(),
             'end_date' => now()->toDateString(),
@@ -94,6 +102,52 @@
                     </div>
                 </div>
             @endif
+
+            {{-- Incident Statistics --}}
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🚨 Incident Overview</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="text-center p-3 bg-red-50 rounded-xl">
+                        <p class="text-2xl font-bold text-red-600">{{ $openIncidents }}</p>
+                        <p class="text-xs text-gray-500 mt-1">Open</p>
+                    </div>
+                    <div class="text-center p-3 bg-amber-50 rounded-xl">
+                        <p class="text-2xl font-bold text-amber-600">{{ $reviewedIncidents }}</p>
+                        <p class="text-xs text-gray-500 mt-1">Under Review</p>
+                    </div>
+                    <div class="text-center p-3 bg-green-50 rounded-xl">
+                        <p class="text-2xl font-bold text-green-600">{{ $closedIncidents }}</p>
+                        <p class="text-xs text-gray-500 mt-1">Closed</p>
+                    </div>
+                    <div class="text-center p-3 bg-gray-50 rounded-xl">
+                        <p class="text-2xl font-bold text-gray-700">{{ $totalIncidents }}</p>
+                        <p class="text-xs text-gray-500 mt-1">Total</p>
+                    </div>
+                </div>
+
+                @if($highSeverity > 0 || $mediumSeverity > 0)
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <p class="text-sm font-medium text-gray-600 mb-2">Open by Severity:</p>
+                        <div class="flex gap-3 flex-wrap">
+                            @if($highSeverity > 0)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800">
+                                    🔴 {{ $highSeverity }} High
+                                </span>
+                            @endif
+                            @if($mediumSeverity > 0)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-800">
+                                    🟡 {{ $mediumSeverity }} Medium
+                                </span>
+                            @endif
+                            @if($lowSeverity > 0)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                                    🟢 {{ $lowSeverity }} Low
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </div>
 
             {{-- Attendance KPIs + Filters --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
@@ -494,6 +548,7 @@
             const labels = @json($attendanceChart['labels'] ?? []);
             const presentData = @json($attendanceChart['present'] ?? []);
             const absentData = @json($attendanceChart['absent'] ?? []);
+            const incidentMap = @json($incidentTrend);
 
             const el = document.getElementById('attendanceTrendChart');
             if (!el) return;
@@ -506,13 +561,38 @@
 
             const ctx = el.getContext('2d');
 
+            const incidentData = labels.map(d => incidentMap[d] || 0);
+
             new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels,
                     datasets: [
-                        { label: 'Present', data: presentData, tension: 0.35 },
-                        { label: 'Absent', data: absentData, tension: 0.35 },
+                        {
+                            label: 'Present',
+                            data: presentData,
+                            backgroundColor: 'rgba(34, 197, 94, 0.6)',
+                            borderRadius: 4,
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Absent',
+                            data: absentData,
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                            borderRadius: 4,
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Incidents',
+                            data: incidentData,
+                            type: 'line',
+                            borderColor: 'rgba(245, 158, 11, 1)',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            yAxisID: 'y1',
+                            pointRadius: 4,
+                        },
                     ]
                 },
                 options: {
@@ -523,14 +603,9 @@
                         legend: {
                             display: true,
                             position: 'top',
-                            labels: {
-                                boxWidth: 10,
-                                boxHeight: 10,
-                            }
+                            labels: { boxWidth: 10, boxHeight: 10 }
                         },
-                        tooltip: {
-                            enabled: true
-                        }
+                        tooltip: { enabled: true }
                     },
                     scales: {
                         x: {
@@ -540,7 +615,15 @@
                         y: {
                             beginAtZero: true,
                             ticks: { precision: 0 },
+                            title: { display: true, text: 'Children' },
                             grid: { drawBorder: false }
+                        },
+                        y1: {
+                            beginAtZero: true,
+                            position: 'right',
+                            ticks: { precision: 0 },
+                            title: { display: true, text: 'Incidents' },
+                            grid: { drawOnChartArea: false }
                         }
                     }
                 }
