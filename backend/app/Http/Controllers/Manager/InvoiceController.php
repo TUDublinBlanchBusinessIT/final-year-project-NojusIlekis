@@ -11,13 +11,19 @@ use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = Invoice::with(['child', 'parent'])
-            ->latest()
-            ->get();
+        $paymentFilter = $request->get('payment_status');
 
-        return view('manager.reports.invoices.index', compact('invoices'));
+        $query = Invoice::with(['child', 'parent']);
+
+        if ($paymentFilter) {
+            $query->where('payment_status', $paymentFilter);
+        }
+
+        $invoices = $query->latest()->paginate(20);
+
+        return view('manager.reports.invoices.index', compact('invoices', 'paymentFilter'));
     }
 
     public function show(Invoice $invoice)

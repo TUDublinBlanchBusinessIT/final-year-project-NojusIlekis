@@ -32,6 +32,18 @@
                     <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
                         {{ __('manager.all_invoices') }}
                     </h3>
+                    <div class="flex gap-3 mt-3">
+                        <form method="GET" class="flex gap-2 items-center">
+                            <label class="text-sm font-medium text-gray-700">Payment Status:</label>
+                            <select name="payment_status" onchange="this.form.submit()" class="rounded-lg border-slate-200 text-sm">
+                                <option value="">All</option>
+                                <option value="unpaid" {{ request('payment_status') === 'unpaid' ? 'selected' : '' }}>Unpaid</option>
+                                <option value="payment_submitted" {{ request('payment_status') === 'payment_submitted' ? 'selected' : '' }}>Payment Submitted (Pending Review)</option>
+                                <option value="approved" {{ request('payment_status') === 'approved' ? 'selected' : '' }}>Approved / Paid</option>
+                                <option value="rejected" {{ request('payment_status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                            </select>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto">

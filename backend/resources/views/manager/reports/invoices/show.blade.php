@@ -218,6 +218,34 @@
                 </div>
             @endif
 
+            {{-- Payment Processing Timeline --}}
+            <div class="mt-6 bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 class="text-lg font-semibold mb-4">Payment Processing</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full {{ $invoice->status !== 'draft' ? 'bg-green-500' : 'bg-gray-300' }} flex items-center justify-center text-white text-sm">1</div>
+                        <div>
+                            <p class="font-medium {{ $invoice->status !== 'draft' ? 'text-green-700' : 'text-gray-500' }}">Invoice Sent</p>
+                            <p class="text-xs text-gray-400">Manager sends invoice to parent</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full {{ in_array($invoice->payment_status, ['payment_submitted', 'approved']) ? 'bg-green-500' : 'bg-gray-300' }} flex items-center justify-center text-white text-sm">2</div>
+                        <div>
+                            <p class="font-medium {{ in_array($invoice->payment_status, ['payment_submitted', 'approved']) ? 'text-green-700' : 'text-gray-500' }}">Payment Submitted</p>
+                            <p class="text-xs text-gray-400">{{ $invoice->payment_submitted_at ? 'Submitted ' . $invoice->payment_submitted_at->format('d M Y, H:i') : 'Waiting for parent to submit payment' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full {{ $invoice->payment_status === 'approved' ? 'bg-green-500' : 'bg-gray-300' }} flex items-center justify-center text-white text-sm">3</div>
+                        <div>
+                            <p class="font-medium {{ $invoice->payment_status === 'approved' ? 'text-green-700' : 'text-gray-500' }}">Payment Verified & Processed</p>
+                            <p class="text-xs text-gray-400">{{ $invoice->payment_approved_at ? 'Processed by ' . ($invoice->approvedBy->first_name ?? $invoice->approvedBy->name ?? 'Manager') . ' on ' . $invoice->payment_approved_at->format('d M Y, H:i') : 'Manager reviews and marks as processed' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
