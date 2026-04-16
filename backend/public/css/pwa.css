@@ -1,0 +1,67 @@
+/* PWA / Mobile optimisations */
+
+/* Prevent tap highlight on interactive elements */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* Smooth scrolling for the whole app */
+html, body {
+    scroll-behavior: smooth;
+}
+
+/* Prevent pull-to-refresh on Chrome Android from interfering with app */
+body {
+    overscroll-behavior-y: contain;
+}
+
+/* Safe area insets for notched devices (iPhone X+) */
+.safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
+/* Chatbot panel — full-screen on small mobile, anchored on larger screens */
+.chatbot-panel {
+    max-height: calc(100vh - 7rem);
+}
+
+@media (max-width: 480px) {
+    .chatbot-panel {
+        width: calc(100vw - 2rem) !important;
+        right: 1rem !important;
+        bottom: 5rem !important;
+        max-height: calc(100vh - 6rem);
+    }
+}
+
+/* Ensure buttons and links have a comfortable touch target size */
+button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Override for small inline elements where 44px would look wrong */
+button.touch-small, a.touch-small {
+    min-height: unset;
+    min-width: unset;
+}
+
+/* Scrollable areas should feel native on iOS */
+.overflow-y-auto, .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Installed PWA — hide browser chrome elements that don't apply */
+@media (display-mode: standalone) {
+    /* Extra top padding for status bar when running as standalone PWA */
+    body {
+        padding-top: env(safe-area-inset-top);
+    }
+}

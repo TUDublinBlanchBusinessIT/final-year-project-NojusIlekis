@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Milestones</h2>
+            <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">{{ __('carer.milestones') }}</h2>
             <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                Select a child to view or record their Aistear milestone progress.
+                {{ __('carer.milestones_intro') }}
             </p>
         </div>
     </x-slot>
@@ -12,7 +12,7 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Children in Your Rooms</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('carer.children_in_rooms') }}</h3>
                 </div>
 
                 <div class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -29,7 +29,7 @@
                                         {{ $child->first_name }} {{ $child->last_name }}
                                     </p>
                                     <p class="text-xs text-slate-500 dark:text-slate-400">
-                                        {{ $child->age_in_months }} months ·
+                                        {{ $child->age_in_months }} {{ __('carer.months') }} ·
                                         {{ \App\Models\Milestone::AGE_RANGES[$child->age_range] ?? $child->age_range }}
                                         @if($child->room)
                                             · {{ $child->room->name }}
@@ -43,7 +43,7 @@
                         </a>
                     @empty
                         <div class="px-5 py-8 text-center text-slate-500 dark:text-slate-400">
-                            No children found in your active rooms.
+                            {{ __('carer.no_children_active_rooms') }}
                         </div>
                     @endforelse
                 </div>

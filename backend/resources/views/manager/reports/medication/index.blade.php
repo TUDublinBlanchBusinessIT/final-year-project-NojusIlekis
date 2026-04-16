@@ -2,16 +2,16 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Medication Logs</h2>
+                <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.medication_logs') }}</h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    View medication records by room and date.
+                    {{ __('manager.medication_logs_report_desc') }}
                 </p>
             </div>
 
             <a href="{{ route('manager.dashboard') }}"
                class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50
                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
-                ← Back to Dashboard
+                ← {{ __('manager.back_to_dashboard') }}
             </a>
         </div>
     </x-slot>
@@ -23,16 +23,16 @@
                 <div class="p-5">
                     <form method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                         <div>
-                            <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-200">Date</label>
+                            <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-200">{{ __('manager.date') }}</label>
                             <input type="date" name="date" value="{{ $date }}"
                                    class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-200">Room</label>
+                            <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-200">{{ __('manager.room') }}</label>
                             <select name="room_id"
                                     class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
-                                <option value="">All rooms</option>
+                                <option value="">{{ __('manager.all_rooms') }}</option>
                                 @foreach($rooms as $room)
                                     <option value="{{ $room->id }}" @selected((string)$roomId === (string)$room->id)>
                                         {{ $room->name }}
@@ -42,7 +42,7 @@
                         </div>
 
                         <button class="rounded-xl px-4 py-2 font-semibold text-white bg-blue-600 hover:bg-blue-700">
-                            Load
+                            {{ __('manager.load') }}
                         </button>
                     </form>
                 </div>
@@ -53,14 +53,14 @@
                     <table class="min-w-full">
                         <thead class="bg-slate-50 dark:bg-slate-900/60">
                             <tr>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">Child</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">Room</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">Medication</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">Dosage</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">Date</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">Time</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">Carer</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">Notes</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">{{ __('manager.child') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">{{ __('manager.room') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">{{ __('manager.medication') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">{{ __('manager.dosage') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">{{ __('manager.date') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">{{ __('manager.time') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">{{ __('manager.carer') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600 dark:text-slate-300">{{ __('manager.notes') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -82,7 +82,7 @@
                             @empty
                                 <tr>
                                     <td colspan="8" class="px-5 py-6 text-slate-600 dark:text-slate-300">
-                                        No medication records found.
+                                        {{ __('manager.no_medication_records') }}
                                     </td>
                                 </tr>
                             @endforelse

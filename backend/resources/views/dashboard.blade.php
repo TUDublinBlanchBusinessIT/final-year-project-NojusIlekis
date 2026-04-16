@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    Parent Dashboard
+                    {{ __('parent.dashboard_title') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Welcome, {{ auth()->user()->name }}
+                    {{ __('parent.welcome') }}, {{ auth()->user()->name }}
                 </p>
             </div>
         </div>
@@ -32,15 +32,15 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h3 class="text-lg font-semibold text-slate-900">
-                            Pending Acknowledgements
+                            {{ __('parent.pending_acknowledgements') }}
                         </h3>
                         <p class="text-sm text-slate-600 mt-1">
-                            Review and sign any reports waiting for your confirmation.
+                            {{ __('parent.pending_description') }}
                         </p>
                     </div>
 
                     <div class="inline-flex items-center rounded-full bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-800">
-                        {{ $acknowledgements->count() }} Pending
+                        {{ $acknowledgements->count() }} {{ __('parent.pending') }}
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200">
                     <h3 class="text-base font-semibold text-slate-900">
-                        Acknowledgement Requests
+                        {{ __('parent.acknowledgement_requests') }}
                     </h3>
                 </div>
 
@@ -58,19 +58,19 @@
                         <thead>
                             <tr class="bg-slate-50">
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600">
-                                    Type
+                                    {{ __('parent.type') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600">
-                                    Record ID
+                                    {{ __('parent.record_id') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600">
-                                    Status
+                                    {{ __('parent.status') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600">
-                                    Created
+                                    {{ __('parent.created') }}
                                 </th>
                                 <th class="text-left px-5 py-3 text-xs font-semibold uppercase text-slate-600">
-                                    Action
+                                    {{ __('parent.action') }}
                                 </th>
                             </tr>
                         </thead>
@@ -105,7 +105,7 @@
                                             <input
                                                 type="text"
                                                 name="signature_name"
-                                                placeholder="Type your full name"
+                                                placeholder="{{ __('parent.full_name_placeholder') }}"
                                                 class="w-full rounded-lg border-slate-300 text-sm"
                                                 required
                                             >
@@ -116,13 +116,13 @@
                                                        value="1"
                                                        class="mt-1"
                                                        required>
-                                                <span>I confirm I have read this item</span>
+                                                <span>{{ __('parent.confirm_read') }}</span>
                                             </label>
 
                                             <button
                                                 type="submit"
                                                 class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-                                                Acknowledge
+                                                {{ __('parent.acknowledge') }}
                                             </button>
                                         </form>
                                     </td>
@@ -130,7 +130,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="px-5 py-6 text-slate-600">
-                                        No pending acknowledgements.
+                                        {{ __('parent.no_pending') }}
                                     </td>
                                 </tr>
                             @endforelse

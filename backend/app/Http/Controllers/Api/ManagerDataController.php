@@ -77,6 +77,68 @@ class ManagerDataController extends Controller
         return response()->json($rooms);
     }
 
+    /**
+     * List invoices with pending payments.
+     * GET /api/manager/payments/pending
+     */
+    public function pendingPayments(): JsonResponse
+    {
+        $pending = Invoice::where('payment_status', 'payment_submitted')
+            ->with(['child:id,first_name,last_name', 'parent:id,first_name,last_name,name'])
+            ->latest('payment_submitted_at')
+            ->get()
+            ->map(fn($inv) => [
+                'invoice_id' => $inv->id,
+                'total' => $inv->total,
+                'child_name' => ($inv->child->first_name ?? '') . ' ' . ($inv->child->last_name ?? ''),
+                'parent_name' => ($inv->parent->first_name ?? $inv->parent->name ?? '') . ' ' . ($inv->parent->last_name ?? ''),
+                'payment_submitted_at' => $inv->payment_submitted_at,
+                'payment_notes' => $inv->payment_notes,
+                'payment_proof_url' => $inv->payment_proof_path ? \Storage::url($inv->payment_proof_path) : null,
+            ]);
+
+        return response()->json([
+            'count' => $pending->count(),
+            'pending_payments' => $pending,
+        ]);
+    }
+
+    /**
+     * Approve a payment.
+     * POST /api/manager/invoices/{invoice}/approve
+     */
+    public function approvePayment(Invoice $invoice): JsonResponse
+    {
+        abort_unless($invoice->isPaymentPending(), 422, 'No pending payment to approve.');
+        $invoice->approvePayment(auth()->id());
+
+        return response()->json([
+            'message' => 'Payment approved.',
+            'invoice_id' => $invoice->id,
+            'status' => $invoice->status,
+            'payment_status' => $invoice->payment_status,
+        ]);
+    }
+
+    /**
+     * Reject a payment.
+     * POST /api/manager/invoices/{invoice}/reject
+     */
+    public function rejectPayment(\Illuminate\Http\Request $request, Invoice $invoice): JsonResponse
+    {
+        abort_unless($invoice->isPaymentPending(), 422, 'No pending payment to reject.');
+
+        $request->validate(['rejection_reason' => 'required|string|max:500']);
+        $invoice->rejectPayment($request->rejection_reason);
+
+        return response()->json([
+            'message' => 'Payment rejected.',
+            'invoice_id' => $invoice->id,
+            'payment_status' => $invoice->payment_status,
+            'rejection_reason' => $invoice->rejection_reason,
+        ]);
+    }
+
     public function dashboard(): JsonResponse
     {
         $today = now()->toDateString();

@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    Enquiry from {{ $user->name }}
+                    {{ __('manager.enquiry_from') }} {{ $user->name }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Parent conversation thread
+                    {{ __('manager.parent_conversation_thread') }}
                 </p>
             </div>
 
@@ -14,7 +14,7 @@
                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
                       bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100
                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                ← Back to Enquiries
+                ← {{ __('manager.back_to_enquiries') }}
             </a>
         </div>
     </x-slot>
@@ -26,7 +26,7 @@
                         dark:border-slate-800 dark:bg-slate-950/40">
                 @if($messages->count() === 1)
                     <p class="text-center text-xs text-slate-400">
-                        Start of conversation
+                        {{ __('manager.start_of_conversation') }}
                     </p>
                 @endif
 
@@ -37,7 +37,7 @@
                         <div class="max-w-sm">
                             @if ($messageItem->child)
                                 <p class="text-xs text-slate-400 mb-1 {{ $isMine ? 'text-right' : 'text-left' }}">
-                                    Re: {{ $messageItem->child->first_name }} {{ $messageItem->child->last_name }}
+                                    {{ __('manager.re') }}: {{ $messageItem->child->first_name }} {{ $messageItem->child->last_name }}
                                 </p>
                             @endif
 
@@ -53,14 +53,14 @@
                                 &middot; {{ $messageItem->created_at->format('d M') }}
 
                                 @if ($isMine)
-                                    &middot; {{ $messageItem->read_at ? 'Read' : 'Sent' }}
+                                    &middot; {{ $messageItem->read_at ? __('manager.read') : __('manager.sent') }}
                                 @endif
                             </p>
                         </div>
                     </div>
                 @empty
                     <p class="text-slate-400 text-sm text-center py-8">
-                        No messages yet.
+                        {{ __('manager.no_messages_yet') }}
                     </p>
                 @endforelse
             </div>
@@ -80,10 +80,10 @@
 
                     <div>
                         <label for="body" class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                            Reply
+                            {{ __('manager.reply') }}
                         </label>
                         <textarea name="body" id="body" rows="3" required maxlength="2000"
-                                  placeholder="Type your reply..."
+                                  placeholder="{{ __('manager.type_reply_placeholder') }}"
                                   class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none
                                          dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">{{ old('body') }}</textarea>
 
@@ -98,7 +98,7 @@
                                        bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
                                        shadow-sm shadow-blue-500/20 hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
                                        active:translate-y-[1px]">
-                            Send Reply
+                            {{ __('manager.send_reply') }}
                         </button>
                     </div>
                 </form>

@@ -27,10 +27,30 @@ use App\Http\Controllers\Carer\MilestoneController as CarerMilestoneController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manager\MessagingController as ManagerMessagingController;
 use App\Http\Controllers\Parent\TimelineController;
+use App\Http\Controllers\ChatbotController;
+use Illuminate\Http\Request;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::post('/locale', function (Request $request) {
+    $request->validate([
+        'locale' => 'required|in:en,pt,pl,ro',
+    ]);
+
+    session(['locale' => $request->locale]);
+
+    if (auth()->check()) {
+        auth()->user()->update([
+            'preferred_language' => $request->locale,
+        ]);
+    }
+
+    return back();
+})->name('locale.switch');
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -47,6 +67,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Chatbot
+    Route::post('/chatbot/ask', [ChatbotController::class, 'respond'])->name('chatbot.ask');
+    Route::get('/chatbot/suggestions', [ChatbotController::class, 'suggestions'])->name('chatbot.suggestions');
 });
 
 Route::middleware(['auth', 'role:parent'])
@@ -79,12 +103,17 @@ Route::middleware(['auth', 'role:parent'])
         Route::get('/invoices/{invoice}/print', [ParentInvoiceController::class, 'print'])
             ->name('invoices.print');
 
+        Route::post('/invoices/{invoice}/pay', [ParentInvoiceController::class, 'submitPayment'])
+            ->name('invoices.pay');
+
+
         // Parent children
         Route::get('/children', [ParentChildrenController::class, 'index'])
             ->name('children.index');
 
         Route::get('/children/{child}', [ParentChildrenController::class, 'show'])
             ->name('children.show');
+
 
         Route::get('/children/{child}/timeline', [TimelineController::class, 'show'])
         ->name('children.timeline');
@@ -205,6 +234,10 @@ Route::middleware(['auth', 'role:manager'])
 
         Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])
             ->name('invoices.print');
+
+        Route::post('/invoices/{invoice}/approve-payment', [InvoiceController::class, 'approvePayment'])->name('invoices.approve-payment');
+        Route::post('/invoices/{invoice}/reject-payment', [InvoiceController::class, 'rejectPayment'])->name('invoices.reject-payment');
+        Route::post('/invoices/{invoice}/cancel', [InvoiceController::class, 'cancel'])->name('invoices.cancel');
 
         // Parent linking & room assignment
         Route::get('children/{child}/link-parent', [ChildController::class, 'linkParentForm'])

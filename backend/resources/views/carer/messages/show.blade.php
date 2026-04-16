@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    Conversation with {{ $user->name }}
+                    {{ __('carer.conversation_with') }} {{ $user->name }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
                     {{ ucfirst($user->role) }}
@@ -11,7 +11,7 @@
             </div>
             <a href="{{ route('carer.messages.index') }}"
                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100">
-                ← Back to Messages
+                ← {{ __('carer.back_to_messages') }}
             </a>
         </div>
     </x-slot>
@@ -28,7 +28,7 @@
                             {{-- Child badge --}}
                             @if ($message->child)
                                 <p class="text-xs text-slate-400 mb-1 {{ $isMine ? 'text-right' : 'text-left' }}">
-                                    Re: {{ $message->child->first_name }} {{ $message->child->last_name }}
+                                    {{ __('carer.re') }} {{ $message->child->first_name }} {{ $message->child->last_name }}
                                 </p>
                             @endif
 
@@ -47,7 +47,7 @@
                     </div>
                 @empty
                     <p class="text-slate-400 text-sm text-center py-8">
-                        No messages yet. Send the first one below.
+                        {{ __('carer.no_messages_yet') }}
                     </p>
                 @endforelse
             </div>
@@ -68,11 +68,11 @@
                     @if ($roomChildren->isNotEmpty())
                         <div>
                             <label for="child_id" class="block text-xs font-medium text-slate-600 mb-1">
-                                About child (optional)
+                                {{ __('carer.about_child_optional') }}
                             </label>
                             <select name="child_id" id="child_id"
                                     class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">— Select child —</option>
+                                <option value="">{{ __('carer.select_child_placeholder') }}</option>
                                 @foreach ($roomChildren as $child)
                                     <option value="{{ $child->id }}">
                                         {{ $child->first_name }} {{ $child->last_name }}
@@ -85,10 +85,10 @@
                     {{-- Message body --}}
                     <div>
                         <label for="body" class="block text-xs font-medium text-slate-600 mb-1">
-                            Message
+                            {{ __('carer.message') }}
                         </label>
                         <textarea name="body" id="body" rows="3" required maxlength="2000"
-                                  placeholder="Type your message…"
+                                  placeholder="{{ __('carer.type_message') }}"
                                   class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none">{{ old('body') }}</textarea>
                         @error('body')
                             <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
@@ -101,7 +101,7 @@
                                        bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700
                                        shadow-sm shadow-blue-500/20 hover:brightness-110 focus:outline-none focus:ring-4 focus:ring-blue-200
                                        active:translate-y-[1px]">
-                            Send
+                            {{ __('carer.send') }}
                         </button>
                     </div>
                 </form>

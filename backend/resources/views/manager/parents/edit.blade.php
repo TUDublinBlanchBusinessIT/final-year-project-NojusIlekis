@@ -2,14 +2,14 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                Edit Parent
+                {{ __('manager.edit_parent') }}
             </h2>
 
             <a href="{{ route('manager.parents.show', $parentUser) }}"
                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
                       bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100
                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                Back to Profile
+                {{ __('manager.back_to_profile') }}
             </a>
         </div>
     </x-slot>
@@ -37,7 +37,7 @@
 
                         <div>
                             <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                Name <span class="text-red-500">*</span>
+                                {{ __('manager.name') }} <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="name" id="name"
                                    value="{{ old('name', $parentUser->name) }}"
@@ -52,7 +52,7 @@
 
                         <div>
                             <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                Email <span class="text-red-500">*</span>
+                                {{ __('manager.email') }} <span class="text-red-500">*</span>
                             </label>
                             <input type="email" name="email" id="email"
                                    value="{{ old('email', $parentUser->email) }}"
@@ -68,14 +68,16 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>
                                 <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    New Password
+                                    {{ __('manager.new_password') }}
                                 </label>
                                 <input type="password" name="password" id="password"
                                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
                                               focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                               dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
                                               @error('password') border-red-400 @enderror">
-                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Leave blank to keep current password.</p>
+                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                    {{ __('manager.leave_blank_password') }}
+                                </p>
                                 @error('password')
                                     <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
@@ -83,7 +85,7 @@
 
                             <div>
                                 <label for="password_confirmation" class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
-                                    Confirm New Password
+                                    {{ __('manager.confirm_new_password') }}
                                 </label>
                                 <input type="password" name="password_confirmation" id="password_confirmation"
                                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900
@@ -100,7 +102,7 @@
                                            hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                                            focus:outline-none focus:ring-4 focus:ring-blue-200
                                            active:translate-y-[1px]">
-                                Update
+                                {{ __('manager.update') }}
                             </button>
 
                             <a href="{{ route('manager.parents.show', $parentUser) }}"
@@ -108,7 +110,7 @@
                                       bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200
                                       dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700
                                       focus:outline-none focus:ring-4 focus:ring-slate-200">
-                                Cancel
+                                {{ __('manager.cancel') }}
                             </a>
                         </div>
                     </form>

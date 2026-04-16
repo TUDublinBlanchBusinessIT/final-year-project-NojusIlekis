@@ -155,10 +155,43 @@ class InvoiceController extends Controller
             ]);
         }
 
-
         return redirect()
             ->route('manager.invoices.show', $invoice)
             ->with('success', 'Invoice status updated.');
+    }
+
+    public function cancel(Invoice $invoice)
+    {
+        abort_unless($invoice->canBeCancelled(), 422, 'This invoice cannot be cancelled.');
+
+        $invoice->cancelInvoice();
+
+        return redirect()->route('manager.invoices.index')
+            ->with('success', 'Invoice #' . $invoice->id . ' has been cancelled.');
+    }
+
+    public function approvePayment(Invoice $invoice)
+    {
+        abort_unless($invoice->isPaymentPending(), 422, 'No pending payment to approve.');
+
+        $invoice->approvePayment(auth()->id());
+
+        return redirect()->route('manager.invoices.show', $invoice)
+            ->with('success', 'Payment approved. Invoice marked as paid.');
+    }
+
+    public function rejectPayment(Request $request, Invoice $invoice)
+    {
+        abort_unless($invoice->isPaymentPending(), 422, 'No pending payment to reject.');
+
+        $request->validate([
+            'rejection_reason' => 'required|string|max:500',
+        ]);
+
+        $invoice->rejectPayment($request->rejection_reason);
+
+        return redirect()->route('manager.invoices.show', $invoice)
+            ->with('success', 'Payment rejected. The parent will be notified and can resubmit.');
     }
 
     public function print(Invoice $invoice)

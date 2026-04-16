@@ -3,17 +3,17 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    Pending Acknowledgements
+                    {{ __('parent.pending_acknowledgements') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    View items waiting for your acknowledgement.
+                    {{ __('parent.acknowledgement_description') }}
                 </p>
             </div>
 
             <a href="{{ route('parent.dashboard') }}"
                class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50
                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
-                ← Back to Dashboard
+                ← {{ __('parent.back_to_dashboard') }}
             </a>
         </div>
     </x-slot>
@@ -45,18 +45,18 @@
 
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Acknowledgements</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('parent.acknowledgements') }}</h3>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-900/60">
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Type</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Record ID</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Status</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Created</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Action</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('parent.type') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('parent.record_id') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('parent.status') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('parent.created') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('parent.action') }}</th>
                             </tr>
                         </thead>
 
@@ -92,7 +92,7 @@
                                                     <input
                                                         type="text"
                                                         name="signature_name"
-                                                        placeholder="Type your full name"
+                                                        placeholder="{{ __('parent.full_name_placeholder') }}"
                                                         value="{{ old('signature_name') }}"
                                                         class="w-full rounded-lg border-slate-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                                         required
@@ -101,24 +101,24 @@
 
                                                 <label class="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-200">
                                                     <input type="checkbox" name="confirm_acknowledgement" value="1" class="mt-1" required>
-                                                    <span>I confirm I have read this item.</span>
+                                                    <span>{{ __('parent.confirm_read') }}</span>
                                                 </label>
 
                                                 <button
                                                     type="submit"
                                                     class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
-                                                    Acknowledge
+                                                    {{ __('parent.acknowledge') }}
                                                 </button>
                                             </form>
                                         @else
-                                            <span class="text-sm text-slate-500 dark:text-slate-400">Already signed</span>
+                                            <span class="text-sm text-slate-500 dark:text-slate-400">{{ __('parent.already_signed') }}</span>
                                         @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="5" class="px-5 py-6 text-slate-600 dark:text-slate-300">
-                                        No pending acknowledgements.
+                                        {{ __('parent.no_pending') }}
                                     </td>
                                 </tr>
                             @endforelse

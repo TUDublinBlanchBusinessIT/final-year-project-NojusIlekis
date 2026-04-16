@@ -6,7 +6,7 @@
                     {{ $parentUser->name }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Parent Profile
+                    {{ __('manager.parent_profile') }}
                 </p>
             </div>
 
@@ -19,7 +19,7 @@
                           hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                           focus:outline-none focus:ring-4 focus:ring-blue-200
                           active:translate-y-[1px]">
-                    Edit
+                    {{ __('manager.edit') }}
                 </a>
                 @endcan
 
@@ -34,7 +34,7 @@
                                    hover:bg-red-100
                                    dark:bg-red-950/30 dark:text-red-300 dark:border-red-800/60 dark:hover:bg-red-950/50
                                    focus:outline-none focus:ring-4 focus:ring-red-200">
-                        Delete
+                        {{ __('manager.delete') }}
                     </button>
                 </form>
                 @endcan
@@ -43,7 +43,7 @@
                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
                           bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100
                           dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                    Back
+                    {{ __('manager.back') }}
                 </a>
             </div>
         </div>
@@ -70,19 +70,19 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Details</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.details') }}</h3>
                 </div>
                 <div class="p-6 space-y-3 text-sm text-slate-800 dark:text-slate-200">
                     <p>
-                        <span class="font-semibold text-slate-600 dark:text-slate-400">Name:</span>
+                        <span class="font-semibold text-slate-600 dark:text-slate-400">{{ __('manager.name') }}:</span>
                         {{ $parentUser->name }}
                     </p>
                     <p>
-                        <span class="font-semibold text-slate-600 dark:text-slate-400">Email:</span>
+                        <span class="font-semibold text-slate-600 dark:text-slate-400">{{ __('manager.email') }}:</span>
                         {{ $parentUser->email }}
                     </p>
                     <p>
-                        <span class="font-semibold text-slate-600 dark:text-slate-400">Registered:</span>
+                        <span class="font-semibold text-slate-600 dark:text-slate-400">{{ __('manager.registered') }}:</span>
                         {{ $parentUser->created_at->format('d M Y') }}
                     </p>
                 </div>
@@ -92,15 +92,15 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Linked Children</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.linked_children') }}</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm">
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-900/60">
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Name</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Room</th>
-                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Relationship</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.name') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.room') }}</th>
+                                <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('manager.relationship') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -119,7 +119,7 @@
                                             <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
                                                          bg-amber-50 text-amber-700 border border-amber-200
                                                          dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800/60">
-                                                Unassigned
+                                                {{ __('manager.unassigned') }}
                                             </span>
                                         @endif
                                     </td>
@@ -138,7 +138,7 @@
                             @empty
                                 <tr>
                                     <td colspan="3" class="px-5 py-4 text-slate-600 dark:text-slate-300">
-                                        No children linked to this parent.
+                                        {{ __('manager.no_children_linked_parent') }}
                                     </td>
                                 </tr>
                             @endforelse

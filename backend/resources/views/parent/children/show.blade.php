@@ -6,13 +6,13 @@
                     {{ $child->first_name }} {{ $child->last_name }}
                 </h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Child profile and history
+                    {{ __('parent.child_profile_history') }}
                 </p>
             </div>
 
             <a href="{{ route('parent.children.index') }}"
                class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-                Back to My Children
+                {{ __('parent.back_to_children') }}
             </a>
         </div>
     </x-slot>
@@ -20,7 +20,7 @@
     @php
         $roomLabel = $child->room?->name
             ?? $child->room?->room_name
-            ?? ($child->room ? 'Assigned room' : 'No room assigned');
+            ?? ($child->room ? __('parent.assigned_room') : __('parent.no_room'));
 
         $tabClasses = function ($tab) use ($activeTab) {
             return $activeTab === $tab
@@ -36,22 +36,22 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                            Profile details
+                            {{ __('parent.profile_details') }}
                         </h3>
 
                         <div class="space-y-3 text-sm">
                             <p class="text-gray-700 dark:text-gray-300">
-                                <span class="font-semibold">Full name:</span>
+                                <span class="font-semibold">{{ __('parent.full_name') }}:</span>
                                 {{ $child->first_name }} {{ $child->last_name }}
                             </p>
 
                             <p class="text-gray-700 dark:text-gray-300">
-                                <span class="font-semibold">Date of birth:</span>
-                                {{ $child->dob ? $child->dob->format('d M Y') : 'Not recorded' }}
+                                <span class="font-semibold">{{ __('parent.date_of_birth') }}:</span>
+                                {{ $child->dob ? $child->dob->format('d M Y') : __('parent.not_recorded') }}'
                             </p>
 
                             <p class="text-gray-700 dark:text-gray-300">
-                                <span class="font-semibold">Room:</span>
+                                <span class="font-semibold">{{ __('parent.room') }}:</span>
                                 {{ $roomLabel }}
                             </p>
                         </div>
@@ -59,12 +59,12 @@
 
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                            Health notes
+                            {{ __('parent.health_notes') }}
                         </h3>
 
                         <div class="space-y-4 text-sm">
                             <div>
-                                <p class="font-semibold text-gray-800 dark:text-gray-200">Allergies</p>
+                                <p class="font-semibold text-gray-800 dark:text-gray-200">{{ __('parent.allergies') }}</p>
                                 @if($child->allergyArray())
                                     <div class="flex flex-wrap gap-2 mt-2">
                                         @foreach($child->allergyArray() as $allergy)
@@ -74,14 +74,14 @@
                                         @endforeach
                                     </div>
                                 @else
-                                    <p class="text-gray-700 dark:text-gray-300 mt-1">No allergies recorded.</p>
+                                    <p class="text-gray-700 dark:text-gray-300 mt-1">{{ __('parent.no_allergies') }}</p>
                                 @endif
                             </div>
 
                             <div>
-                                <p class="font-semibold text-gray-800 dark:text-gray-200">Medical notes</p>
+                                <p class="font-semibold text-gray-800 dark:text-gray-200">{{ __('parent.medical_notes') }}</p>
                                 <p class="text-gray-700 dark:text-gray-300 mt-1">
-                                    {{ $child->medical_notes ?: 'No medical notes recorded.' }}
+                                    {{ $child->medical_notes ?: __('parent.no_medical_notes') }}
                                 </p>
                             </div>
                         </div>
@@ -95,10 +95,10 @@
             {{-- Milestone Progress Summary --}}
             <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Development Milestones</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ __('parent.milestones') }}</h3>
                     <a href="{{ route('parent.milestones.show', $child) }}"
                        class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 font-medium">
-                        View All →
+                        {{ __('parent.view_all') }}
                     </a>
                 </div>
 
@@ -115,7 +115,7 @@
                 @if($overallProgress['total'] > 0)
                     <div class="mb-4">
                         <div class="flex items-center justify-between text-sm mb-1">
-                            <span class="text-gray-600 dark:text-gray-300">Overall Progress</span>
+                            <span class="text-gray-600 dark:text-gray-300">{{ __('parent.overall_progress') }}</span>
                             <span class="font-semibold text-gray-800 dark:text-gray-100">
                                 {{ $overallProgress['achieved'] }}/{{ $overallProgress['total'] }} ({{ $overallProgress['percentage'] }}%)
                             </span>
@@ -142,7 +142,7 @@
                         @endforeach
                     </div>
                 @else
-                    <p class="text-gray-500 dark:text-gray-400 text-sm">No milestones available for this age range yet.</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('parent.no_milestones') }}.</p>
                 @endif
             </div>
 
@@ -150,54 +150,54 @@
             <div class="flex flex-wrap gap-2">
                 <a href="{{ route('parent.children.show', $child) }}"
                    class="px-4 py-2 rounded-md text-sm font-medium {{ $tabClasses('profile') }}">
-                    Profile
+                    {{ __('parent.profile') }}
                 </a>
 
                 <a href="{{ route('parent.children.show', ['child' => $child, 'tab' => 'updates']) }}"
                    class="px-4 py-2 rounded-md text-sm font-medium {{ $tabClasses('updates') }}">
-                    Daily Updates
+                    {{ __('parent.daily_updates') }}
                 </a>
 
                 <a href="{{ route('parent.children.show', ['child' => $child, 'tab' => 'attendance']) }}"
                    class="px-4 py-2 rounded-md text-sm font-medium {{ $tabClasses('attendance') }}">
-                    Attendance
+                    {{ __('parent.attendance') }}
                 </a>
 
                 <a href="{{ route('parent.children.show', ['child' => $child, 'tab' => 'reports']) }}"
                    class="px-4 py-2 rounded-md text-sm font-medium {{ $tabClasses('reports') }}">
-                    Daily Reports
+                    {{ __('parent.daily_reports') }}
                 </a>
 
                 <a href="{{ route('parent.children.show', ['child' => $child, 'tab' => 'medication']) }}"
                    class="px-4 py-2 rounded-md text-sm font-medium {{ $tabClasses('medication') }}">
-                    Medication Logs
+                    {{ __('parent.medication_logs') }}
                 </a>
             </div>
 
             @if ($activeTab === 'profile')
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                        Overview
+                        {{ __('parent.overview') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
-                            <p class="text-sm text-gray-500 dark:text-gray-300">Daily Updates</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-300">{{ __('parent.daily_updates') }}</p>
                             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $dailyUpdates->count() }}</p>
                         </div>
 
                         <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
-                            <p class="text-sm text-gray-500 dark:text-gray-300">Attendance Records</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-300">{{ __('parent.attendance_records') }}</p>
                             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $attendanceRecords->count() }}</p>
                         </div>
 
                         <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
-                            <p class="text-sm text-gray-500 dark:text-gray-300">Daily Reports</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-300">{{ __('parent.daily_reports') }}</p>
                             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $dailyReports->count() }}</p>
                         </div>
 
                         <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
-                            <p class="text-sm text-gray-500 dark:text-gray-300">Medication Logs</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-300">{{ __('parent.medication_logs') }}</p>
                             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $medicationLogs->count() }}</p>
                         </div>
                     </div>
@@ -207,21 +207,21 @@
             @if ($activeTab === 'updates')
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                        Daily Updates
+                        {{ __('parent.daily_updates') }}
                     </h3>
 
                     @if ($dailyUpdates->isEmpty())
-                        <p class="text-gray-600 dark:text-gray-300">No daily updates recorded yet.</p>
+                        <p class="text-gray-600 dark:text-gray-300">{{ __('parent.no_daily_updates') }}</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="min-w-full text-sm text-gray-900 dark:text-gray-100">
                                 <thead>
                                     <tr class="border-b dark:border-gray-700 align-top text-gray-800 dark:text-gray-100">
-                                        <th class="py-3 pr-4">Date</th>
-                                        <th class="py-3 pr-4">Meals</th>
-                                        <th class="py-3 pr-4">Sleep</th>
-                                        <th class="py-3 pr-4">Notes</th>
-                                        <th class="py-3">Created By</th>
+                                        <th class="py-3 pr-4">{{ __('parent.date') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.meals') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.sleep') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.notes') }}</th>
+                                        <th class="py-3">{{ __('parent.created_by') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -244,22 +244,22 @@
             @if ($activeTab === 'attendance')
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                        Attendance History
+                       {{ __('parent.attendance_history') }} 
                     </h3>
 
                     @if ($attendanceRecords->isEmpty())
-                        <p class="text-gray-600 dark:text-gray-300">No attendance records recorded yet.</p>
+                        <p class="text-gray-600 dark:text-gray-300">{{ __('parent.no_attendance') }}</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="min-w-full text-sm text-gray-900 dark:text-gray-100">
                                 <thead>
                                     <tr class="border-b dark:border-gray-700 align-top text-gray-800 dark:text-gray-100">
-                                        <th class="py-3 pr-4">Date</th>
-                                        <th class="py-3 pr-4">Status</th>
-                                        <th class="py-3 pr-4">Check In</th>
-                                        <th class="py-3 pr-4">Check Out</th>
-                                        <th class="py-3 pr-4">Room</th>
-                                        <th class="py-3">Recorded By</th>
+                                        <th class="py-3 pr-4">{{ __('parent.date') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.status') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.check_in') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.check_out') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.room') }}</th>
+                                        <th class="py-3">{{ __('parent.recorded_by') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -283,27 +283,27 @@
             @if ($activeTab === 'reports')
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                        Daily Reports
+                        {{ __('parent.daily_reports') }}
                     </h3>
 
                     @if ($dailyReports->isEmpty())
-                        <p class="text-gray-600 dark:text-gray-300">No daily reports recorded yet.</p>
+                        <p class="text-gray-600 dark:text-gray-300">{{ __('parent.no_reports') }}</p>
                     @else
                         <div class="space-y-4">
                             @foreach ($dailyReports as $report)
     <div class="border dark:border-gray-700 rounded-lg p-4">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3">
             <p class="font-semibold text-gray-900 dark:text-gray-100">
-                {{ $report->date ? \Carbon\Carbon::parse($report->date)->format('d M Y') : 'No date' }}
+                {{ $report->date ? \Carbon\Carbon::parse($report->date)->format('d M Y') : __('parent.no_date') }}'
             </p>
             <p class="text-sm text-gray-600 dark:text-gray-400">
-                Carer: {{ $report->carer?->name ?: '—' }} |
-                Media items: {{ $report->mediaUpdates->count() }}
+                {{ __('parent.carer') }}: {{ $report->carer?->name ?: '—' }} |
+                {{ __('parent.media_items') }}: {{ $report->mediaUpdates->count() }}
             </p>
         </div>
 
         <p class="text-gray-700 dark:text-gray-300 whitespace-pre-line">
-            {{ $report->daily_report ?: 'No written report.' }}
+            {{ $report->daily_report ?:  __('parent.no_written_report') }}' 
         </p>
 
         @if ($report->mediaUpdates->isNotEmpty())
@@ -318,18 +318,18 @@
                     <div class="border dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-900/40">
                         @if ($isImage)
                             <img src="{{ $url }}"
-                                 alt="Daily report media"
+                                 alt="{{ __('parent.daily_report_media') }}"
                                  class="w-full h-auto rounded-lg object-cover">
                         @elseif ($isVideo)
                             <video controls class="w-full rounded-lg">
                                 <source src="{{ $url }}">
-                                Your browser does not support the video tag.
+                                {{ __('parent.video_not_supported') }}
                             </video>
                         @else
                             <a href="{{ $url }}"
                                target="_blank"
                                class="text-blue-600 dark:text-blue-400 hover:underline">
-                                View attachment
+                                {{ __('parent.view_attachment') }}
                             </a>
                         @endif
 
@@ -352,22 +352,22 @@
             @if ($activeTab === 'medication')
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                        Medication Logs
+                        {{ __('parent.medication_logs') }}
                     </h3>
 
                     @if ($medicationLogs->isEmpty())
-                        <p class="text-gray-600 dark:text-gray-300">No medication logs recorded yet.</p>
+                        <p class="text-gray-600 dark:text-gray-300">{{ __('parent.no_medication') }}</p>
                     @else
                         <div class="overflow-x-auto">
                             <table class="min-w-full text-sm text-gray-900 dark:text-gray-100">
                                 <thead>
                                     <tr class="border-b dark:border-gray-700 align-top text-gray-800 dark:text-gray-100">
-                                        <th class="py-3 pr-4">Date</th>
-                                        <th class="py-3 pr-4">Time</th>
-                                        <th class="py-3 pr-4">Medication</th>
-                                        <th class="py-3 pr-4">Dosage</th>
-                                        <th class="py-3 pr-4">Notes</th>
-                                        <th class="py-3">Carer</th>
+                                        <th class="py-3 pr-4">{{ __('parent.date') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.time') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.medication_label') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.dosage') }}</th>
+                                        <th class="py-3 pr-4">{{ __('parent.notes') }}</th>
+                                        <th class="py-3">{{ __('parent.carer') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

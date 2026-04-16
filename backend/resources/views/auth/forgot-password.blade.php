@@ -1,6 +1,23 @@
 <x-guest-layout>
+    <div class="mb-4 flex justify-end">
+        <form method="POST" action="{{ route('locale.switch') }}">
+            @csrf
+
+            <select
+                name="locale"
+                onchange="this.form.submit()"
+                class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+                <option value="en" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>English</option>
+                <option value="pt" {{ app()->getLocale() === 'pt' ? 'selected' : '' }}>Português</option>
+                <option value="pl" {{ app()->getLocale() === 'pl' ? 'selected' : '' }}>Polski</option>
+                <option value="ro" {{ app()->getLocale() === 'ro' ? 'selected' : '' }}>Română</option>
+            </select>
+        </form>
+    </div>
+
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+        {{ __('auth.forgot_password_intro') }}
     </div>
 
     <!-- Session Status -->
@@ -18,7 +35,7 @@
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button>
-                {{ __('Email Password Reset Link') }}
+                {{ __('auth.email_password_reset_link') }}
             </x-primary-button>
         </div>
     </form>

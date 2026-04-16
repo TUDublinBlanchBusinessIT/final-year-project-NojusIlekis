@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                    Daily Updates
+                    {{ __('carer.daily_updates') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Select a date and room, then fill updates per child. Saving here updates the Manager Tasks Summary.
+                    {{ __('carer.daily_updates_instruction') }}
                 </p>
             </div>
 
@@ -14,7 +14,7 @@
                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium
                       text-slate-700 shadow-sm hover:bg-slate-50
                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
-                ← Back to Dashboard
+                ← {{ __('carer.back_to_dashboard') }}
             </a>
         </div>
     </x-slot>
@@ -44,15 +44,15 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Filters</h3>
-                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Choose a date and room to load children.</p>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('carer.filters') }}</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">{{ __('carer.load_children_updates') }}</p>
                 </div>
 
                 <div class="p-5">
                     <form method="GET" action="{{ route('carer.daily-updates.index') }}"
                           class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Date</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">{{ __('carer.date') }}</label>
                             <input type="date" name="date" value="{{ $date }}"
                                    class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900
                                           focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
@@ -61,13 +61,13 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">Room</label>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-1">{{ __('carer.room') }}</label>
                             <select name="room_id"
                                     class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900
                                            focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500
                                            dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100
                                            dark:focus:ring-blue-900/40 dark:focus:border-blue-400">
-                                <option value="">Select room...</option>
+                                <option value="">{{ __('carer.select_room') }}</option>
                                 @foreach($rooms as $room)
                                     <option value="{{ $room->id }}" @selected((string)$roomId === (string)$room->id)>
                                         {{ $room->name }}
@@ -81,7 +81,7 @@
                                        bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 shadow-sm shadow-blue-500/20
                                        hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
                                        focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
-                            Load
+                            {{ __('carer.load') }}
                         </button>
                     </form>
                 </div>
@@ -93,9 +93,9 @@
                             dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                     <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                         <div>
-                            <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Daily Updates</h3>
+                            <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('carer.daily_updates') }}</h3>
                             <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                                Fill at least one field to count as <span class="font-semibold">Done</span>.
+                                {{ __('carer.fill_fields') }} <span class="font-semibold">{{ __('carer.done') }}</span>.
                             </p>
                         </div>
 
@@ -109,7 +109,7 @@
                                            bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 shadow-sm shadow-emerald-500/20
                                            hover:shadow-md hover:shadow-emerald-500/30 hover:brightness-110
                                            focus:outline-none focus:ring-4 focus:ring-emerald-200 dark:focus:ring-emerald-900/40">
-                                Save Updates
+                                {{ __('carer.save_updates') }}
                             </button>
                         </form>
                     </div>
@@ -123,10 +123,10 @@
                             <table class="min-w-full">
                                 <thead>
                                     <tr class="bg-slate-50 dark:bg-slate-900/60">
-                                        <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Child</th>
-                                        <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Meals</th>
-                                        <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Sleep</th>
-                                        <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Notes</th>
+                                        <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('carer.child') }}</th>
+                                        <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('carer.meals') }}</th>
+                                        <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('carer.sleep') }}</th>
+                                        <th class="text-left px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">{{ __('carer.notes') }}</th>
                                     </tr>
                                 </thead>
 
@@ -142,11 +142,11 @@
                                                             {{ $child->first_name }} {{ $child->last_name }}
                                                         </div>
                                                         <div class="text-xs text-slate-500 dark:text-slate-400">
-                                                            Room: {{ $child->room?->name ?? '—' }} • ID: {{ $child->id }}
+                                                            {{ __('carer.room') }}: {{ $child->room?->name ?? '—' }} • ID: {{ $child->id }}
                                                         </div>
                                                         @if($child->hasAllergies())
                                                             <span class="mt-1 inline-flex items-center bg-red-100 text-red-700 text-xs font-semibold px-2 py-0.5 rounded-full"
-                                                                  title="Allergies: {{ $child->allergyList() }}">
+                                                                  title="{{ __('carer.allergies') }}: {{ $child->allergyList() }}">
                                                                 ⚠️ {{ $child->allergyList() }}
                                                             </span>
                                                         @endif
@@ -156,13 +156,13 @@
                                                         <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
                                                                      bg-emerald-50 text-emerald-700 border border-emerald-200
                                                                      dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-900/60">
-                                                            Done
+                                                            {{ __('carer.done') }}
                                                         </span>
                                                     @else
                                                         <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
                                                                      bg-red-50 text-red-700 border border-red-200
                                                                      dark:bg-red-950/40 dark:text-red-200 dark:border-red-900/60">
-                                                            Missing
+                                                            {{ __('carer.missing') }}
                                                         </span>
                                                     @endif
                                                 </div>
@@ -176,7 +176,7 @@
                                                               dark:focus:ring-blue-900/40 dark:focus:border-blue-400">
                                                 @if($child->hasAllergies())
                                                     <p class="mt-1 text-xs text-red-600 font-medium">
-                                                        ⚠️ Allergies: {{ $child->allergyList() }}
+                                                        ⚠️ {{ __('carer.allergies') }}: {{ $child->allergyList() }}
                                                     </p>
                                                 @endif
                                             </td>
@@ -200,7 +200,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="4" class="px-5 py-6 text-slate-600 dark:text-slate-300">
-                                                No children found for this room.
+                                                {{ __('carer.no_children_room') }}
                                             </td>
                                         </tr>
                                     @endforelse
@@ -208,15 +208,6 @@
                             </table>
                         </div>
 
-                        <div class="px-5 py-4 border-t border-slate-200 dark:border-slate-800 flex justify-end">
-                            <button type="submit"
-                                    class="group inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 font-semibold text-white
-                                           bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 shadow-sm shadow-blue-500/20
-                                           hover:shadow-md hover:shadow-blue-500/30 hover:brightness-110
-                                           focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
-                                Save Updates
-                            </button>
-                        </div>
                     </form>
                 </div>
             @endif

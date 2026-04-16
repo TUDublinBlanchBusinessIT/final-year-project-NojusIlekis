@@ -3,19 +3,19 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    {{ $dailyReport->child->first_name }} {{ $dailyReport->child->last_name }} — Daily Report
+                    {{ $dailyReport->child->first_name }} {{ $dailyReport->child->last_name }} — {{ __('manager.daily_report') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    Room: {{ $dailyReport->child->room->name ?? '—' }} · Date: {{ $dailyReport->date }} ·
-                    Submitted at: {{ $dailyReport->created_at->format('d/m/Y H:i:s') }}
-                    · By: {{ $dailyReport->carer->name ?? '—' }}
+                    {{ __('manager.room') }}: {{ $dailyReport->child->room->name ?? '—' }} · {{ __('manager.date') }}: {{ $dailyReport->date }} ·
+                    {{ __('manager.submitted_at') }}: {{ $dailyReport->created_at->format('d/m/Y H:i:s') }}
+                    · {{ __('manager.by') }}: {{ $dailyReport->carer->name ?? '—' }}
                 </p>
             </div>
 
             <a href="{{ route('manager.reports.daily-reports.index', ['date' => $dailyReport->date, 'room_id' => $dailyReport->child->room_id]) }}"
                class="inline-flex items-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50
                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700">
-                ← Back to list
+                ← {{ __('manager.back_to_list') }}
             </a>
         </div>
     </x-slot>
@@ -40,13 +40,13 @@
             {{-- Acknowledgement --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Acknowledgement</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.acknowledgement') }}</h3>
 
                     <form method="POST" action="{{ route('manager.reports.daily-reports.request-ack', $dailyReport->id) }}">
                         @csrf
                         <button type="submit"
                                 class="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
-                            Request Acknowledgement
+                            {{ __('manager.request_acknowledgement') }}
                         </button>
                     </form>
                 </div>
@@ -60,10 +60,10 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="font-medium text-green-800">Acknowledged</p>
+                                <p class="font-medium text-green-800">{{ __('manager.acknowledged') }}</p>
                                 <p class="text-sm text-gray-500">
-                                    Signed by {{ $dailyReport->acknowledgement->signature_name }}
-                                    on {{ $dailyReport->acknowledgement->signed_at->format('d M Y \a\t H:i') }}
+                                    {{ __('manager.signed_by') }} {{ $dailyReport->acknowledgement->signature_name }}
+                                    {{ __('manager.on') }} {{ $dailyReport->acknowledgement->signed_at->format('d M Y \a\t H:i') }}
                                 </p>
                             </div>
                         </div>
@@ -75,21 +75,21 @@
                                 </svg>
                             </div>
                             <div>
-                                <p class="font-medium text-amber-800">Awaiting Parent Signature</p>
-                                <p class="text-sm text-gray-500">Sent to parent — not yet acknowledged</p>
+                                <p class="font-medium text-amber-800">{{ __('manager.awaiting_parent_signature') }}</p>
+                                <p class="text-sm text-gray-500">{{ __('manager.sent_to_parent_not_acknowledged') }}</p>
                             </div>
                         </div>
                     @else
-                        <p class="text-gray-400 text-sm">No acknowledgement requested for this report.</p>
+                        <p class="text-gray-400 text-sm">{{ __('manager.no_acknowledgement_requested') }}</p>
                     @endif
 
                     @if($dailyReport->acknowledgement && ($dailyReport->acknowledgement->creator || $dailyReport->acknowledgement->updater))
                         <div class="mt-3 text-xs text-gray-400">
                             @if($dailyReport->acknowledgement->creator)
-                                Requested by {{ $dailyReport->acknowledgement->creator->name }}
+                                {{ __('manager.requested_by') }} {{ $dailyReport->acknowledgement->creator->name }}
                             @endif
                             @if($dailyReport->acknowledgement->updater)
-                                · Last updated by {{ $dailyReport->acknowledgement->updater->name }}
+                                · {{ __('manager.last_updated_by') }} {{ $dailyReport->acknowledgement->updater->name }}
                             @endif
                         </div>
                     @endif
@@ -99,7 +99,7 @@
             {{-- Report text --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">End of day report</h3>
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('manager.end_of_day_report') }}</h3>
                 </div>
                 <div class="p-5 text-slate-900 dark:text-slate-100 whitespace-pre-wrap">
                     {{ $dailyReport->daily_report }}
@@ -110,13 +110,13 @@
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/40">
                 <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800">
                     <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
-                        Attachments ({{ $dailyReport->mediaUpdates->count() }})
+                        {{ __('manager.attachments') }} ({{ $dailyReport->mediaUpdates->count() }})
                     </h3>
                 </div>
 
                 <div class="p-5">
                     @if($dailyReport->mediaUpdates->isEmpty())
-                        <p class="text-slate-600 dark:text-slate-300">No attachments.</p>
+                        <p class="text-slate-600 dark:text-slate-300">{{ __('manager.no_attachments') }}</p>
                     @else
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach($dailyReport->mediaUpdates as $media)
@@ -131,10 +131,10 @@
                                             {{ ucfirst($media->type) }}
                                         </div>
                                         <div class="text-xs mt-1">
-                                            Uploaded: {{ $time }}
+                                            {{ __('manager.uploaded') }}: {{ $time }}
                                         </div>
                                         @if($media->notes)
-                                            <div class="text-xs mt-1">Notes: {{ $media->notes }}</div>
+                                            <div class="text-xs mt-1">{{ __('manager.notes') }}: {{ $media->notes }}</div>
                                         @endif
                                     </div>
 
@@ -144,13 +144,13 @@
                                         @else
                                             <video controls class="w-full h-48 rounded-lg">
                                                 <source src="{{ $url }}">
-                                                Your browser does not support the video tag.
+                                                {{ __('manager.browser_no_video_support') }}
                                             </video>
                                         @endif
 
                                         <a href="{{ $url }}" target="_blank"
                                            class="mt-3 inline-flex items-center justify-center w-full rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
-                                            Open
+                                            {{ __('manager.open') }}
                                         </a>
                                     </div>
                                 </div>

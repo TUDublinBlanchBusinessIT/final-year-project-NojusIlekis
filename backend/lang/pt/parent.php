@@ -1,0 +1,164 @@
+<?php
+
+return [
+    'dashboard_title' => 'Painel dos Pais',
+    'welcome' => 'Bem-vindo',
+    'children' => 'As minhas crianças',
+    'timeline' => 'Linha do tempo',
+    'daily_updates' => 'Atualizações diárias',
+    'attendance' => 'Presenças',
+    'medication' => 'Medicação',
+    'incidents' => 'Incidentes',
+    'messages' => 'Mensagens',
+    'acknowledgements' => 'Confirmações',
+
+    'view_child' => 'Ver criança',
+    'room' => 'Sala',
+    'assigned_room' => 'Sala atribuída',
+    'no_room' => 'Sem sala atribuída',
+
+    'no_children' => 'Sem crianças',
+    'no_updates' => 'Sem atualizações',
+
+    'pending_acknowledgements' => 'Confirmações pendentes',
+    'pending' => 'Pendente',
+
+    'profile_details' => 'Detalhes do perfil',
+    'full_name' => 'Nome completo',
+
+    'health_notes' => 'Notas de saúde',
+    'allergies' => 'Alergias',
+
+    'milestones' => 'Marcos de desenvolvimento',
+
+    'overview' => 'Visão geral',
+
+    'date' => 'Data',
+    'meals' => 'Refeições',
+    'sleep' => 'Sono',
+    'notes' => 'Notas',
+
+    'incident_reports' => 'Relatórios de incidentes',
+    'severity' => 'Gravidade',
+
+    'invoice_details' => 'Detalhes da fatura',
+    'subtotal' => 'Subtotal',
+    'discount' => 'Desconto',
+    'final_total' => 'Total final',
+
+    'payment' => 'Pagamento',
+    'approved' => 'Aprovado',
+
+    'upload_payment_proof' => 'Carregar comprovativo',
+    'submit_payment' => '💳 Submeter pagamento',
+
+    'messages_description' => 'Conversas com cuidadores',
+    'new_message' => 'Nova mensagem',
+
+    'send' => 'Enviar',
+
+    'today' => 'Hoje',
+    'title' => 'Título',
+'status' => 'Estado',
+'acknowledgement' => 'Confirmação',
+'view' => 'Ver',
+'high' => 'Alta',
+'medium' => 'Média',
+'low' => 'Baixa',
+'open' => 'Aberto',
+'reviewed' => 'Revisto',
+'closed' => 'Fechado',
+'acknowledged' => 'Confirmado',
+'pending' => 'Pendente',
+
+    'no_pending_acknowledgements' => 'Não há confirmações pendentes — está tudo em dia!',
+'outstanding_invoices' => 'Faturas em Aberto',
+'total_outstanding' => 'Total em Aberto',
+'next_due_date' => 'Próxima Data de Vencimento',
+'unpaid_invoices' => 'Faturas por Pagar',
+'none' => 'Nenhuma',
+'no_outstanding_invoices' => 'Não há faturas em aberto — está tudo em dia!',
+'child_timelines' => 'Linhas do Tempo da Criança',
+'view_child_timeline' => 'Veja a linha do tempo diária da sua criança.',
+'view_timeline' => 'Ver Linha do Tempo',
+'contact_centre' => 'Centro de Contacto',
+'contact_centre_desc' => 'Envie uma rápida questão sobre propinas diretamente ao gestor do centro.',
+'enquiry_sent_to' => 'Este pedido de informação será enviado para:',
+'about_child_optional' => 'Sobre a criança (opcional)',
+'general_fee_enquiry' => 'Questão geral sobre propinas',
+'message' => 'Mensagem',
+'fee_enquiry_placeholder' => 'Escreva aqui a sua questão sobre propinas...',
+'send_enquiry' => 'Enviar Pedido',
+'view_profile' => 'Ver perfil',
+
+'child' => 'Criança',
+'period' => 'Período',
+'due_date' => 'Data de Vencimento',
+'total' => 'Total',
+'action' => 'Ação',
+'no_pending_caught_up' => 'Não há confirmações pendentes — está tudo em dia!',
+'no_outstanding_caught_up' => 'Não há faturas em aberto — está tudo em dia!',
+'child_timeline_description' => 'Veja a linha do tempo diária da sua criança.',
+'contact_centre_description' => 'Envie uma rápida questão sobre propinas diretamente ao gestor do centro.',
+'type_fee_enquiry' => 'Escreva aqui a sua questão sobre propinas...',
+
+'incident_details' => 'Detalhes do Incidente',
+'back_to_incidents' => 'Voltar aos Incidentes',
+'incident_summary' => 'Resumo do Incidente',
+'description' => 'Descrição',
+'action_taken' => 'Ação Tomada',
+'parent_acknowledgement' => 'Confirmação do Responsável',
+'incident_acknowledged' => 'Incidente confirmado',
+'signed_by' => 'Assinado por',
+'on' => 'em',
+'high' => 'Alta',
+'closed' => 'Fechado',
+
+'my_invoices' => 'As Minhas Faturas',
+'my_invoices_desc' => 'Veja as faturas dos seus filhos.',
+'invoice_list' => 'Lista de Faturas',
+'invoice_id' => 'ID da Fatura',
+'no_invoices_available' => 'Não há faturas disponíveis.',
+'my_invoices_desc' => 'Veja as faturas dos seus filhos.',
+'no_invoices_available' => 'Não há faturas disponíveis.',
+
+'age' => 'Idade',
+'months' => 'meses',
+'age_4_5' => '4 a 5 anos',
+'milestones_observed' => 'marcos observados',
+'back_to_children' => '← As minhas crianças',
+
+'overall_progress' => 'PROGRESSO GERAL',
+'observed' => 'observado',
+
+'category_well-being' => 'Bem-estar',
+'category_identity-belonging' => 'Identidade e Pertencimento',
+'category_communicating' => 'Comunicação',
+'category_exploring-thinking' => 'Exploração e Pensamento',
+
+'all_milestones' => 'Todos os Marcos',
+'milestones_age_range' => 'Marcos para a faixa etária de 4 a 5 anos.',
+'age_range_4_5' => '4 a 5 anos',
+
+'category_wellbeing' => 'Bem-estar',
+'category_identity_belonging' => 'Identidade e Pertença',
+'category_communicating' => 'Comunicação',
+'category_exploring_thinking' => 'Exploração e Pensamento',
+
+'milestones_for_age_range' => 'Marcos para :range.',
+'age_range_48_60' => '4 a 5 anos',
+
+    'pending_acknowledgements' => 'Confirmações pendentes',
+    'pending' => 'Pendente',
+
+    'daily_report' => 'Relatório Diário',
+    'record' => 'Registo',
+
+    'type_full_name_sign' => 'Digite o seu nome completo para assinar',
+    'confirm_read_understood' => 'Confirmo que li e compreendi este item',
+    'sign_acknowledge' => 'Assinar e Confirmar',
+
+    'no_pending_caught_up' => 'Sem confirmações pendentes — está tudo atualizado.',
+    
+
+];

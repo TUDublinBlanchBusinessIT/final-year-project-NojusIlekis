@@ -165,6 +165,13 @@ class DashboardController extends Controller
             $absentSeries[] = $map[$d]['absent'] ?? 0;
         }
 
+        $pendingPayments = \App\Models\Invoice::where('payment_status', 'payment_submitted')
+            ->with(['child', 'parent'])
+            ->latest('payment_submitted_at')
+            ->get();
+
+        $pendingPaymentCount = $pendingPayments->count();
+
         return view('dashboards.manager', [
             'filters' => [
                 'start_date' => $start,
@@ -185,6 +192,8 @@ class DashboardController extends Controller
                 'present' => $presentSeries,
                 'absent' => $absentSeries,
             ],
+            'pendingPayments' => $pendingPayments,
+            'pendingPaymentCount' => $pendingPaymentCount,
         ]);
     }
 }

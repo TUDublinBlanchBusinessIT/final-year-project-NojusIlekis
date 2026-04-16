@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">
-                    Parent Enquiries
+                    {{ __('manager.parent_enquiries') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    View and respond to fee and invoice enquiries sent by parents.
+                    {{ __('manager.parent_enquiries_desc') }}
                 </p>
             </div>
 
@@ -14,7 +14,7 @@
                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
                       bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100
                       dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                ← Back to Dashboard
+                ← {{ __('manager.back_to_dashboard') }}
             </a>
         </div>
     </x-slot>
@@ -25,7 +25,7 @@
             @if ($conversations->isEmpty())
                 <div class="rounded-2xl border border-slate-200 bg-white shadow-sm p-8 text-center text-slate-500
                             dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-300">
-                    No parent enquiries yet.
+                    {{ __('manager.no_parent_enquiries') }}
                 </div>
             @else
                 @foreach ($conversations as $conversation)
@@ -46,9 +46,9 @@
 
                                 <p class="text-xs text-slate-400 mt-1">
                                     @if ($conversation->last_message->child)
-                                        About: {{ $conversation->last_message->child->first_name }} {{ $conversation->last_message->child->last_name }}
+                                        {{ __('manager.about') }}: {{ $conversation->last_message->child->first_name }} {{ $conversation->last_message->child->last_name }}
                                     @else
-                                        General enquiry
+                                        {{ __('manager.general_enquiry') }}
                                     @endif
                                 </p>
                             </div>

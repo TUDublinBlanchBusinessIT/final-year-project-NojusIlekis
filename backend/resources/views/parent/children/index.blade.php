@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            My Children
+            {{ __('parent.children') }}
         </h2>
     </x-slot>
 
@@ -10,7 +10,7 @@
             @if ($children->isEmpty())
                 <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
                     <p class="text-gray-700 dark:text-gray-300">
-                        No children are linked to your account yet.
+                        {{ __('parent.no_children') }}
                     </p>
                 </div>
             @else
@@ -24,7 +24,7 @@
 
                             $roomLabel = $child->room?->name
                                 ?? $child->room?->room_name
-                                ?? ($child->room ? 'Assigned room' : 'No room assigned');
+                                ?? ($child->room ? __('parent.assigned_room') : __('parent.no_room'))
                         @endphp
 
                         <div class="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
@@ -39,7 +39,7 @@
                                             {{ $child->first_name }} {{ $child->last_name }}
                                         </h3>
                                         <p class="text-sm text-gray-600 dark:text-gray-400">
-                                            Room: {{ $roomLabel }}
+                                            {{ __('parent.room') }}: {{ $roomLabel }}
                                         </p>
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                                 <div class="mt-6">
                                     <a href="{{ route('parent.children.show', $child) }}"
                                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-                                        View profile
+                                        {{ __('parent.view_profile') }}
                                     </a>
                                 </div>
                             </div>

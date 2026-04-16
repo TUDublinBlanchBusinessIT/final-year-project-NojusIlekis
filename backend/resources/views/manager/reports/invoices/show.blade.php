@@ -3,10 +3,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="font-semibold text-2xl text-slate-900 dark:text-slate-100 leading-tight">
-                    Invoice Details
+                    {{ __('manager.invoice_details') }}
                 </h2>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    View invoice breakdown, discount, and final total.
+                    {{ __('manager.invoice_details_desc') }}
                 </p>
             </div>
 
@@ -16,7 +16,7 @@
                    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
                           bg-slate-700 text-white border border-slate-700
                           hover:bg-slate-800">
-                    Print Invoice
+                    {{ __('manager.print_invoice') }}
                 </a>
 
                 <a href="{{ route('manager.invoices.index') }}"
@@ -24,7 +24,7 @@
                           bg-slate-50 text-slate-700 border border-slate-200
                           hover:bg-slate-100
                           dark:bg-slate-900/40 dark:text-slate-200 dark:border-slate-700/60">
-                    Back to Invoices
+                    {{ __('manager.back_to_invoices') }}
                 </a>
             </div>
         </div>
@@ -55,23 +55,23 @@
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                        Invoice Summary
+                        {{ __('manager.invoice_summary') }}
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                         <div class="space-y-2 text-slate-800 dark:text-slate-200">
-                            <p><span class="font-semibold">Invoice ID:</span> #{{ $invoice->id }}</p>
-                            <p><span class="font-semibold">Child:</span> {{ $invoice->child->first_name ?? '' }} {{ $invoice->child->last_name ?? '' }}</p>
-                            <p><span class="font-semibold">Parent:</span> {{ $invoice->parent->name ?? 'N/A' }}</p>
-                            <p><span class="font-semibold">Status:</span> {{ ucfirst($invoice->status) }}</p>
+                            <p><span class="font-semibold">{{ __('manager.invoice_id') }}:</span> #{{ $invoice->id }}</p>
+                            <p><span class="font-semibold">{{ __('manager.child') }}:</span> {{ $invoice->child->first_name ?? '' }} {{ $invoice->child->last_name ?? '' }}</p>
+                            <p><span class="font-semibold">{{ __('manager.parent') }}:</span> {{ $invoice->parent->name ?? __('manager.not_available') }}</p>
+                            <p><span class="font-semibold">{{ __('manager.status') }}:</span> {{ ucfirst($invoice->status) }}</p>
                         </div>
 
                         <div class="space-y-2 text-slate-800 dark:text-slate-200">
-                            <p><span class="font-semibold">Period:</span> {{ $invoice->period_start }} to {{ $invoice->period_end }}</p>
-                            <p><span class="font-semibold">Due Date:</span> {{ $invoice->due_date }}</p>
-                            <p><span class="font-semibold">Subtotal:</span> €{{ number_format($subtotal, 2) }}</p>
-                            <p><span class="font-semibold">Discount:</span> €{{ number_format($invoice->discount, 2) }}</p>
-                            <p><span class="font-semibold">Final Total:</span> €{{ number_format($finalTotal, 2) }}</p>
+                            <p><span class="font-semibold">{{ __('manager.period') }}:</span> {{ $invoice->period_start }} {{ __('manager.to') }} {{ $invoice->period_end }}</p>
+                            <p><span class="font-semibold">{{ __('manager.due_date') }}:</span> {{ $invoice->due_date }}</p>
+                            <p><span class="font-semibold">{{ __('manager.subtotal') }}:</span> €{{ number_format($subtotal, 2) }}</p>
+                            <p><span class="font-semibold">{{ __('manager.discount') }}:</span> €{{ number_format($invoice->discount, 2) }}</p>
+                            <p><span class="font-semibold">{{ __('manager.final_total') }}:</span> €{{ number_format($finalTotal, 2) }}</p>
                         </div>
                     </div>
 
@@ -90,7 +90,7 @@
                                            focus:outline-none focus:ring-4 focus:ring-blue-200
                                            active:translate-y-[1px]
                                            dark:shadow-blue-900/30 dark:focus:ring-blue-900/40">
-                                    Mark as Sent
+                                    {{ __('manager.mark_as_sent') }}
                                 </button>
                             </form>
                         @endif
@@ -105,7 +105,24 @@
                                     class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold text-white
                                            bg-emerald-600 hover:bg-emerald-700
                                            focus:outline-none focus:ring-4 focus:ring-emerald-200">
-                                    Mark as Paid
+                                    {{ __('manager.mark_as_paid') }}
+                                </button>
+                            </form>
+                        @endif
+
+                        @if($invoice->canBeEdited())
+                            <a href="{{ route('manager.invoices.items.create', $invoice) }}"
+                               class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition">
+                                ✏️ {{ __('manager.edit_invoice') }}
+                            </a>
+                        @endif
+
+                        @if($invoice->canBeCancelled())
+                            <form method="POST" action="{{ route('manager.invoices.cancel', $invoice) }}">
+                                @csrf
+                                <button type="submit" onclick="return confirm('{{ __('manager.cancel_invoice_confirm') }}')"
+                                        class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition">
+                                    🚫 {{ __('manager.cancel_invoice') }}
                                 </button>
                             </form>
                         @endif
@@ -113,11 +130,99 @@
                 </div>
             </div>
 
+            {{-- Payment Review Section (Manager) --}}
+            @if($invoice->isPaymentPending())
+                <div class="bg-amber-50 rounded-2xl border border-amber-200 shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-amber-800 mb-4">⏳ {{ __('manager.payment_awaiting_review') }}</h3>
+
+                    <div class="space-y-3 mb-4">
+                        <p class="text-sm text-gray-700">
+                            <span class="font-medium">{{ __('manager.submitted') }}:</span> {{ $invoice->payment_submitted_at->format('d M Y, H:i') }}
+                        </p>
+                        @if($invoice->payment_notes)
+                            <p class="text-sm text-gray-700">
+                                <span class="font-medium">{{ __('manager.parent_note') }}:</span> "{{ $invoice->payment_notes }}"
+                            </p>
+                        @endif
+                    </div>
+
+                    {{-- Payment proof viewer --}}
+                    @if($invoice->payment_proof_path)
+                        <div class="mb-4">
+                            <p class="text-sm font-medium text-gray-700 mb-2">{{ __('manager.payment_proof') }}:</p>
+                            @if(\Illuminate\Support\Str::endsWith($invoice->payment_proof_path, '.pdf'))
+                                <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank"
+                                   class="inline-flex items-center text-blue-600 hover:text-blue-800 underline text-sm">
+                                    📄 {{ __('manager.view_pdf_receipt') }}
+                                </a>
+                            @else
+                                <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank">
+                                    <img src="{{ Storage::url($invoice->payment_proof_path) }}"
+                                         alt="Payment proof"
+                                         class="max-w-md rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:opacity-90">
+                                </a>
+                                <p class="text-xs text-gray-400 mt-1">{{ __('manager.click_full_size') }}</p>
+                            @endif
+                        </div>
+                    @endif
+
+                    {{-- Approve / Reject buttons --}}
+                    <div class="flex gap-3">
+                        <form method="POST" action="{{ route('manager.invoices.approve-payment', $invoice) }}">
+                            @csrf
+                            <button type="submit" onclick="return confirm('{{ __('manager.approve_payment_confirm') }}')"
+                                    class="px-5 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition">
+                                ✅ {{ __('manager.approve_payment') }}
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ route('manager.invoices.reject-payment', $invoice) }}"
+                              x-data="{ showReason: false }">
+                            @csrf
+                            <button type="button" @click="showReason = !showReason"
+                                    class="px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition">
+                                ❌ {{ __('manager.reject_payment') }}
+                            </button>
+                            <div x-show="showReason" x-cloak class="mt-3">
+                                <textarea name="rejection_reason" rows="2" required
+                                          placeholder="{{ __('manager.rejection_reason_placeholder') }}"
+                                          class="w-full text-sm rounded-lg border-slate-200 focus:border-red-500 focus:ring-red-500"></textarea>
+                                <button type="submit" class="mt-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700">
+                                    {{ __('manager.confirm_rejection') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Payment status display for non-pending invoices --}}
+            @if($invoice->payment_status === 'approved')
+                <div class="bg-green-50 rounded-2xl border border-green-200 p-6">
+                    <h3 class="text-lg font-semibold text-green-800">✅ {{ __('manager.payment_approved') }}</h3>
+                    <p class="text-sm text-gray-600 mt-1">
+                        {{ __('manager.approved_by') }} {{ $invoice->approvedBy?->first_name ?? $invoice->approvedBy?->name ?? 'Manager' }}
+                        {{ __('manager.on') }} {{ $invoice->payment_approved_at?->format('d M Y, H:i') }}
+                    </p>
+                    @if($invoice->payment_proof_path)
+                        <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank" class="text-sm text-blue-600 underline mt-2 inline-block">
+                            {{ __('manager.view_payment_proof') }}
+                        </a>
+                    @endif
+                </div>
+            @elseif($invoice->payment_status === 'rejected')
+                <div class="bg-red-50 rounded-2xl border border-red-200 p-6">
+                    <h3 class="text-lg font-semibold text-red-800">❌ {{ __('manager.payment_rejected') }}</h3>
+                    <p class="text-sm text-gray-600 mt-1">{{ __('manager.reason') }}: {{ $invoice->rejection_reason }}</p>
+                    <p class="text-sm text-gray-500 mt-1">{{ __('manager.waiting_parent_resubmit') }}</p>
+                </div>
+            @endif
+
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
-                        Line Items
+                        {{ __('manager.line_items') }}
                     </h3>
 
                     @if ($invoice->items->count())
@@ -125,10 +230,10 @@
                             <table class="min-w-full text-sm">
                                 <thead>
                                     <tr class="border-b border-slate-200 dark:border-slate-700">
-                                        <th class="text-left py-3 font-semibold text-slate-700 dark:text-slate-200">Description</th>
-                                        <th class="text-left py-3 font-semibold text-slate-700 dark:text-slate-200">Qty</th>
-                                        <th class="text-left py-3 font-semibold text-slate-700 dark:text-slate-200">Unit Price</th>
-                                        <th class="text-left py-3 font-semibold text-slate-700 dark:text-slate-200">Total</th>
+                                        <th class="text-left py-3 font-semibold text-slate-700 dark:text-slate-200">{{ __('manager.description') }}</th>
+                                        <th class="text-left py-3 font-semibold text-slate-700 dark:text-slate-200">{{ __('manager.qty') }}</th>
+                                        <th class="text-left py-3 font-semibold text-slate-700 dark:text-slate-200">{{ __('manager.unit_price') }}</th>
+                                        <th class="text-left py-3 font-semibold text-slate-700 dark:text-slate-200">{{ __('manager.total') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
@@ -153,7 +258,7 @@
                         </div>
                     @else
                         <p class="text-sm text-slate-600 dark:text-slate-300">
-                            No line items added yet.
+                            {{ __('manager.no_line_items') }}
                         </p>
                     @endif
                 </div>
