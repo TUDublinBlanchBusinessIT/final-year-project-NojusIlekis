@@ -192,6 +192,12 @@ class DashboardController extends Controller
             ->pluck('count', 'incident_date')
             ->toArray();
 
+        // Overdue incidents (open/reviewed for 10+ days), oldest first
+        $overdueIncidents = IncidentReport::overdue()
+            ->with(['child', 'carer'])
+            ->orderBy('incident_date', 'asc')
+            ->get();
+
         return view('dashboards.manager', [
             'filters' => [
                 'start_date' => $start,
@@ -222,6 +228,7 @@ class DashboardController extends Controller
             'mediumSeverity' => $mediumSeverity,
             'lowSeverity' => $lowSeverity,
             'incidentTrend' => $incidentTrend,
+            'overdueIncidents' => $overdueIncidents,
         ]);
     }
 }

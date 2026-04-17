@@ -99,6 +99,11 @@
 
         </select>
     </form>
+        @if($report->isOverdue())
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-200 text-red-900 mt-1">
+                ⚠️ {{ $report->daysOpen() }} days — OVERDUE
+            </span>
+        @endif
     </td>
 
     <td class="p-3">

@@ -10,6 +10,7 @@
         $mediumSeverity = $mediumSeverity ?? 0;
         $lowSeverity = $lowSeverity ?? 0;
         $incidentTrend = $incidentTrend ?? [];
+        $overdueIncidents = $overdueIncidents ?? collect([]);
         $filters = $filters ?? [
             'start_date' => now()->subDays(6)->toDateString(),
             'end_date' => now()->toDateString(),
@@ -96,6 +97,40 @@
                                 <div class="text-right">
                                     <p class="font-semibold text-gray-800">€{{ number_format($payment->total, 2) }}</p>
                                     <p class="text-xs text-gray-400">{{ $payment->payment_submitted_at->diffForHumans() }}</p>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Overdue Incidents Alert --}}
+            @if($overdueIncidents->count() > 0)
+                <div class="bg-red-50 rounded-2xl border-2 border-red-300 shadow-sm p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white text-xl">⚠️</div>
+                        <div>
+                            <h3 class="text-lg font-bold text-red-800">{{ $overdueIncidents->count() }} Overdue Incident{{ $overdueIncidents->count() > 1 ? 's' : '' }}</h3>
+                            <p class="text-sm text-red-600">These incidents have been open for 10+ days and need immediate attention.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        @foreach($overdueIncidents as $incident)
+                            <a href="{{ route('manager.reports.incidents') }}"
+                               class="flex items-center justify-between bg-white rounded-xl p-4 border {{ $incident->daysOpen() >= 14 ? 'border-red-400' : 'border-red-200' }} hover:border-red-400 transition">
+                                <div>
+                                    <p class="font-semibold text-gray-800">{{ $incident->title }}</p>
+                                    <p class="text-sm text-gray-500">
+                                        {{ $incident->child->first_name ?? '' }} {{ $incident->child->last_name ?? '' }} —
+                                        {{ ucfirst($incident->severity) }} severity
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold {{ $incident->daysOpen() >= 14 ? 'bg-red-200 text-red-900' : 'bg-amber-100 text-amber-800' }}">
+                                        {{ $incident->daysOpen() }} days open
+                                    </span>
+                                    <p class="text-xs text-gray-400 mt-1">{{ \Carbon\Carbon::parse($incident->incident_date)->format('d M Y') }}</p>
                                 </div>
                             </a>
                         @endforeach

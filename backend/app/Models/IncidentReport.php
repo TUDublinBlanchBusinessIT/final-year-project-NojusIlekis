@@ -45,4 +45,30 @@ class IncidentReport extends Model
         return $this->hasOne(Acknowledgement::class, 'record_id')
                     ->where('record_type', 'incident_report');
     }
+
+    /**
+     * Check if this incident is overdue (open for 10+ days).
+     */
+    public function isOverdue(): bool
+    {
+        if ($this->status === 'closed') return false;
+        return $this->incident_date && \Carbon\Carbon::parse($this->incident_date)->diffInDays(now()) >= 10;
+    }
+
+    /**
+     * Get how many days this incident has been open.
+     */
+    public function daysOpen(): int
+    {
+        return $this->incident_date ? (int) \Carbon\Carbon::parse($this->incident_date)->diffInDays(now()) : 0;
+    }
+
+    /**
+     * Scope: overdue incidents (open/reviewed for 10+ days).
+     */
+    public function scopeOverdue($query)
+    {
+        return $query->whereIn('status', ['open', 'reviewed'])
+                     ->where('incident_date', '<=', now()->subDays(10));
+    }
 }
