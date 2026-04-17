@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\IncidentReport;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -172,6 +173,31 @@ class DashboardController extends Controller
 
         $pendingPaymentCount = $pendingPayments->count();
 
+        // Incident stats
+        $totalIncidents    = IncidentReport::count();
+        $openIncidents     = IncidentReport::where('status', 'open')->count();
+        $reviewedIncidents = IncidentReport::where('status', 'reviewed')->count();
+        $closedIncidents   = IncidentReport::where('status', 'closed')->count();
+
+        // Incidents by severity (open/reviewed only)
+        $highSeverity   = IncidentReport::where('severity', 'high')->where('status', '!=', 'closed')->count();
+        $mediumSeverity = IncidentReport::where('severity', 'medium')->where('status', '!=', 'closed')->count();
+        $lowSeverity    = IncidentReport::where('severity', 'low')->where('status', '!=', 'closed')->count();
+
+        // Incidents trend — last 30 days grouped by date
+        $incidentTrend = IncidentReport::where('incident_date', '>=', now()->subDays(30))
+            ->selectRaw('incident_date, count(*) as count')
+            ->groupBy('incident_date')
+            ->orderBy('incident_date')
+            ->pluck('count', 'incident_date')
+            ->toArray();
+
+        // Overdue incidents (open/reviewed for 10+ days), oldest first
+        $overdueIncidents = IncidentReport::overdue()
+            ->with(['child', 'carer'])
+            ->orderBy('incident_date', 'asc')
+            ->get();
+
         return view('dashboards.manager', [
             'filters' => [
                 'start_date' => $start,
@@ -194,6 +220,15 @@ class DashboardController extends Controller
             ],
             'pendingPayments' => $pendingPayments,
             'pendingPaymentCount' => $pendingPaymentCount,
+            'totalIncidents' => $totalIncidents,
+            'openIncidents' => $openIncidents,
+            'reviewedIncidents' => $reviewedIncidents,
+            'closedIncidents' => $closedIncidents,
+            'highSeverity' => $highSeverity,
+            'mediumSeverity' => $mediumSeverity,
+            'lowSeverity' => $lowSeverity,
+            'incidentTrend' => $incidentTrend,
+            'overdueIncidents' => $overdueIncidents,
         ]);
     }
 }

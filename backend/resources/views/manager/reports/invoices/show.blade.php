@@ -218,6 +218,122 @@
                 </div>
             @endif
 
+            {{-- Payment Processing Timeline --}}
+            <div class="mt-6 bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 class="text-lg font-semibold mb-4">Payment Processing</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full {{ $invoice->status !== 'draft' ? 'bg-green-500' : 'bg-gray-300' }} flex items-center justify-center text-white text-sm">1</div>
+                        <div>
+                            <p class="font-medium {{ $invoice->status !== 'draft' ? 'text-green-700' : 'text-gray-500' }}">Invoice Sent</p>
+                            <p class="text-xs text-gray-400">Manager sends invoice to parent</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full {{ in_array($invoice->payment_status, ['payment_submitted', 'approved']) ? 'bg-green-500' : 'bg-gray-300' }} flex items-center justify-center text-white text-sm">2</div>
+                        <div>
+                            <p class="font-medium {{ in_array($invoice->payment_status, ['payment_submitted', 'approved']) ? 'text-green-700' : 'text-gray-500' }}">Payment Submitted</p>
+                            <p class="text-xs text-gray-400">{{ $invoice->payment_submitted_at ? 'Submitted ' . $invoice->payment_submitted_at->format('d M Y, H:i') : 'Waiting for parent to submit payment' }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full {{ $invoice->payment_status === 'approved' ? 'bg-green-500' : 'bg-gray-300' }} flex items-center justify-center text-white text-sm">3</div>
+                        <div>
+                            <p class="font-medium {{ $invoice->payment_status === 'approved' ? 'text-green-700' : 'text-gray-500' }}">Payment Verified & Processed</p>
+                            <p class="text-xs text-gray-400">{{ $invoice->payment_approved_at ? 'Processed by ' . ($invoice->approvedBy->first_name ?? $invoice->approvedBy->name ?? 'Manager') . ' on ' . $invoice->payment_approved_at->format('d M Y, H:i') : 'Manager reviews and marks as processed' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Payment Review Section (Manager) --}}
+            @if($invoice->isPaymentPending())
+                <div class="bg-amber-50 rounded-2xl border border-amber-200 shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-amber-800 mb-4">⏳ {{ __('manager.payment_awaiting_review') }}</h3>
+
+                    <div class="space-y-3 mb-4">
+                        <p class="text-sm text-gray-700">
+                            <span class="font-medium">{{ __('manager.submitted') }}:</span> {{ $invoice->payment_submitted_at->format('d M Y, H:i') }}
+                        </p>
+                        @if($invoice->payment_notes)
+                            <p class="text-sm text-gray-700">
+                                <span class="font-medium">{{ __('manager.parent_note') }}:</span> "{{ $invoice->payment_notes }}"
+                            </p>
+                        @endif
+                    </div>
+
+                    {{-- Payment proof viewer --}}
+                    @if($invoice->payment_proof_path)
+                        <div class="mb-4">
+                            <p class="text-sm font-medium text-gray-700 mb-2">{{ __('manager.payment_proof') }}:</p>
+                            @if(\Illuminate\Support\Str::endsWith($invoice->payment_proof_path, '.pdf'))
+                                <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank"
+                                   class="inline-flex items-center text-blue-600 hover:text-blue-800 underline text-sm">
+                                    📄 {{ __('manager.view_pdf_receipt') }}
+                                </a>
+                            @else
+                                <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank">
+                                    <img src="{{ Storage::url($invoice->payment_proof_path) }}"
+                                         alt="Payment proof"
+                                         class="max-w-md rounded-lg border border-slate-200 shadow-sm cursor-pointer hover:opacity-90">
+                                </a>
+                                <p class="text-xs text-gray-400 mt-1">{{ __('manager.click_full_size') }}</p>
+                            @endif
+                        </div>
+                    @endif
+
+                    {{-- Approve / Reject buttons --}}
+                    <div class="flex gap-3">
+                        <form method="POST" action="{{ route('manager.invoices.approve-payment', $invoice) }}">
+                            @csrf
+                            <button type="submit" onclick="return confirm('{{ __('manager.approve_payment_confirm') }}')"
+                                    class="px-5 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition">
+                                ✅ {{ __('manager.approve_payment') }}
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ route('manager.invoices.reject-payment', $invoice) }}"
+                              x-data="{ showReason: false }">
+                            @csrf
+                            <button type="button" @click="showReason = !showReason"
+                                    class="px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition">
+                                ❌ {{ __('manager.reject_payment') }}
+                            </button>
+                            <div x-show="showReason" x-cloak class="mt-3">
+                                <textarea name="rejection_reason" rows="2" required
+                                          placeholder="{{ __('manager.rejection_reason_placeholder') }}"
+                                          class="w-full text-sm rounded-lg border-slate-200 focus:border-red-500 focus:ring-red-500"></textarea>
+                                <button type="submit" class="mt-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700">
+                                    {{ __('manager.confirm_rejection') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Payment status display for non-pending invoices --}}
+            @if($invoice->payment_status === 'approved')
+                <div class="bg-green-50 rounded-2xl border border-green-200 p-6">
+                    <h3 class="text-lg font-semibold text-green-800">✅ {{ __('manager.payment_approved') }}</h3>
+                    <p class="text-sm text-gray-600 mt-1">
+                        {{ __('manager.approved_by') }} {{ $invoice->approvedBy?->first_name ?? $invoice->approvedBy?->name ?? 'Manager' }}
+                        {{ __('manager.on') }} {{ $invoice->payment_approved_at?->format('d M Y, H:i') }}
+                    </p>
+                    @if($invoice->payment_proof_path)
+                        <a href="{{ Storage::url($invoice->payment_proof_path) }}" target="_blank" class="text-sm text-blue-600 underline mt-2 inline-block">
+                            {{ __('manager.view_payment_proof') }}
+                        </a>
+                    @endif
+                </div>
+            @elseif($invoice->payment_status === 'rejected')
+                <div class="bg-red-50 rounded-2xl border border-red-200 p-6">
+                    <h3 class="text-lg font-semibold text-red-800">❌ {{ __('manager.payment_rejected') }}</h3>
+                    <p class="text-sm text-gray-600 mt-1">{{ __('manager.reason') }}: {{ $invoice->rejection_reason }}</p>
+                    <p class="text-sm text-gray-500 mt-1">{{ __('manager.waiting_parent_resubmit') }}</p>
+                </div>
+            @endif
+
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
                 <div class="p-6">
