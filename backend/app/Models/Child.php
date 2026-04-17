@@ -135,4 +135,14 @@ class Child extends Model
         }
         return array_map('trim', explode(',', $this->allergies));
     }
+
+    public function hasMedicalNeeds(): bool
+    {
+        return !empty(trim((string) $this->medical_notes));
+    }
+
+    public function medicalNeedsSummary(): string
+    {
+        return trim((string) $this->medical_notes) ?: '';
+    }
 }

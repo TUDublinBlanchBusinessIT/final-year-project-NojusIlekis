@@ -40,6 +40,7 @@
 
             {{-- Allergy Alert --}}
             <x-allergy-alert :child="$child" />
+            <x-medical-alert :child="$child" />
 
             {{-- Timeline --}}
             <div class="relative">
