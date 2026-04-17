@@ -195,6 +195,11 @@ return [
     'a_carer' => 'a carer',
     'no_milestones_for_age' => 'No milestones found for this age range.',
 
+    'category_wellbeing' => 'Well-being',
+    'category_identity_belonging' => 'Identity & Belonging',
+    'category_communicating' => 'Communicating',
+    'category_exploring_thinking' => 'Exploring & Thinking',
+
     'daily_timeline' => 'Daily Timeline',
     'today' => 'Today',
     'no_updates_day' => 'No updates for this day',
