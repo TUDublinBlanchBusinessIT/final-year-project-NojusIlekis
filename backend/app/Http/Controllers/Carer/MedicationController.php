@@ -28,10 +28,11 @@ class MedicationController extends Controller
 
         $allergyData = $children->mapWithKeys(fn($child) => [
             $child->id => [
-                'name'          => $child->first_name . ' ' . $child->last_name,
-                'has_allergies' => $child->hasAllergies(),
-                'allergies'     => $child->allergyList(),
-                'medical_notes' => $child->medical_notes ?? '',
+                'name'             => $child->first_name . ' ' . $child->last_name,
+                'has_allergies'    => $child->hasAllergies(),
+                'allergies'        => $child->allergyList(),
+                'has_medical_needs' => $child->hasMedicalNeeds(),
+                'medical_notes'    => $child->medicalNeedsSummary(),
             ]
         ]);
 

@@ -16,12 +16,16 @@ class DailyUpdateController extends Controller
         $date   = $request->input('date', now()->toDateString());
         $roomId = $request->input('room_id');
 
-        $rooms = Room::orderBy('name')->get(['id', 'name']);
+        // Only show rooms the carer is actively assigned to
+        $rooms = auth()->user()->activeRooms()->orderBy('name')->get(['rooms.id', 'rooms.name']);
 
         $children = collect();
         $existing = collect();
 
         if ($roomId) {
+            // Ensure the selected room belongs to this carer
+            abort_unless($rooms->pluck('id')->contains((int) $roomId), 403);
+
             $children = Child::query()
                 ->with('room')
                 ->where('room_id', $roomId)
@@ -51,6 +55,10 @@ class DailyUpdateController extends Controller
 
         $date   = $data['date'];
         $roomId = $data['room_id'];
+
+        // Security: carer can only submit for rooms assigned to them
+        $allowedRoomIds = auth()->user()->activeRooms()->pluck('rooms.id')->map(fn($id) => (int)$id);
+        abort_unless($allowedRoomIds->contains((int) $roomId), 403);
 
         // Only save for children in that room
         $children = Child::where('room_id', $roomId)->get(['id']);

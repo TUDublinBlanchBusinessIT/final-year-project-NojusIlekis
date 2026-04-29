@@ -91,6 +91,7 @@
 
             {{-- Allergy Alert Banner --}}
             <x-allergy-alert :child="$child" />
+            <x-medical-alert :child="$child" />
 
             {{-- Milestone Progress Summary --}}
             <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">

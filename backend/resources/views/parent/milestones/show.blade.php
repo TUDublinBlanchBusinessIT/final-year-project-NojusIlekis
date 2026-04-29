@@ -8,7 +8,7 @@
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
                     {{ __('parent.age') }}: {{ $child->age_in_months }} {{ __('parent.months') }} ·
                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200">
-                        {{ __('parent.age_range_' . str_replace('-', '_', $ageRange)) }}
+                        {{ \App\Models\Milestone::AGE_RANGES[$ageRange] ?? $ageRange }}
                     </span>
                     · {{ $overallProgress['achieved'] }}/{{ $overallProgress['total'] }} {{ __('parent.milestones_observed') }}
                 </p>
@@ -80,8 +80,8 @@
                     </h3>
                     <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
                         {{ __('parent.milestones_for_age_range', [
-                        'range' => __('parent.age_range_' . str_replace('-', '_', $ageRange))
-                            ]) }}
+                            'range' => \App\Models\Milestone::AGE_RANGES[$ageRange] ?? $ageRange,
+                        ]) }}
                     </p>
                 </div>
 

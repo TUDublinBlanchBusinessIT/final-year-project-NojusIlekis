@@ -24,6 +24,8 @@ class RoomFactory extends Factory
                 '2-3 years',
                 '3-5 years',
             ]),
+            'capacity'    => $this->faker->numberBetween(8, 20),
+            'description' => $this->faker->sentence(),
         ];
     }
 }

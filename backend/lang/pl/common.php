@@ -19,6 +19,7 @@ return [
     'children' => 'Dzieci',
     'parents' => 'Rodzice',
     'carers' => 'Opiekunowie',
+    'rooms' => 'Sale',
     'incidents' => 'Incydenty',
     'invoices' => 'Faktury',
     'milestones' => 'Kamienie milowe',

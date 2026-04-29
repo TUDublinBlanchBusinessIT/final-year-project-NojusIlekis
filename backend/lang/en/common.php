@@ -19,6 +19,7 @@ return [
     'children' => 'Children',
     'parents' => 'Parents',
     'carers' => 'Carers',
+    'rooms' => 'Rooms',
     'incidents' => 'Incidents',
     'invoices' => 'Invoices',
     'milestones' => 'Milestones',

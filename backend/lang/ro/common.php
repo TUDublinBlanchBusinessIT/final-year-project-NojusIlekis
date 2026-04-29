@@ -19,6 +19,7 @@ return [
     'children' => 'Copii',
     'parents' => 'Părinți',
     'carers' => 'Îngrijitori',
+    'rooms' => 'Camere',
     'incidents' => 'Incidente',
     'invoices' => 'Facturi',
     'milestones' => 'Repere',

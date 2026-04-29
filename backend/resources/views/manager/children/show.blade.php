@@ -68,6 +68,7 @@
 
             {{-- Allergy banner --}}
             <x-allergy-alert :child="$child" />
+            <x-medical-alert :child="$child" />
 
             {{-- Details Card --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
