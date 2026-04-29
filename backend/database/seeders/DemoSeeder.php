@@ -35,6 +35,28 @@ class DemoSeeder extends Seeder
 
         $roomA = Room::where('name', 'Bumblebees')->firstOrFail();
         $roomB = Room::where('name', 'Ladybirds')->firstOrFail();
+        $roomC = Room::where('name', 'Caterpillars')->first();
+
+        // Backfill capacity / description on the seeded rooms
+        $roomA->forceFill([
+            'age_band'    => $roomA->age_band ?? '2-4 years',
+            'capacity'    => $roomA->capacity ?? 15,
+            'description' => $roomA->description ?? 'Toddler room with a focus on creative play and early language development.',
+        ])->save();
+
+        $roomB->forceFill([
+            'age_band'    => $roomB->age_band ?? '3-5 years',
+            'capacity'    => $roomB->capacity ?? 18,
+            'description' => $roomB->description ?? 'Pre-school room preparing children for primary school with structured group activities.',
+        ])->save();
+
+        if ($roomC) {
+            $roomC->forceFill([
+                'age_band'    => $roomC->age_band ?? '0-2 years',
+                'capacity'    => $roomC->capacity ?? 10,
+                'description' => $roomC->description ?? 'Baby and young toddler room with low staff-to-child ratio.',
+            ])->save();
+        }
 
         // -----------------------------------------------------------------------
         // 1. Additional carer — Sarah Nolan, assigned to Bumblebees

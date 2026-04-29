@@ -10,7 +10,7 @@ class Room extends Model
 {
     use HasFactory; 
 
-    protected $fillable = ['name', 'age_band'];
+    protected $fillable = ['name', 'age_band', 'capacity', 'description'];
 
     public function users(): BelongsToMany
     {

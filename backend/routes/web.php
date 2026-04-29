@@ -14,6 +14,7 @@ use App\Http\Controllers\Manager\InvoiceController;
 use App\Http\Controllers\Manager\ChildController;
 use App\Http\Controllers\Manager\ParentController;
 use App\Http\Controllers\Manager\CarerController;
+use App\Http\Controllers\Manager\RoomController;
 use App\Http\Controllers\Manager\IncidentReportsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
 use App\Http\Controllers\Parent\AcknowledgementController;
@@ -260,6 +261,9 @@ Route::middleware(['auth', 'role:manager'])
 
         // Carers CRUD
         Route::resource('carers', CarerController::class);
+
+        // Rooms CRUD
+        Route::resource('rooms', RoomController::class);
 
         Route::patch('/reports/incidents/{incident}/status',
             [IncidentReportsController::class, 'updateStatus']

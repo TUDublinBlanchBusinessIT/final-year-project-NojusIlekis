@@ -88,6 +88,10 @@
                             {{ __('common.carers') }}
                         </x-nav-link>
 
+                        <x-nav-link :href="route('manager.rooms.index')" :active="request()->routeIs('manager.rooms.*')">
+                            {{ __('common.rooms') }}
+                        </x-nav-link>
+
                         <x-nav-link :href="route('manager.invoices.index')" :active="request()->routeIs('manager.invoices.*')">
                             {{ __('common.invoices') }}
                             @if($pendingPaymentsBadge > 0)
@@ -222,6 +226,10 @@
 
                 <x-responsive-nav-link :href="route('manager.carers.index')" :active="request()->routeIs('manager.carers.*')">
                     {{ __('common.carers') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('manager.rooms.index')" :active="request()->routeIs('manager.rooms.*')">
+                    {{ __('common.rooms') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link :href="route('manager.invoices.index')" :active="request()->routeIs('manager.invoices.*')">
