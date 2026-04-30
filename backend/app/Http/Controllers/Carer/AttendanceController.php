@@ -15,9 +15,9 @@ class AttendanceController extends Controller
         $date   = $request->input('date', now()->toDateString());
         $roomId = $request->input('room_id');
 
-        // Carer can only pick rooms assigned to them
+        // Carer can only pick rooms they're actively assigned to
         $rooms = Room::query()
-            ->whereIn('id', auth()->user()->rooms()->pluck('rooms.id'))
+            ->whereIn('id', auth()->user()->activeRooms()->pluck('rooms.id'))
             ->orderBy('name')
             ->get();
 
@@ -53,8 +53,8 @@ class AttendanceController extends Controller
             'attendance.*' => ['in:present,absent'],
         ]);
 
-        // Security: carer can only submit for rooms assigned to them
-        $allowedRoomIds = auth()->user()->rooms()->pluck('rooms.id')->map(fn ($id) => (int) $id);
+        // Security: carer can only submit for rooms they're actively assigned to
+        $allowedRoomIds = auth()->user()->activeRooms()->pluck('rooms.id')->map(fn ($id) => (int) $id);
         abort_unless($allowedRoomIds->contains((int) $data['room_id']), 403);
 
         // Only allow marking children that belong to this room

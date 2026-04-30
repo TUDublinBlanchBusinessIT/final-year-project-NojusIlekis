@@ -362,4 +362,13 @@ return [
     'rooms_at_capacity' => 'Esta sala está na ou acima da capacidade (:count / :capacity).',
     'rooms_cannot_delete_has_children' => 'Não é possível eliminar uma sala com crianças atribuídas. Reatribua ou remova as crianças primeiro.',
     'rooms_delete_confirm' => 'Eliminar :name? Esta ação não pode ser desfeita.',
+
+    // Carer show page
+    'carer_profile' => 'Perfil do cuidador',
+    'registered' => 'Registado',
+    'current_room_assignment' => 'Atribuição de sala atual',
+    'since' => 'desde',
+    'room_history' => 'Histórico de salas',
+    'recent_activity' => 'Atividade recente',
+    'attendance_records' => 'Registos de presença',
 ];

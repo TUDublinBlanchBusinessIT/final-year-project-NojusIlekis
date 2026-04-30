@@ -362,4 +362,13 @@ return [
 'rooms_at_capacity' => 'This room is at or over capacity (:count / :capacity).',
 'rooms_cannot_delete_has_children' => 'Cannot delete a room that still has children assigned. Reassign or remove the children first.',
 'rooms_delete_confirm' => 'Delete :name? This cannot be undone.',
+
+// Carer show page
+'carer_profile' => 'Carer Profile',
+'registered' => 'Registered',
+'current_room_assignment' => 'Current Room Assignment',
+'since' => 'since',
+'room_history' => 'Room History',
+'recent_activity' => 'Recent Activity',
+'attendance_records' => 'Attendance Records',
 ];

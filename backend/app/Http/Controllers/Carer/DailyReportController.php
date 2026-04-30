@@ -15,8 +15,8 @@ class DailyReportController extends Controller
     {
         $carer = auth()->user();
 
-        // Get room IDs assigned to this carer
-        $roomIds = $carer->rooms()->pluck('rooms.id');
+        // Get room IDs the carer is actively assigned to
+        $roomIds = $carer->activeRooms()->pluck('rooms.id');
 
         // Get rooms and children in those rooms
         $rooms = Room::whereIn('id', $roomIds)->orderBy('name')->get();

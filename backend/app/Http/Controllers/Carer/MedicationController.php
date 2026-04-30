@@ -13,7 +13,7 @@ class MedicationController extends Controller
     {
         $carer = auth()->user();
 
-        $roomIds = $carer->rooms()->pluck('rooms.id');
+        $roomIds = $carer->activeRooms()->pluck('rooms.id');
 
         $children = Child::whereIn('room_id', $roomIds)
             ->orderBy('first_name')
@@ -49,6 +49,11 @@ class MedicationController extends Controller
             'time_given' => 'required',
             'notes' => 'nullable|string',
         ]);
+
+        // Verify the child is in one of the carer's active rooms
+        $child = Child::findOrFail($request->child_id);
+        $carerRoomIds = auth()->user()->activeRooms()->pluck('rooms.id')->toArray();
+        abort_unless(in_array($child->room_id, $carerRoomIds), 403, 'This child is not in your assigned rooms.');
 
         MedicationLog::create([
             'child_id' => $request->child_id,

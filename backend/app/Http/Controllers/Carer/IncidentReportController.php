@@ -13,7 +13,7 @@ class IncidentReportController extends Controller
     {
         $carer = auth()->user();
 
-        $roomIds = $carer->rooms()->pluck('rooms.id');
+        $roomIds = $carer->activeRooms()->pluck('rooms.id');
 
         $children = Child::whereIn('room_id', $roomIds)
             ->orderBy('first_name')
@@ -33,7 +33,7 @@ class IncidentReportController extends Controller
     {
         $carer = auth()->user();
 
-        $roomIds = $carer->rooms()->pluck('rooms.id');
+        $roomIds = $carer->activeRooms()->pluck('rooms.id');
 
         $request->validate([
             'child_id' => 'required|exists:children,id',
