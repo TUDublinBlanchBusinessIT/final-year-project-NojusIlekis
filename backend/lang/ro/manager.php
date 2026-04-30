@@ -362,4 +362,13 @@ return [
     'rooms_at_capacity' => 'Această cameră este la sau peste capacitate (:count / :capacity).',
     'rooms_cannot_delete_has_children' => 'Nu se poate șterge o cameră care are copii atribuiți. Mută sau elimină copiii mai întâi.',
     'rooms_delete_confirm' => 'Ștergi :name? Această acțiune nu poate fi anulată.',
+
+    // Carer show page
+    'carer_profile' => 'Profilul îngrijitorului',
+    'registered' => 'Înregistrat',
+    'current_room_assignment' => 'Atribuirea curentă la cameră',
+    'since' => 'din',
+    'room_history' => 'Istoricul camerelor',
+    'recent_activity' => 'Activitate recentă',
+    'attendance_records' => 'Înregistrări de prezență',
 ];

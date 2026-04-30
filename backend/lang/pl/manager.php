@@ -362,4 +362,13 @@ return [
     'rooms_at_capacity' => 'Ta sala jest pełna lub przepełniona (:count / :capacity).',
     'rooms_cannot_delete_has_children' => 'Nie można usunąć sali, do której nadal są przypisane dzieci. Najpierw przenieś lub usuń dzieci.',
     'rooms_delete_confirm' => 'Usunąć :name? Tej operacji nie można cofnąć.',
+
+    // Carer show page
+    'carer_profile' => 'Profil opiekuna',
+    'registered' => 'Zarejestrowany',
+    'current_room_assignment' => 'Obecne przypisanie do sali',
+    'since' => 'od',
+    'room_history' => 'Historia sal',
+    'recent_activity' => 'Ostatnia aktywność',
+    'attendance_records' => 'Zapisy obecności',
 ];

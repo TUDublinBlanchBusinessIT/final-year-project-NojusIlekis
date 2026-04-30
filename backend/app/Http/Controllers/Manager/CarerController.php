@@ -8,6 +8,7 @@ use App\Http\Requests\Manager\UpdateCarerRequest;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class CarerController extends Controller
@@ -58,11 +59,7 @@ class CarerController extends Controller
         ]);
 
         if (!empty($validated['room_id'])) {
-            $carerUser->rooms()->attach($validated['room_id'], [
-                'start_date' => now()->toDateString(),
-                'end_date'   => null,
-                'is_primary' => true,
-            ]);
+            $this->assignRoom($carerUser, (int) $validated['room_id']);
         }
 
         return redirect()
@@ -123,28 +120,82 @@ class CarerController extends Controller
         $carerUser->save();
 
         // Handle room reassignment
-        $newRoomId      = $validated['room_id'] ?? null;
-        $currentActive  = $carerUser->activeRooms->first();
-        $currentRoomId  = $currentActive?->id;
-
-        if ((string) $newRoomId !== (string) $currentRoomId) {
-            if ($currentActive) {
-                $carerUser->rooms()->updateExistingPivot($currentActive->id, [
-                    'end_date' => now()->toDateString(),
-                ]);
-            }
-            if ($newRoomId) {
-                $carerUser->rooms()->attach($newRoomId, [
-                    'start_date' => now()->toDateString(),
-                    'end_date'   => null,
-                    'is_primary' => true,
-                ]);
-            }
-        }
+        $this->assignRoom($carerUser, $validated['room_id'] ?? null);
 
         return redirect()
             ->route('manager.carers.show', $carerUser)
             ->with('success', 'Carer updated successfully.');
+    }
+
+    /**
+     * Re-assign a carer to a single active room (or to none).
+     *
+     * Closes any active assignments to OTHER rooms first. For the target room
+     * the helper handles three states without ever inserting a duplicate of
+     * the (room_id, user_id, start_date) unique key:
+     *   - already actively assigned → no-op
+     *   - a same-day row exists but is closed (end_date set) → reopen it
+     *   - no same-day row → insert fresh
+     */
+    private function assignRoom(User $carer, ?int $roomId): void
+    {
+        $today = now()->toDateString();
+
+        if (! $roomId) {
+            // No target room — close every active assignment.
+            DB::table('room_user')
+                ->where('user_id', $carer->id)
+                ->whereNull('end_date')
+                ->update(['end_date' => $today]);
+            return;
+        }
+
+        // Close active assignments to OTHER rooms only (leave the target room alone).
+        DB::table('room_user')
+            ->where('user_id', $carer->id)
+            ->whereNull('end_date')
+            ->where('room_id', '!=', $roomId)
+            ->update(['end_date' => $today]);
+
+        // If already actively assigned to the target room, nothing to do.
+        $alreadyAssigned = DB::table('room_user')
+            ->where('user_id', $carer->id)
+            ->where('room_id', $roomId)
+            ->whereNull('end_date')
+            ->exists();
+
+        if ($alreadyAssigned) {
+            return;
+        }
+
+        // If there's a closed-today row for the target room, reopen it instead
+        // of inserting a duplicate of the same composite key.
+        $closedTodayRow = DB::table('room_user')
+            ->where('user_id', $carer->id)
+            ->where('room_id', $roomId)
+            ->where('start_date', $today)
+            ->whereNotNull('end_date')
+            ->exists();
+
+        if ($closedTodayRow) {
+            DB::table('room_user')
+                ->where('user_id', $carer->id)
+                ->where('room_id', $roomId)
+                ->where('start_date', $today)
+                ->update([
+                    'end_date'   => null,
+                    'is_primary' => true,
+                    'updated_at' => now(),
+                ]);
+            return;
+        }
+
+        // No existing same-day row — insert fresh.
+        $carer->rooms()->attach($roomId, [
+            'start_date' => $today,
+            'end_date'   => null,
+            'is_primary' => true,
+        ]);
     }
 
     public function destroy(string $id)
