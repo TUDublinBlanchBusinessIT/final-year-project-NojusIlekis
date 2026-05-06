@@ -541,6 +541,269 @@ class DemoSeeder extends Seeder
                 [$manager, $parent3,  "Hi Aoife, thanks for reaching out. We do have availability in Ladybirds — I'll send you an updated invoice this week."],
             ]
         );
+
+        // -----------------------------------------------------------------------
+        // 15. Live demo data — fresh entries for yesterday + today
+        //     so dashboards feel "live" the moment a demo opens them.
+        //     Idempotent: re-running this seeder only refreshes the rows.
+        // -----------------------------------------------------------------------
+
+        // Resolve to the most recent weekdays (skip Sat/Sun)
+        $todayLive = Carbon::today()->copy();
+        while ($todayLive->isWeekend()) {
+            $todayLive->subDay();
+        }
+        $yesterdayLive = $todayLive->copy()->subDay();
+        while ($yesterdayLive->isWeekend()) {
+            $yesterdayLive->subDay();
+        }
+        $liveDays = [$yesterdayLive, $todayLive];
+
+        $liveMeals = [
+            'Porridge with banana for breakfast. Roast chicken, mash and peas for lunch. Yoghurt and fruit for snack.',
+            'Toast and scrambled egg for breakfast. Spaghetti bolognese for lunch. Cheese and crackers for snack.',
+            'Weetabix and milk for breakfast. Shepherd\'s pie for lunch. Apple slices and rice cakes for snack.',
+            'Pancakes with berries for breakfast. Salmon, potatoes and broccoli for lunch. Carrot sticks and hummus for snack.',
+            'Fruit and yoghurt for breakfast. Mild chicken curry with rice for lunch. Banana bread for snack.',
+            'Wholemeal toast with cream cheese for breakfast. Lasagne and salad for lunch. Cucumber and pita for snack.',
+        ];
+        $liveSleep = [
+            'Settled quickly for nap 12:30–2:00, woke up smiling.',
+            'Long nap 12:45–2:30 — very well rested.',
+            'Short rest 1:00–1:30, full of energy in the afternoon.',
+            'Napped 1:00–2:15 with their favourite teddy.',
+            'Cosy nap from 12:30–2:00 after lunch.',
+            'Quick power nap 1:15–1:50, back to play afterwards.',
+        ];
+        $liveNotes = [
+            'Loved music time today, danced through every song.',
+            'Asked us to read the hungry caterpillar twice — a clear favourite.',
+            'Chose the painting station first thing — very focused work.',
+            'Tried new foods at lunch and gave a thumbs up to the broccoli!',
+            'Gentle and kind to a friend who was upset, lovely to see.',
+            'Spent ages at the water tray — splashing and pouring happily.',
+            'Built the tallest tower yet at construction play, very proud.',
+            'Helped tidy up without being asked — beaming the whole time.',
+        ];
+
+        // ---- 1 & 2. Attendance + Daily Updates for every child, both days ----
+        foreach ($liveDays as $dayIndex => $day) {
+            foreach ($allChildren as $child) {
+                $childCarer = $carerForRoom($child);
+                $absent = (random_int(1, 10) === 1); // ~10% absent
+
+                Attendance::updateOrCreate(
+                    ['child_id' => $child->id, 'date' => $day->toDateString()],
+                    [
+                        'status'       => $absent ? 'absent' : 'present',
+                        'room_id'      => $child->room_id,
+                        'recorded_by'  => $childCarer->id,
+                        'check_in_at'  => $absent ? null : $day->copy()->setTime(8, random_int(30, 59)),
+                        'check_out_at' => $absent ? null : $day->copy()->setTime(17, random_int(0, 30)),
+                    ]
+                );
+
+                if (! $absent) {
+                    DailyUpdate::updateOrCreate(
+                        ['child_id' => $child->id, 'date' => $day->toDateString()],
+                        [
+                            'meals'      => $liveMeals[($child->id + $dayIndex) % count($liveMeals)],
+                            'sleep'      => $liveSleep[($child->id + $dayIndex + 1) % count($liveSleep)],
+                            'notes'      => $liveNotes[($child->id + $dayIndex + 2) % count($liveNotes)],
+                            'created_by' => $childCarer->id,
+                        ]
+                    );
+                }
+            }
+        }
+
+        // ---- 3. Daily reports — narrative for 4-5 children, both days ----
+        $liveReportNarratives = [
+            "had a wonderful day today. {pronoun_he_she} was very engaged during our morning art session and created a beautiful painting using autumn leaves. At lunchtime {pronoun_he_she} ate everything on {pronoun_his_her} plate, including the broccoli! {pronoun_he_she} had a good nap from 12:30 to 2pm and woke up in great spirits. {pronoun_he_she} enjoyed our afternoon storytime, particularly the book about the hungry caterpillar. Looking forward to seeing {pronoun_him_her} tomorrow.",
+            "had a brilliant morning. {pronoun_he_she} was the first to choose music time and led the room in singing the wheels on the bus. At snack {pronoun_he_she} tried new fruit for the first time and asked for seconds. After a long restful nap from 12:45 to 2:15, {pronoun_he_she} settled into the home corner with friends, sharing toys beautifully. A really lovely day all round.",
+            "had a calm and contented day. {pronoun_he_she} spent a happy stretch at the sensory tray exploring rice and small pots — focused for almost twenty minutes. {pronoun_he_she} ate a great lunch and napped well. In the afternoon {pronoun_he_she} loved our outdoor walk and pointed at every leaf {pronoun_he_she} could see.",
+            "was full of beans today! {pronoun_he_she} ran straight to outdoor play and spent the morning in the sandpit making 'cakes' for everyone. Lunch went down a treat, especially the pasta. {pronoun_he_she} had a short nap and bounced back ready for craft time, where {pronoun_he_she} made a lovely card to take home.",
+            "had a really sociable day. {pronoun_he_she} played beautifully with friends during free play and was so kind when one of the younger children was upset — helped settle them with a teddy. {pronoun_he_she} ate well, napped well, and finished the day proudly showing off the tower {pronoun_he_she} built at construction time.",
+        ];
+
+        $liveReportTargets = collect([
+            $miaKelly,    // Bumblebees
+            $noahByrne,   // Bumblebees
+            $avaOBrien,   // Ladybirds
+            $charlie,     // Ladybirds
+            $lilyMurphy,  // Bumblebees
+        ])->filter()->values();
+
+        $liveSlot = 0;
+        foreach ($liveReportTargets as $child) {
+            foreach ($liveDays as $day) {
+                $childCarer = $carerForRoom($child);
+                $narrative = $liveReportNarratives[$liveSlot % count($liveReportNarratives)];
+                // Lightweight pronoun substitution — keeps text personal without per-child branches
+                $body = strtr($narrative, [
+                    '{pronoun_he_she}'  => 'they',
+                    '{pronoun_his_her}' => 'their',
+                    '{pronoun_him_her}' => 'them',
+                ]);
+
+                DailyReport::updateOrCreate(
+                    ['child_id' => $child->id, 'date' => $day->toDateString()],
+                    [
+                        'carer_id'     => $childCarer->id,
+                        'daily_report' => $child->first_name . ' ' . $body,
+                    ]
+                );
+                $liveSlot++;
+            }
+        }
+
+        // ---- 4. Medication log — 1-2 entries for today ----
+        $liveMeds = [
+            // Charlie White has asthma per his medical_notes — routine inhaler before outdoor play
+            [$charlie,   'Inhaler', '2 puffs', '10:30:00', 'Routine asthma management before outdoor play.'],
+            // Noah feeling a bit warm today — Calpol after parent consent
+            [$noahByrne, 'Calpol',  '5ml',     '13:00:00', 'Mild temperature of 37.6°C, parent consented by phone.'],
+        ];
+
+        foreach ($liveMeds as [$child, $name, $dosage, $time, $notes]) {
+            if (! $child) continue;
+            $childCarer = $carerForRoom($child);
+
+            $exists = MedicationLog::where('child_id', $child->id)
+                ->where('date', $todayLive->toDateString())
+                ->where('medication_name', $name)
+                ->exists();
+
+            if (! $exists) {
+                MedicationLog::create([
+                    'child_id'        => $child->id,
+                    'carer_id'        => $childCarer->id,
+                    'medication_name' => $name,
+                    'dosage'          => $dosage,
+                    'date'            => $todayLive->toDateString(),
+                    'time_given'      => $time,
+                    'notes'           => $notes,
+                ]);
+            }
+        }
+
+        // ---- 5. Incident report — 1 minor for yesterday (open, low) ----
+        $incidentTitle = 'Minor scrape on knee during outdoor play';
+        $incidentChild = $jackWalsh ?: ($oliverDavis ?: $allChildren->first());
+
+        if ($incidentChild) {
+            $exists = IncidentReport::where('child_id', $incidentChild->id)
+                ->where('incident_date', $yesterdayLive->toDateString())
+                ->where('title', $incidentTitle)
+                ->exists();
+
+            if (! $exists) {
+                IncidentReport::create([
+                    'child_id'                => $incidentChild->id,
+                    'carer_id'                => $carerForRoom($incidentChild)->id,
+                    'room_id'                 => $incidentChild->room_id,
+                    'incident_date'           => $yesterdayLive->toDateString(),
+                    'incident_time'           => '11:25:00',
+                    'title'                   => $incidentTitle,
+                    'description'             => 'Child slipped on the decking edge during outdoor play and grazed the right knee. No other injuries noted.',
+                    'action_taken'            => 'Cleaned and plaster applied. Parent notified at pickup.',
+                    'severity'                => 'low',
+                    'parent_contact_required' => true,
+                    'status'                  => 'open',
+                ]);
+            }
+        }
+
+        // ---- 6. Messages — 2-3 fresh today, all unread ----
+        $liveMessageData = [
+            [$parent,  $carer,   $miaKelly,   "Hi Sarah, just to let you know Mia might be a bit tired today, didn't sleep well last night.", 4],
+            [$carer,   $parent,  $miaKelly,   "Thanks for letting us know! We'll keep an eye on her and make sure she has a good nap.", 3],
+            [$parent2, $carer2,  $avaOBrien,  "Morning Emma — Ava forgot her hat at home, can she still join outdoor play?", 2],
+        ];
+
+        foreach ($liveMessageData as [$sender, $receiver, $child, $body, $hoursAgo]) {
+            if (! $sender || ! $receiver) continue;
+
+            $exists = Message::where('sender_id', $sender->id)
+                ->where('receiver_id', $receiver->id)
+                ->where('body', $body)
+                ->exists();
+
+            if (! $exists) {
+                Message::create([
+                    'sender_id'   => $sender->id,
+                    'receiver_id' => $receiver->id,
+                    'child_id'    => $child?->id,
+                    'body'        => $body,
+                    'read_at'     => null,
+                    'created_at'  => now()->subHours($hoursAgo),
+                    'updated_at'  => now()->subHours($hoursAgo),
+                ]);
+            }
+        }
+
+        // ---- 7. Milestone observations — 2-3 dated today/yesterday ----
+        if ($allMilestones->isNotEmpty()) {
+            $milestoneTargets = collect([$miaKelly, $noahByrne, $avaOBrien])->filter()->values();
+            $observers        = [$carer, $carer2];
+
+            foreach ($milestoneTargets as $idx => $child) {
+                $ageMonths = Carbon::parse($child->dob)->diffInMonths(now());
+
+                $relevant = $allMilestones->filter(function ($m) use ($ageMonths) {
+                    [$min, $max] = explode('-', $m->age_range_months);
+                    return $ageMonths >= (int) $min && $ageMonths <= ((int) $max + 6);
+                });
+
+                if ($relevant->isEmpty()) continue;
+
+                // Prefer a milestone this child has not been observed against yet
+                $alreadyObserved = DB::table('child_milestones')
+                    ->where('child_id', $child->id)
+                    ->pluck('milestone_id')
+                    ->all();
+                $available = $relevant->whereNotIn('id', $alreadyObserved);
+                $milestone = $available->isNotEmpty() ? $available->random() : $relevant->random();
+
+                $day = ($idx % 2 === 0) ? $todayLive : $yesterdayLive;
+
+                DB::table('child_milestones')->updateOrInsert(
+                    ['child_id' => $child->id, 'milestone_id' => $milestone->id],
+                    [
+                        'child_id'     => $child->id,
+                        'milestone_id' => $milestone->id,
+                        'observed_by'  => $observers[$idx % count($observers)]->id,
+                        'observed_at'  => $day->toDateString(),
+                        'notes'        => 'Observed clearly and consistently during free play.',
+                        'created_at'   => now(),
+                        'updated_at'   => now(),
+                    ]
+                );
+            }
+        }
+
+        // ---- 8. Payment submission — one invoice with very recent timestamp ----
+        // Refresh Lily Murphy's April invoice (already payment_submitted) so the
+        // manager dashboard's "Pending Payments" card shows live activity.
+        $pendingPaymentInvoice = null;
+        if ($lilyMurphy) {
+            $pendingPaymentInvoice = Invoice::where('child_id', $lilyMurphy->id)
+                ->where('period_start', '2026-04-01')
+                ->first();
+        }
+        if (! $pendingPaymentInvoice) {
+            $pendingPaymentInvoice = Invoice::where('payment_status', 'payment_submitted')->first();
+        }
+
+        if ($pendingPaymentInvoice) {
+            $pendingPaymentInvoice->update([
+                'payment_status'       => 'payment_submitted',
+                'payment_submitted_at' => now()->subHours(2),
+                'payment_proof_path'   => 'payment_proofs/demo-receipt.png',
+                'payment_notes'        => $pendingPaymentInvoice->payment_notes ?: 'Bank transfer receipt uploaded.',
+                'rejection_reason'     => null,
+            ]);
+        }
     }
 
     // -----------------------------------------------------------------------
