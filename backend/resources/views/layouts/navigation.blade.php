@@ -18,6 +18,7 @@
                     $firstChild = ($role === 'parent' && auth()->check()) ? auth()->user()->children()->first() : null;
                     $unreadMessageCount = auth()->check() ? \App\Models\Message::where('receiver_id', auth()->id())->whereNull('read_at')->count() : 0;
                     $pendingPaymentsBadge = ($role === 'manager') ? \App\Models\Invoice::where('payment_status', 'payment_submitted')->count() : 0;
+                    $pendingRegistrationsBadge = ($role === 'manager') ? \App\Models\User::where('status', 'pending')->count() : 0;
                 @endphp
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -78,6 +79,15 @@
 
                         <x-nav-link :href="route('manager.children.index')" :active="request()->routeIs('manager.children.*')">
                             {{ __('common.children') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('manager.pending-registrations.index')" :active="request()->routeIs('manager.pending-registrations.*')">
+                            {{ __('manager.registrations') }}
+                            @if($pendingRegistrationsBadge > 0)
+                                <span class="ml-1 inline-flex items-center justify-center rounded-full bg-indigo-500 text-white text-xs font-bold w-5 h-5">
+                                    {{ $pendingRegistrationsBadge }}
+                                </span>
+                            @endif
                         </x-nav-link>
 
                         <x-nav-link :href="route('manager.parents.index')" :active="request()->routeIs('manager.parents.*')">

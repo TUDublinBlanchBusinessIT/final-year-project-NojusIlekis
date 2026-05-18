@@ -34,6 +34,8 @@ class DemoSeeder extends Seeder
                 'password'          => Hash::make('Password123!'),
                 'role'              => 'manager',
                 'email_verified_at' => now(),
+                'status'            => 'approved',
+                'approved_at'       => now(),
             ]
         );
 
@@ -44,6 +46,8 @@ class DemoSeeder extends Seeder
                 'password'          => Hash::make('Password123!'),
                 'role'              => 'carer',
                 'email_verified_at' => now(),
+                'status'            => 'approved',
+                'approved_at'       => now(),
             ]
         );
 
@@ -54,6 +58,8 @@ class DemoSeeder extends Seeder
                 'password'          => Hash::make('Password123!'),
                 'role'              => 'carer',
                 'email_verified_at' => now(),
+                'status'            => 'approved',
+                'approved_at'       => now(),
             ]
         );
 
@@ -64,6 +70,8 @@ class DemoSeeder extends Seeder
                 'password'          => Hash::make('Password123!'),
                 'role'              => 'parent',
                 'email_verified_at' => now(),
+                'status'            => 'approved',
+                'approved_at'       => now(),
             ]
         );
 
@@ -74,6 +82,8 @@ class DemoSeeder extends Seeder
                 'password'          => Hash::make('Password123!'),
                 'role'              => 'parent',
                 'email_verified_at' => now(),
+                'status'            => 'approved',
+                'approved_at'       => now(),
             ]
         );
 
@@ -84,6 +94,8 @@ class DemoSeeder extends Seeder
                 'password'          => Hash::make('Password123!'),
                 'role'              => 'parent',
                 'email_verified_at' => now(),
+                'status'            => 'approved',
+                'approved_at'       => now(),
             ]
         );
 

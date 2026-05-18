@@ -17,6 +17,7 @@ use App\Http\Controllers\Manager\CarerController;
 use App\Http\Controllers\Manager\RoomController;
 use App\Http\Controllers\Manager\IncidentReportsController;
 use App\Http\Controllers\Manager\DailyReportsController as ManagerDailyReportsController;
+use App\Http\Controllers\Manager\PendingRegistrationController;
 use App\Http\Controllers\Parent\AcknowledgementController;
 use App\Http\Controllers\Parent\ParentChildrenController;
 use App\Http\Controllers\Parent\ParentIncidentController;
@@ -35,6 +36,8 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/registration/pending', fn () => view('auth.pending-approval'))->name('registration.pending');
 
 
 Route::post('/locale', function (Request $request) {
@@ -180,6 +183,15 @@ Route::middleware(['auth', 'role:manager'])
     ->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Pending Registrations
+        Route::post('pending-registrations/{user}/approve', [PendingRegistrationController::class, 'approve'])
+            ->name('pending-registrations.approve');
+        Route::post('pending-registrations/{user}/reject', [PendingRegistrationController::class, 'reject'])
+            ->name('pending-registrations.reject');
+        Route::resource('pending-registrations', PendingRegistrationController::class)
+            ->only(['index', 'show', 'edit', 'update', 'destroy'])
+            ->parameters(['pending-registrations' => 'user']);
 
         Route::get('/reports/attendance', [ReportsController::class, 'attendance'])->name('reports.attendance');
         Route::get('/reports/tasks', [ReportsController::class, 'tasks'])->name('reports.tasks');

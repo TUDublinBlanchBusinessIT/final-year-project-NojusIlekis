@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\IncidentReport;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -173,6 +174,8 @@ class DashboardController extends Controller
 
         $pendingPaymentCount = $pendingPayments->count();
 
+        $pendingRegistrationCount = User::where('status', 'pending')->count();
+
         // Incident stats
         $totalIncidents    = IncidentReport::count();
         $openIncidents     = IncidentReport::where('status', 'open')->count();
@@ -220,6 +223,7 @@ class DashboardController extends Controller
             ],
             'pendingPayments' => $pendingPayments,
             'pendingPaymentCount' => $pendingPaymentCount,
+            'pendingRegistrationCount' => $pendingRegistrationCount,
             'totalIncidents' => $totalIncidents,
             'openIncidents' => $openIncidents,
             'reviewedIncidents' => $reviewedIncidents,
