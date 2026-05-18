@@ -2,6 +2,7 @@
     @php
         $pendingPayments = $pendingPayments ?? collect([]);
         $pendingPaymentCount = $pendingPaymentCount ?? 0;
+        $pendingRegistrationCount = $pendingRegistrationCount ?? 0;
         $totalIncidents = $totalIncidents ?? 0;
         $openIncidents = $openIncidents ?? 0;
         $reviewedIncidents = $reviewedIncidents ?? 0;
@@ -67,6 +68,24 @@
                     </p>
                 </div>
             </div>
+
+            {{-- Pending Registrations Card --}}
+            @if($pendingRegistrationCount > 0)
+                <div class="bg-indigo-50 rounded-2xl border border-indigo-200 shadow-sm p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-800">
+                                📋 {{ $pendingRegistrationCount }} {{ $pendingRegistrationCount === 1 ? __('manager.new_registration_to_review') : __('manager.new_registrations_to_review') }}
+                            </h3>
+                            <p class="text-sm text-indigo-600 mt-1">{{ __('manager.pending_registrations_dashboard_desc') }}</p>
+                        </div>
+                        <a href="{{ route('manager.pending-registrations.index') }}"
+                           class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-medium rounded-lg hover:opacity-90">
+                            {{ __('manager.review_now') }}
+                        </a>
+                    </div>
+                </div>
+            @endif
 
             {{-- Pending Payments Card --}}
             @if($pendingPaymentCount > 0)

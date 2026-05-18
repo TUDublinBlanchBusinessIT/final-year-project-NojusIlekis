@@ -20,6 +20,21 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $user = Auth::user();
+
+        if ($user && $user->status === 'pending') {
+            Auth::logout();
+            return redirect()->route('registration.pending')->with('email', $user->email);
+        }
+
+        if ($user && $user->status === 'rejected') {
+            $reason = $user->rejection_reason ?? __('auth.rejection_no_reason');
+            Auth::logout();
+            return back()->withErrors([
+                'email' => __('auth.rejected_login', ['reason' => $reason]),
+            ]);
+        }
+
         $locale = $request->session()->get('locale');
 
         $request->session()->regenerate();
