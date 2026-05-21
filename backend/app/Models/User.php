@@ -131,4 +131,41 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
+
+    public function qualifications()
+    {
+        return $this->hasMany(StaffQualification::class)->orderBy('expires_at', 'asc');
+    }
+
+    public function clockIns()
+    {
+        return $this->hasMany(StaffClockIn::class)->orderByDesc('clocked_in_at');
+    }
+
+    public function currentClockIn()
+    {
+        return $this->clockIns()->whereNull('clocked_out_at')->first();
+    }
+
+    public function isClockedIn(): bool
+    {
+        return $this->currentClockIn() !== null;
+    }
+
+    public function expiringQualifications(int $days = 30)
+    {
+        return $this->qualifications()
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '>=', now()->toDateString())
+            ->where('expires_at', '<=', now()->addDays($days)->toDateString())
+            ->get();
+    }
+
+    public function expiredQualifications()
+    {
+        return $this->qualifications()
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<', now()->toDateString())
+            ->get();
+    }
 }

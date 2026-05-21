@@ -3,6 +3,9 @@
         $pendingPayments = $pendingPayments ?? collect([]);
         $pendingPaymentCount = $pendingPaymentCount ?? 0;
         $pendingRegistrationCount = $pendingRegistrationCount ?? 0;
+        $ratios = $ratios ?? collect();
+        $expiringQuals = $expiringQuals ?? collect();
+        $currentlyClockedIn = $currentlyClockedIn ?? collect();
         $totalIncidents = $totalIncidents ?? 0;
         $openIncidents = $openIncidents ?? 0;
         $reviewedIncidents = $reviewedIncidents ?? 0;
@@ -67,6 +70,81 @@
                         {{ __('manager.dashboard_hint') }}
                     </p>
                 </div>
+            </div>
+
+            {{-- Staff:Child Ratio Monitor --}}
+            @if($ratios->isNotEmpty())
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">👥 {{ __('staff.ratio_monitor') }}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($ratios as $r)
+                            <div class="rounded-xl p-4 border-2 {{ $r['compliant'] ? 'border-green-200 bg-green-50' : 'border-red-300 bg-red-50' }}">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-semibold text-gray-800">{{ $r['room']->name }}</h4>
+                                    <span class="text-xs px-2 py-1 rounded-full font-semibold {{ $r['compliant'] ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900' }}">
+                                        {{ $r['compliant'] ? '✓ ' . __('staff.compliant') : '⚠ ' . __('staff.under_ratio') }}
+                                    </span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-center">
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-800">{{ $r['children'] }}</p>
+                                        <p class="text-xs text-gray-500">{{ __('staff.children_present') }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-800">{{ $r['staff'] }}</p>
+                                        <p class="text-xs text-gray-500">{{ __('staff.staff_clocked_in') }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold {{ $r['compliant'] ? 'text-green-700' : 'text-red-700' }}">{{ $r['required'] }}</p>
+                                        <p class="text-xs text-gray-500">{{ __('staff.staff_required') }}</p>
+                                    </div>
+                                </div>
+                                @if(!$r['compliant'] && $r['shortfall'] > 0)
+                                    <p class="text-xs text-red-700 mt-2 font-medium">
+                                        {{ __('staff.shortfall_message', ['count' => $r['shortfall']]) }}
+                                    </p>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Expiring Qualifications Alert --}}
+            @if($expiringQuals->isNotEmpty())
+                <div class="bg-amber-50 rounded-2xl border-2 border-amber-300 shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-amber-800 mb-4">⚠️ {{ __('staff.expiring_qualifications') }}</h3>
+                    <div class="space-y-2">
+                        @foreach($expiringQuals as $qual)
+                            <a href="{{ route('manager.carers.qualifications.index', $qual->user) }}"
+                               class="flex items-center justify-between bg-white rounded-lg p-3 hover:border-amber-400 border border-amber-200 transition">
+                                <div>
+                                    <p class="font-medium text-gray-800">{{ $qual->user->name }} — {{ $qual->name }}</p>
+                                    <p class="text-xs text-gray-500">{{ $qual->typeLabel() }}</p>
+                                </div>
+                                <span class="text-sm font-bold {{ $qual->isExpired() ? 'text-red-700' : 'text-amber-700' }}">
+                                    {{ $qual->statusLabel() }}
+                                </span>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Currently On Shift --}}
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🟢 {{ __('staff.currently_on_shift') }}</h3>
+                @forelse($currentlyClockedIn as $carer)
+                    @php($shift = $carer->clockIns->first())
+                    <div class="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                        <div>
+                            <p class="font-medium text-gray-800">{{ $carer->name }}</p>
+                            <p class="text-xs text-gray-500">{{ __('staff.since') }} {{ $shift->clocked_in_at->format('H:i') }} · {{ $shift->durationLabel() }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500">{{ __('staff.no_staff_clocked_in') }}</p>
+                @endforelse
             </div>
 
             {{-- Pending Registrations Card --}}

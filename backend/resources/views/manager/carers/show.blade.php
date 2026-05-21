@@ -141,6 +141,31 @@
                 </div>
             @endif
 
+            {{-- Qualifications --}}
+            <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
+                        dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{{ __('staff.qualifications') }}</h3>
+                    <a href="{{ route('manager.carers.qualifications.index', $carerUser) }}"
+                       class="text-sm text-blue-600 hover:underline">{{ __('staff.manage_qualifications') }} →</a>
+                </div>
+                <div class="p-6">
+                    @forelse($carerUser->qualifications()->limit(5)->get() as $qual)
+                        <div class="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                            <div>
+                                <p class="font-medium text-slate-800 dark:text-slate-100">{{ $qual->name }}</p>
+                                <p class="text-xs text-slate-500">{{ $qual->typeLabel() }}{{ $qual->issuer ? ' · ' . $qual->issuer : '' }}</p>
+                            </div>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold {{ $qual->statusColour() }}">
+                                {{ $qual->statusLabel() }}
+                            </span>
+                        </div>
+                    @empty
+                        <p class="text-sm text-slate-500">{{ __('staff.no_qualifications_yet') }}</p>
+                    @endforelse
+                </div>
+            </div>
+
             {{-- Recent Activity --}}
             <div class="rounded-2xl border border-slate-200 bg-white shadow-sm
                         dark:border-slate-800 dark:bg-slate-950/40 overflow-hidden">

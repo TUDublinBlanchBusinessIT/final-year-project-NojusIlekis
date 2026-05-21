@@ -3,6 +3,46 @@
 
     <div class="py-10 px-6 max-w-6xl mx-auto">
 
+        @if (session('success'))
+            <div class="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 mb-6 text-green-800">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @php
+            $activeClockIn = auth()->user()->currentClockIn();
+        @endphp
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">⏰ {{ __('staff.your_shift') }}</h3>
+                    @if($activeClockIn)
+                        <p class="text-sm text-gray-500 mt-1">
+                            {{ __('staff.clocked_in_at') }} {{ $activeClockIn->clocked_in_at->format('H:i') }}
+                            · {{ __('staff.duration') }}: {{ $activeClockIn->durationLabel() }}
+                        </p>
+                    @else
+                        <p class="text-sm text-gray-500 mt-1">{{ __('staff.not_clocked_in_message') }}</p>
+                    @endif
+                </div>
+                @if($activeClockIn)
+                    <form method="POST" action="{{ route('carer.clock-out') }}">
+                        @csrf
+                        <button type="submit" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition">
+                            {{ __('staff.clock_out') }}
+                        </button>
+                    </form>
+                @else
+                    <form method="POST" action="{{ route('carer.clock-in') }}">
+                        @csrf
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:opacity-90 transition">
+                            {{ __('staff.clock_in') }}
+                        </button>
+                    </form>
+                @endif
+            </div>
+        </div>
+
         <!-- Welcome Section -->
         <div class="mb-10">
             <h3 class="text-3xl font-bold text-slate-800 text-white">

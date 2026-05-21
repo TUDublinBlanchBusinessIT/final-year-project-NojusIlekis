@@ -176,6 +176,23 @@ class DashboardController extends Controller
 
         $pendingRegistrationCount = User::where('status', 'pending')->count();
 
+        // Staff management — Tusla compliance surfaces
+        $allRooms = \App\Models\Room::all();
+        $ratios   = $allRooms->mapWithKeys(fn ($room) => [
+            $room->id => array_merge(['room' => $room], $room->currentRatio()),
+        ]);
+
+        $expiringQuals = \App\Models\StaffQualification::with('user')
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<=', now()->addDays(30)->toDateString())
+            ->orderBy('expires_at', 'asc')
+            ->get();
+
+        $currentlyClockedIn = User::where('role', 'carer')
+            ->whereHas('clockIns', fn ($q) => $q->whereNull('clocked_out_at'))
+            ->with(['clockIns' => fn ($q) => $q->whereNull('clocked_out_at')])
+            ->get();
+
         // Incident stats
         $totalIncidents    = IncidentReport::count();
         $openIncidents     = IncidentReport::where('status', 'open')->count();
@@ -224,6 +241,9 @@ class DashboardController extends Controller
             'pendingPayments' => $pendingPayments,
             'pendingPaymentCount' => $pendingPaymentCount,
             'pendingRegistrationCount' => $pendingRegistrationCount,
+            'ratios' => $ratios,
+            'expiringQuals' => $expiringQuals,
+            'currentlyClockedIn' => $currentlyClockedIn,
             'totalIncidents' => $totalIncidents,
             'openIncidents' => $openIncidents,
             'reviewedIncidents' => $reviewedIncidents,

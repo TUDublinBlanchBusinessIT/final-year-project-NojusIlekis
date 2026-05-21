@@ -145,6 +145,10 @@ Route::middleware(['auth', 'role:carer'])
 
         Route::get('/dashboard', [CarerDashboardController::class, 'index'])->name('dashboard');
 
+        // Clock-in / Clock-out
+        Route::post('/clock-in', [\App\Http\Controllers\Carer\ClockInController::class, 'clockIn'])->name('clock-in');
+        Route::post('/clock-out', [\App\Http\Controllers\Carer\ClockInController::class, 'clockOut'])->name('clock-out');
+
         // Attendance
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
         Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
@@ -270,6 +274,11 @@ Route::middleware(['auth', 'role:manager'])
 
         // Parents CRUD
         Route::resource('parents', ParentController::class);
+
+        // Staff Qualifications (nested under carers)
+        Route::resource('carers.qualifications', \App\Http\Controllers\Manager\StaffQualificationController::class)
+            ->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])
+            ->parameters(['carers' => 'carer', 'qualifications' => 'qualification']);
 
         // Carers CRUD
         Route::resource('carers', CarerController::class);

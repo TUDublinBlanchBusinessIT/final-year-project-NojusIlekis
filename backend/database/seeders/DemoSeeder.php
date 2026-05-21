@@ -816,6 +816,52 @@ class DemoSeeder extends Seeder
                 'rejection_reason'     => null,
             ]);
         }
+
+        // -----------------------------------------------------------------------
+        // 16. Staff qualifications + live clock-ins (Tusla compliance demo data)
+        // -----------------------------------------------------------------------
+        $qualSeed = [
+            'carer@test.com' => [
+                ['type' => 'education',        'name' => 'QQI Level 6 in Early Childhood Care and Education', 'issuer' => 'QQI',                       'issued_date' => '2020-06-15',                                            'expires_at' => null],
+                ['type' => 'garda_vetting',    'name' => 'Garda Vetting Disclosure',                          'issuer' => 'National Vetting Bureau',   'issued_date' => '2024-01-10',                                            'expires_at' => now()->addMonths(6)->toDateString()],
+                ['type' => 'first_aid',        'name' => 'Paediatric First Aid',                              'issuer' => 'Irish Heart Foundation',    'issued_date' => '2024-09-12',                                            'expires_at' => now()->addDays(45)->toDateString()],
+                ['type' => 'child_protection', 'name' => 'Children First e-Learning',                         'issuer' => 'Tusla',                     'issued_date' => '2025-02-20',                                            'expires_at' => now()->addYears(2)->toDateString()],
+            ],
+            'carer2@test.com' => [
+                ['type' => 'education',     'name' => 'QQI Level 5 in Early Childhood Care and Education', 'issuer' => 'QQI',                     'issued_date' => '2022-06-15',                                            'expires_at' => null],
+                ['type' => 'garda_vetting', 'name' => 'Garda Vetting Disclosure',                          'issuer' => 'National Vetting Bureau', 'issued_date' => '2023-11-15',                                            'expires_at' => now()->addDays(20)->toDateString()],
+                ['type' => 'first_aid',     'name' => 'Paediatric First Aid',                              'issuer' => 'Order of Malta',          'issued_date' => '2025-03-10',                                            'expires_at' => now()->addYears(2)->toDateString()],
+                ['type' => 'food_safety',   'name' => 'HACCP Level 2',                                     'issuer' => 'NSAI',                    'issued_date' => '2024-10-05',                                            'expires_at' => now()->addMonths(3)->toDateString()],
+            ],
+        ];
+
+        foreach ($qualSeed as $email => $quals) {
+            $carerUser = User::where('email', $email)->first();
+            if (! $carerUser) {
+                continue;
+            }
+            foreach ($quals as $q) {
+                \App\Models\StaffQualification::firstOrCreate(
+                    ['user_id' => $carerUser->id, 'type' => $q['type'], 'name' => $q['name']],
+                    $q
+                );
+            }
+        }
+
+        foreach (['carer@test.com', 'carer2@test.com'] as $email) {
+            $carerUser = User::where('email', $email)->first();
+            if (! $carerUser) {
+                continue;
+            }
+            if (! $carerUser->isClockedIn()) {
+                \App\Models\StaffClockIn::create([
+                    'user_id'        => $carerUser->id,
+                    'clocked_in_at'  => now()->setTime(8, 30),
+                    'clocked_out_at' => null,
+                    'room_id'        => $carerUser->activeRooms()->first()?->id,
+                ]);
+            }
+        }
     }
 
     // -----------------------------------------------------------------------
